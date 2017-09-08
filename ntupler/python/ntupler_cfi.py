@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-process.ntuplerBase = cms.EDAnalyzer("ntupler",
+ntuplerBase = cms.EDAnalyzer("ntupler",
 	OfflineMuon = cms.untracked.InputTag("muons"),
 	OfflineVertex = cms.untracked.InputTag("offlinePrimaryVertices"),
 	TriggerResults = cms.untracked.InputTag("TriggerResults::HLT"),

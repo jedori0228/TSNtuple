@@ -1,5 +1,5 @@
 
-#include "ntupler/interface/ntupler.h"
+#include "TriggerStudyNtuple/ntupler/interface/ntupler.h"
 
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -37,11 +37,19 @@
 #include "HLTrigger/HLTcore/interface/HLTEventAnalyzerAOD.h"
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 
+#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
+
 
 #include <map>
 #include <string>
 #include <iomanip>
 #include "TTree.h"
+
+using namespace std;
+using namespace reco;
+using namespace edm;
 
 ntupler::ntupler(const edm::ParameterSet& iConfig):
 Token_OfflineMuon			( consumes< std::vector<reco::Muon> > 				(iConfig.getUntrackedParameter<edm::InputTag>("OfflineMuon")) ),
@@ -71,7 +79,7 @@ Token_GenParticle			( consumes<reco::GenParticleCollection> 			(iConfig.getUntra
 
 }
 
-ntupler::analyze(const edm::Event &iEvent, const edm::EventSetup &iSetup)
+void ntupler::analyze(const edm::Event &iEvent, const edm::EventSetup &iSetup)
 {
 	this->Init();
 	this->RunNum = iEvent.id().run();
@@ -131,7 +139,7 @@ ntupler::analyze(const edm::Event &iEvent, const edm::EventSetup &iSetup)
 	this->ntuple->Fill();
 }
 
-ntupler::beginJob()
+void ntupler::beginJob()
 {
 	edm::Service<TFileService> fs;
 	this->ntuple = fs->make<TTree>("ntuple","ntuple");
@@ -139,7 +147,7 @@ ntupler::beginJob()
 	this->Make_Branch();
 }
 
-ntupler::Init()
+void ntupler::Init()
 {
 	this->RunNum = 0;
 	this->LumiBlackNum = 0;
@@ -292,15 +300,15 @@ ntupler::Init()
 	}
 }
 
-ntupler::Make_Branch()
+void ntupler::Make_Branch()
 {
 	this->ntuple->Branch("RunNum",&RunNum,"RunNum/I");
 	this->ntuple->Branch("LumiBlackNum",&LumiBlackNum,"LumiBlackNum/l"); // -- unsigned long long -- //
 	this->ntuple->Branch("EventNum",&EventNum,"EventNum/I");
 	this->ntuple->Branch("nVertices", &nVertices, "nVertices/I");
 	this->ntuple->Branch("Rho_Offline", &Rho_Offline, "Rho_Offline/D");
-	this->ntuple->Branch("BX_ID", &BX_ID, "BX_ID/I");
-	this->ntuple->Branch("InstLumi" &InstLumi,"InstLumi/D");
+	this->ntuple->Branch("BX_ID", &BX_ID, "BX_ID/D");
+	this->ntuple->Branch("InstLumi", &InstLumi, "InstLumi/D");
 	this->ntuple->Branch("TruePU", &TruePU, "TruePU/I");
 
 	this->ntuple->Branch("GenEventWeight", &GenEventWeight, "GenEventWeight/D");
@@ -418,7 +426,7 @@ ntupler::Make_Branch()
 	this->ntuple->Branch("L1Muon_Quality", &L1Muon_Quality, "L1Muon_Quality/D");
 }
 
-ntupler::Fill_Muon(const edm::Event &iEvent)
+void ntupler::Fill_Muon(const edm::Event &iEvent)
 {
 	edm::Handle<reco::VertexCollection> Handle_Vertex; 
 	iEvent.getByToken(Token_OfflineVertex, Handle_Vertex);
@@ -448,7 +456,7 @@ ntupler::Fill_Muon(const edm::Event &iEvent)
 		this->Muon_Px[_nMuon] = mu->px();
 		this->Muon_Py[_nMuon] = mu->py();
 		this->Muon_Pz[_nMuon] = mu->pz();
-		this->Muon_dB[_nMuon] = mu->dB();
+		// this->Muon_dB[_nMuon] = mu->dB(); // -- dB is only availabe in pat::Muon -- //
 
 		this->Muon_Charge[_nMuon] = mu->charge();
 
@@ -523,7 +531,7 @@ ntupler::Fill_Muon(const edm::Event &iEvent)
 	this->nMuon = _nMuon;
 }
 
-ntupler::Fill_HLT(const edm::Event &iEvent)
+void ntupler::Fill_HLT(const edm::Event &iEvent)
 {
 	edm::Handle<edm::TriggerResults>  Handle_TriggerResults;
 	iEvent.getByToken(Token_TriggerResults, Handle_TriggerResults);
@@ -535,7 +543,7 @@ ntupler::Fill_HLT(const edm::Event &iEvent)
 
 	for(unsigned int itrig=0; itrig<TrigNames.size(); ++itrig)
 	{
-		LogDebug("triggers") << TrigNames.triggerName(itrig)
+		LogDebug("triggers") << TrigNames.triggerName(itrig);
 
 		if( Handle_TriggerResults->accept(itrig) )
 		{
@@ -547,7 +555,7 @@ ntupler::Fill_HLT(const edm::Event &iEvent)
 				PathName.find("HLT_TkMu5") != std::string::npos ||
 				PathName.find("HLT_IsoTkMu") != std::string::npos ||
 				PathName.find("HLT_Mu17") != std::string::npos ||
-				PathName.find("HLT_Mu8_T") != std::string::npos || ) this->vec_FiredTrigger.push_back( PathName );
+				PathName.find("HLT_Mu8_T") != std::string::npos ) this->vec_FiredTrigger.push_back( PathName );
 		} // -- if fired -- //
 	} // -- iteration over all trigger names -- //
 
@@ -561,7 +569,7 @@ ntupler::Fill_HLT(const edm::Event &iEvent)
 			filterTag.find("EG") == std::string::npos &&
 			filterTag.find("MultiFit") == std::string::npos )
 		{
-			trigger::Keys objectKeys = Handle_TriggerEvent->filterKeys(iFilter);
+			trigger::Keys objectKeys = Handle_TriggerEvent->filterKeys(i_filter);
 			const trigger::TriggerObjectCollection& triggerObjects(Handle_TriggerEvent->getObjects());
 
 			for( trigger::size_type i_key=0; i_key<objectKeys.size(); i_key++)
@@ -590,7 +598,7 @@ ntupler::Fill_HLT(const edm::Event &iEvent)
 		this->RhoHCAL = *(Handle_RhoHCAL.product());
 }
 
-ntupler::Fill_HLTMuon(const edm::Event &iEvent)
+void ntupler::Fill_HLTMuon(const edm::Event &iEvent)
 {
 	///////////////////
 	// -- L3 Muon -- //
@@ -694,7 +702,7 @@ ntupler::Fill_HLTMuon(const edm::Event &iEvent)
 	}
 }
 
-ntupler::Fill_L1Muon(const edm::Event &iEvent)
+void ntupler::Fill_L1Muon(const edm::Event &iEvent)
 {
 	edm::Handle<l1t::MuonBxCollection> Handle_L1Muon;
 	if( iEvent.getByToken(Token_L1Muon, Handle_L1Muon) )
@@ -720,7 +728,7 @@ ntupler::Fill_L1Muon(const edm::Event &iEvent)
 	}
 }
 
-ntupler::Fill_GenParticle(const edm::Event &iEvent)
+void ntupler::Fill_GenParticle(const edm::Event &iEvent)
 {
 	// -- Gen-weight info -- //
 	edm::Handle<GenEventInfoProduct> Handle_GenEventInfo;
@@ -751,20 +759,22 @@ ntupler::Fill_GenParticle(const edm::Event &iEvent)
 			this->GenParticle_E[_nGenParticle] = parCand.energy();
 			this->GenParticle_Charge[_nGenParticle] = parCand.charge();
 
-			this->GenParticle_isPrompt[_nGenParticle] = parCand.statusFlags().isPrompt(); //not from hadron, muon or tau decay
-			this->GenParticle_isPromptFinalState[_nGenParticle] = parCand.isPromptFinalState(); //isPrompt && final state (status==1)
-			this->GenParticle_isTauDecayProduct[_nGenParticle] = parCand.statusFlags().isTauDecayProduct(); //is directly or indirectly from a tau decay
-			this->GenParticle_isPromptTauDecayProduct[_nGenParticle] = parCand.statusFlags().isPromptTauDecayProduct(); //is directly or indirectly from a tau decay, where the tau did not come from a hadron decay
-			this->GenParticle_isDirectPromptTauDecayProductFinalState[_nGenParticle] = parCand.isDirectPromptTauDecayProductFinalState(); // is the direct decay product from a tau decay (ie no intermediate hadron), where the tau did not come from a hadron decay && final state
-			this->GenParticle_isHardProcess[_nGenParticle] = parCand.isHardProcess();
-			this->GenParticle_isLastCopy[_nGenParticle] = parCand.isLastCopy();
-			this->GenParticle_isLastCopyBeforeFSR[_nGenParticle] = parCand.isLastCopyBeforeFSR();
-			this->GenParticle_isPromptDecayed[_nGenParticle] = parCand.isPromptDecayed();
-			this->GenParticle_isDecayedLeptonHadron[_nGenParticle] = parCand.statusFlags().isDecayedLeptonHadron();
-			this->GenParticle_fromHardProcessBeforeFSR[_nGenParticle] = parCand.fromHardProcessBeforeFSR();
-			this->GenParticle_fromHardProcessDecayed[_nGenParticle] = parCand.fromHardProcessDecayed();
-			this->GenParticle_fromHardProcessFinalState[_nGenParticle] = parCand.fromHardProcessFinalState();
-			this->GenParticle_isMostlyLikePythia6Status3[_nGenParticle] = parCand.isMostlyLikePythia6Status3();
+			if( parCand.statusFlags().isPrompt() ) this->GenParticle_isPrompt[_nGenParticle] = 1;
+			if( parCand.statusFlags().isTauDecayProduct() ) this->GenParticle_isTauDecayProduct[_nGenParticle] = 1;
+			if( parCand.statusFlags().isPromptTauDecayProduct() ) this->GenParticle_isPromptTauDecayProduct[_nGenParticle] = 1;
+			if( parCand.statusFlags().isDecayedLeptonHadron() ) this->GenParticle_isDecayedLeptonHadron[_nGenParticle] = 1;
+
+			if( parCand.isPromptFinalState() ) this->GenParticle_isPromptFinalState[_nGenParticle] = 1;
+			if( parCand.isDirectPromptTauDecayProductFinalState() ) this->GenParticle_isDirectPromptTauDecayProductFinalState[_nGenParticle] = 1;
+			if( parCand.isHardProcess() ) this->GenParticle_isHardProcess[_nGenParticle] = 1;
+			if( parCand.isLastCopy() ) this->GenParticle_isLastCopy[_nGenParticle] = 1;
+			if( parCand.isLastCopyBeforeFSR() ) this->GenParticle_isLastCopyBeforeFSR[_nGenParticle] = 1;
+
+			if( parCand.isPromptDecayed() ) this->GenParticle_isPromptDecayed[_nGenParticle] = 1;
+			if( parCand.fromHardProcessBeforeFSR() ) this->GenParticle_fromHardProcessBeforeFSR[_nGenParticle] = 1;
+			if( parCand.fromHardProcessDecayed() ) this->GenParticle_fromHardProcessDecayed[_nGenParticle] = 1;
+			if( parCand.fromHardProcessFinalState() ) this->GenParticle_fromHardProcessFinalState[_nGenParticle] = 1;
+			// if( parCand.isMostlyLikePythia6Status3() ) this->GenParticle_isMostlyLikePythia6Status3[_nGenParticle] = 1;
 
 			_nGenParticle++;
 		}
@@ -773,24 +783,8 @@ ntupler::Fill_GenParticle(const edm::Event &iEvent)
 	this->nGenParticle = _nGenParticle;
 }
 
+void ntupler::endJob() {}
+void ntupler::beginRun(const edm::Run &iRun, const edm::EventSetup &iSetup) {}
+void ntupler::endRun(const edm::Run &iRun, const edm::EventSetup &iSetup) {}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+DEFINE_FWK_MODULE(ntupler);
