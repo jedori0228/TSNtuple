@@ -149,31 +149,31 @@ void ntupler::beginJob()
 
 void ntupler::Init()
 {
-	this->RunNum = 0;
-	this->LumiBlackNum = 0;
+	this->RunNum = -999;
+	this->LumiBlackNum = -999;
 	this->EventNum = 0;
-	this->nVertices = 0;
-	this->Rho_Offline = 0;
-	this->BX_ID = 0;
-	this->InstLumi = 0;
-	this->TruePU = 0;
-	this->GenEventWeight = 0;
+	this->nVertices = -999;
+	this->Rho_Offline = -999;
+	this->BX_ID = -999;
+	this->InstLumi = -999;
+	this->TruePU = -999;
+	this->GenEventWeight = -999;
 
 	this->nGenParticle = 0;
 	for( int i=0; i<this->ArrSize; i++)
 	{
-		this->GenParticle_ID[i] = 0;
-		this->GenParticle_Status[i] = 0;
-		this->GenParticle_Mother[i] = 0;
+		this->GenParticle_ID[i] = -999;
+		this->GenParticle_Status[i] = -999;
+		this->GenParticle_Mother[i] = -999;
 
-		this->GenParticle_Pt[i] = 0;
-		this->GenParticle_Eta[i] = 0;
-		this->GenParticle_Phi[i] = 0;
-		this->GenParticle_Px[i] = 0;
-		this->GenParticle_Py[i] = 0;
-		this->GenParticle_Pz[i] = 0;
-		this->GenParticle_E[i] = 0;
-		this->GenParticle_Charge[i] = 0;
+		this->GenParticle_Pt[i] = -999;
+		this->GenParticle_Eta[i] = -999;
+		this->GenParticle_Phi[i] = -999;
+		this->GenParticle_Px[i] = -999;
+		this->GenParticle_Py[i] = -999;
+		this->GenParticle_Pz[i] = -999;
+		this->GenParticle_E[i] = -999;
+		this->GenParticle_Charge[i] = -999;
 
 		this->GenParticle_isPrompt[i] = 0;
 		this->GenParticle_isPromptFinalState[i] = 0;
@@ -197,22 +197,22 @@ void ntupler::Init()
 	this->vec_HLTObj_Eta.clear();
 	this->vec_HLTObj_Phi.clear();
 
-	this->Rho = 0;
-	this->RhoECAL = 0;
-	this->RhoHCAL = 0;
+	this->Rho = -999;
+	this->RhoECAL = -999;
+	this->RhoHCAL = -999;
 
 	this->nMuon = 0;
 
 	for( int i=0; i<this->ArrSize; i++)
 	{
-		this->Muon_Pt[i] = 0;
-		this->Muon_Eta[i] = 0;
-		this->Muon_Phi[i] = 0;
-		this->Muon_Px[i] = 0;
-		this->Muon_Py[i] = 0;
-		this->Muon_Pz[i] = 0;
-		this->Muon_dB[i] = 0;
-		this->Muon_Charge[i] = 0;
+		this->Muon_Pt[i] = -999;
+		this->Muon_Eta[i] = -999;
+		this->Muon_Phi[i] = -999;
+		this->Muon_Px[i] = -999;
+		this->Muon_Py[i] = -999;
+		this->Muon_Pz[i] = -999;
+		this->Muon_dB[i] = -999;
+		this->Muon_Charge[i] = -999;
 		this->Muon_IsGLB[i] = 0;
 		this->Muon_IsSTA[i] = 0;
 		this->Muon_IsTRK[i] = 0;
@@ -221,82 +221,82 @@ void ntupler::Init()
 		this->Muon_IsMedium[i] = 0;
 		this->Muon_IsLoose[i] = 0;
 
-		this->Muon_PFIso03_Charged[i] = 0;
-		this->Muon_PFIso03_Neutral[i] = 0;
-		this->Muon_PFIso03_Photon[i] = 0;
-		this->Muon_PFIso03_SumPU[i] = 0;
+		this->Muon_PFIso03_Charged[i] = -999;
+		this->Muon_PFIso03_Neutral[i] = -999;
+		this->Muon_PFIso03_Photon[i] = -999;
+		this->Muon_PFIso03_SumPU[i] = -999;
 
-		this->Muon_PFIso04_Charged[i] = 0;
-		this->Muon_PFIso04_Neutral[i] = 0;
-		this->Muon_PFIso04_Photon[i] = 0;
-		this->Muon_PFIso04_SumPU[i] = 0;
+		this->Muon_PFIso04_Charged[i] = -999;
+		this->Muon_PFIso04_Neutral[i] = -999;
+		this->Muon_PFIso04_Photon[i] = -999;
+		this->Muon_PFIso04_SumPU[i] = -999;
 
-		this->Muon_PFCluster03_ECAL[i] = 0;
-		this->Muon_PFCluster03_HCAL[i] = 0;
+		this->Muon_PFCluster03_ECAL[i] = -999;
+		this->Muon_PFCluster03_HCAL[i] = -999;
 
-		this->Muon_PFCluster04_ECAL[i] = 0;
-		this->Muon_PFCluster04_HCAL[i] = 0;
+		this->Muon_PFCluster04_ECAL[i] = -999;
+		this->Muon_PFCluster04_HCAL[i] = -999;
 
-		this->Muon_NormChi2_GlbTrk[i] = 0;
-		this->Muon_nTrackerHit_GlbTrk[i] = 0;
-		this->Muon_nTrackerLayer_GlbTrk[i] = 0;
-		this->Muon_nPixelHit_GlbTrk[i] = 0;
-		this->Muon_nMuonHit_GlbTrk[i] = 0;
+		this->Muon_NormChi2_GlbTrk[i] = -999;
+		this->Muon_nTrackerHit_GlbTrk[i] = -999;
+		this->Muon_nTrackerLayer_GlbTrk[i] = -999;
+		this->Muon_nPixelHit_GlbTrk[i] = -999;
+		this->Muon_nMuonHit_GlbTrk[i] = -999;
 
-		this->Muon_NormChi2_InnerTrk[i] = 0;
-		this->Muon_nTrackerHit_InnerTrk[i] = 0;
-		this->Muon_nTrackerLayer_InnerTrk[i] = 0;
-		this->Muon_nPixelHit_InnerTrk[i] = 0;
+		this->Muon_NormChi2_InnerTrk[i] = -999;
+		this->Muon_nTrackerHit_InnerTrk[i] = -999;
+		this->Muon_nTrackerLayer_InnerTrk[i] = -999;
+		this->Muon_nPixelHit_InnerTrk[i] = -999;
 
-		this->Muon_dxyVTX_BestTrk[i] = 0;
-		this->Muon_dzVTX_BestTrk[i] = 0;
+		this->Muon_dxyVTX_BestTrk[i] = -999;
+		this->Muon_dzVTX_BestTrk[i] = -999;
 
-		this->Muon_nMatchedStation[i] = 0;
-		this->Muon_nMatchedRPCLayer[i] = 0;
-		this->Muon_StationMask[i] = 0;
+		this->Muon_nMatchedStation[i] = -999;
+		this->Muon_nMatchedRPCLayer[i] = -999;
+		this->Muon_StationMask[i] = -999;
 	}
 
 	this->nL3Muon = 0;
 	for( int i=0; i<this->ArrSize; i++)
 	{
-		this->L3Muon_Pt[i] = 0;
-		this->L3Muon_Eta[i] = 0;
-		this->L3Muon_Phi[i] = 0;
-		this->L3Muon_Charge[i] = 0;
-		this->L3Muon_TrkPt[i] = 0;
-		this->L3Muon_TrkIso[i] = 0;
-		this->L3Muon_ECALIso[i] = 0;
-		this->L3Muon_HCALIso[i] = 0;
+		this->L3Muon_Pt[i] = -999;
+		this->L3Muon_Eta[i] = -999;
+		this->L3Muon_Phi[i] = -999;
+		this->L3Muon_Charge[i] = -999;
+		this->L3Muon_TrkPt[i] = -999;
+		this->L3Muon_TrkIso[i] = -999;
+		this->L3Muon_ECALIso[i] = -999;
+		this->L3Muon_HCALIso[i] = -999;
 	}
 
 	this->nL2Muon = 0;
 	for( int i=0; i<this->ArrSize; i++)
 	{
-		this->L2Muon_Pt[i] = 0;
-		this->L2Muon_Eta[i] = 0;
-		this->L2Muon_Phi[i] = 0;
-		this->L2Muon_Charge[i] = 0;
-		this->L2Muon_TrkPt[i] = 0;
+		this->L2Muon_Pt[i] = -999;
+		this->L2Muon_Eta[i] = -999;
+		this->L2Muon_Phi[i] = -999;
+		this->L2Muon_Charge[i] = -999;
+		this->L2Muon_TrkPt[i] = -999;
 	}
 
 	this->nTkMuon = 0;
 	for( int i=0; i<this->ArrSize; i++)
 	{
-		this->TkMuon_Pt[i] = 0;
-		this->TkMuon_Eta[i] = 0;
-		this->TkMuon_Phi[i] = 0;
-		this->TkMuon_Charge[i] = 0;
-		this->TkMuon_TrkPt[i] = 0;
+		this->TkMuon_Pt[i] = -999;
+		this->TkMuon_Eta[i] = -999;
+		this->TkMuon_Phi[i] = -999;
+		this->TkMuon_Charge[i] = -999;
+		this->TkMuon_TrkPt[i] = -999;
 	}
 
 	this->nL1Muon = 0;
 	for( int i=0; i<this->ArrSize; i++)
 	{
-		this->L1Muon_Pt[i] = 0;
-		this->L1Muon_Eta[i] = 0;
-		this->L1Muon_Phi[i] = 0;
-		this->L1Muon_Charge[i] = 0;
-		this->L1Muon_Quality[i] = 0;
+		this->L1Muon_Pt[i] = -999;
+		this->L1Muon_Eta[i] = -999;
+		this->L1Muon_Phi[i] = -999;
+		this->L1Muon_Charge[i] = -999;
+		this->L1Muon_Quality[i] = -999;
 	}
 }
 
