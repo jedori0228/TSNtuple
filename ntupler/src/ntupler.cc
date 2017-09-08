@@ -83,7 +83,7 @@ void ntupler::analyze(const edm::Event &iEvent, const edm::EventSetup &iSetup)
 {
 	this->Init();
 	this->RunNum = iEvent.id().run();
-	this->LumiBlackNum = iEvent.id().luminosityBlock();
+	this->LumiBlockNum = iEvent.id().luminosityBlock();
 	this->EventNum = iEvent.id().event();
 
 	// -- vertex -- //
@@ -150,7 +150,7 @@ void ntupler::beginJob()
 void ntupler::Init()
 {
 	this->RunNum = -999;
-	this->LumiBlackNum = -999;
+	this->LumiBlockNum = -999;
 	this->EventNum = 0;
 	this->nVertices = -999;
 	this->Rho_Offline = -999;
@@ -303,8 +303,8 @@ void ntupler::Init()
 void ntupler::Make_Branch()
 {
 	this->ntuple->Branch("RunNum",&RunNum,"RunNum/I");
-	this->ntuple->Branch("LumiBlackNum",&LumiBlackNum,"LumiBlackNum/l"); // -- unsigned long long -- //
-	this->ntuple->Branch("EventNum",&EventNum,"EventNum/I");
+	this->ntuple->Branch("LumiBlockNum",&LumiBlockNum,"LumiBlockNum/I");
+	this->ntuple->Branch("EventNum",&EventNum,"EventNum/l"); // -- unsigned long long -- //
 	this->ntuple->Branch("nVertices", &nVertices, "nVertices/I");
 	this->ntuple->Branch("Rho_Offline", &Rho_Offline, "Rho_Offline/D");
 	this->ntuple->Branch("BX_ID", &BX_ID, "BX_ID/D");

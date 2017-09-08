@@ -100,7 +100,7 @@ private:
 	static const int ArrSize = 2000;
 
 	int RunNum;
-	int LumiBlackNum;
+	int LumiBlockNum;
 	unsigned long long EventNum;
 
 	int nVertices;
