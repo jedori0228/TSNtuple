@@ -32,6 +32,7 @@ process.ntupler.L2Muon = cms.untracked.InputTag("hltL2MuonCandidates")
 # process.ntupler.L1Muon = cms.untracked.InputTag("hltGmtStage2Digis", "Muon") # -- after HLT re-run -- #
 process.ntupler.L1Muon = cms.untracked.InputTag("hltGtStage2Digis", "Muon") # -- after HLT re-run -- #
 # process.ntupler.L1Muon = cms.untracked.InputTag("gmtStage2Digis", "Muon", "RECO") # -- without HLT re-run -- #
+process.ntupler.OfflineVertex = cms.untracked.InputTag("offlineSlimmedPrimaryVertices")
 
 process.mypath = cms.Path(process.ntupler)
 
