@@ -26,7 +26,7 @@ process.load('Configuration.Geometry.GeometryRecoDB_cff')
 from TriggerStudyNtuple.ntupler.ntupler_cfi import *
 
 process.ntupler = ntuplerBase.clone()
-process.ntupler.OfflineMuon = cms.untracked.InputTag("muons")
+process.ntupler.OfflineMuon = cms.untracked.InputTag("slimmedMuons")
 process.ntupler.L3Muon = cms.untracked.InputTag("hltIterL3MuonCandidates")
 process.ntupler.L2Muon = cms.untracked.InputTag("hltL2MuonCandidates")
 # process.ntupler.L1Muon = cms.untracked.InputTag("hltGmtStage2Digis", "Muon") # -- after HLT re-run -- #

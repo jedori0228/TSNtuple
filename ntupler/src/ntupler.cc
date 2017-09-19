@@ -433,6 +433,7 @@ void ntupler::Fill_Muon(const edm::Event &iEvent)
 	const reco::Vertex & pv = Handle_Vertex->at(0);
 
 	edm::Handle<std::vector<reco::Muon> > Handle_OfflineMuon;
+	// edm::Handle< edm::View<reco::Muon> > Handle_OfflineMuon;
 	iEvent.getByToken(Token_OfflineMuon, Handle_OfflineMuon);
 
 	edm::Handle< edm::ValueMap<float> > Handle_OfflineECALPFIso03;
