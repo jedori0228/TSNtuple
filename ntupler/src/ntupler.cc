@@ -87,14 +87,18 @@ void ntupler::analyze(const edm::Event &iEvent, const edm::EventSetup &iSetup)
 	this->EventNum = iEvent.id().event();
 
 	// -- vertex -- //
-	edm::Handle<reco::VertexCollection> Handle_Vertex; 
-	iEvent.getByToken(Token_OfflineVertex, Handle_Vertex);
-	int nGoodVtx = 0;
-	for(reco::VertexCollection::const_iterator it = Handle_Vertex->begin(); it != Handle_Vertex->end(); ++it)
+	edm::Handle<reco::VertexCollection> Handle_Vertex;
+	if( iEvent.getByToken(Token_OfflineVertex, Handle_Vertex) )
 	{
-		if( it->isValid() ) nGoodVtx++;
+		int nGoodVtx = 0;
+		for(reco::VertexCollection::const_iterator it = Handle_Vertex->begin(); it != Handle_Vertex->end(); ++it)
+		{
+			if( it->isValid() ) nGoodVtx++;
+		}
+		this->nVertices = nGoodVtx;
 	}
-	this->nVertices = nGoodVtx;
+	// else
+	// 	std::cout << "Handle_Vertex is not valid ... nVertices will not be filled" << std::endl;
 
 	// -- Rho (offline) -- //
 	edm::Handle<double>  Handle_OfflineRho;
@@ -428,108 +432,115 @@ void ntupler::Make_Branch()
 
 void ntupler::Fill_Muon(const edm::Event &iEvent)
 {
-	edm::Handle<reco::VertexCollection> Handle_Vertex; 
-	iEvent.getByToken(Token_OfflineVertex, Handle_Vertex);
-	const reco::Vertex & pv = Handle_Vertex->at(0);
-
 	edm::Handle<std::vector<reco::Muon> > Handle_OfflineMuon;
 	// edm::Handle< edm::View<reco::Muon> > Handle_OfflineMuon;
-	iEvent.getByToken(Token_OfflineMuon, Handle_OfflineMuon);
-
-	edm::Handle< edm::ValueMap<float> > Handle_OfflineECALPFIso03;
-	edm::Handle< edm::ValueMap<float> > Handle_OfflineHCALPFIso03;
-	bool Flag_Valid_Iso03 = false;
-	if( iEvent.getByToken( Token_OfflineECALPFIso03, Handle_OfflineECALPFIso03 ) &&
-		iEvent.getByToken( Token_OfflineHCALPFIso03, Handle_OfflineHCALPFIso03 ) ) Flag_Valid_Iso03 = true;
-
-	edm::Handle< edm::ValueMap<float> > Handle_OfflineECALPFIso04;
-	edm::Handle< edm::ValueMap<float> > Handle_OfflineHCALPFIso04;
-	bool Flag_Valid_Iso04 = false;
-	if( iEvent.getByToken( Token_OfflineECALPFIso04, Handle_OfflineECALPFIso04 ) &&
-		iEvent.getByToken( Token_OfflineHCALPFIso04, Handle_OfflineHCALPFIso04 ) ) Flag_Valid_Iso04 = true;
-
-	int _nMuon = 0;
-	for(std::vector<reco::Muon>::const_iterator mu=Handle_OfflineMuon->begin(); mu!=Handle_OfflineMuon->end(); ++mu)
+	if( iEvent.getByToken(Token_OfflineMuon, Handle_OfflineMuon) ) // -- only when the dataset has offline muon collection (e.g. AOD) -- //
 	{
-		this->Muon_Pt[_nMuon] = mu->pt();
-		this->Muon_Eta[_nMuon] = mu->eta();
-		this->Muon_Phi[_nMuon] = mu->phi();
-		this->Muon_Px[_nMuon] = mu->px();
-		this->Muon_Py[_nMuon] = mu->py();
-		this->Muon_Pz[_nMuon] = mu->pz();
-		// this->Muon_dB[_nMuon] = mu->dB(); // -- dB is only availabe in pat::Muon -- //
+		edm::Handle<reco::VertexCollection> Handle_Vertex;
+		iEvent.getByToken(Token_OfflineVertex, Handle_Vertex);
+		const reco::Vertex & pv = Handle_Vertex->at(0);
 
-		this->Muon_Charge[_nMuon] = mu->charge();
+		edm::Handle< edm::ValueMap<float> > Handle_OfflineECALPFIso03;
+		edm::Handle< edm::ValueMap<float> > Handle_OfflineHCALPFIso03;
+		bool Flag_Valid_Iso03 = false;
+		if( iEvent.getByToken( Token_OfflineECALPFIso03, Handle_OfflineECALPFIso03 ) &&
+			iEvent.getByToken( Token_OfflineHCALPFIso03, Handle_OfflineHCALPFIso03 ) ) Flag_Valid_Iso03 = true;
 
-		if( mu->isGlobalMuon() ) this->Muon_IsGLB[_nMuon] = 1;
-		if( mu->isStandAloneMuon() ) this->Muon_IsSTA[_nMuon] = 1;
-		if( mu->isTrackerMuon() ) this->Muon_IsTRK[_nMuon] = 1;
-		if( mu->isPFMuon() ) this->Muon_IsPF[_nMuon] = 1;
-		if( muon::isTightMuon( (*mu), pv ) ) this->Muon_IsTight[_nMuon] = 1;
-		if( muon::isMediumMuon( (*mu) ) ) this->Muon_IsMedium[_nMuon] = 1;
-		if( muon::isLooseMuon( (*mu) ) ) this->Muon_IsLoose[_nMuon] = 1;
+		edm::Handle< edm::ValueMap<float> > Handle_OfflineECALPFIso04;
+		edm::Handle< edm::ValueMap<float> > Handle_OfflineHCALPFIso04;
+		bool Flag_Valid_Iso04 = false;
+		if( iEvent.getByToken( Token_OfflineECALPFIso04, Handle_OfflineECALPFIso04 ) &&
+			iEvent.getByToken( Token_OfflineHCALPFIso04, Handle_OfflineHCALPFIso04 ) ) Flag_Valid_Iso04 = true;
 
-		this->Muon_PFIso03_Charged[_nMuon] = mu->pfIsolationR03().sumChargedHadronPt;
-		this->Muon_PFIso03_Neutral[_nMuon] = mu->pfIsolationR03().sumNeutralHadronEt;
-		this->Muon_PFIso03_Photon[_nMuon] = mu->pfIsolationR03().sumPhotonEt;
-		this->Muon_PFIso03_SumPU[_nMuon] = mu->pfIsolationR03().sumPUPt;
-
-		this->Muon_PFIso04_Charged[_nMuon] = mu->pfIsolationR04().sumChargedHadronPt;
-		this->Muon_PFIso04_Neutral[_nMuon] = mu->pfIsolationR04().sumNeutralHadronEt;
-		this->Muon_PFIso04_Photon[_nMuon] = mu->pfIsolationR04().sumPhotonEt;
-		this->Muon_PFIso04_SumPU[_nMuon] = mu->pfIsolationR04().sumPUPt;
-
-		reco::MuonRef Ref_mu = reco::MuonRef(Handle_OfflineMuon, _nMuon);
-
-		if( Flag_Valid_Iso03 )
+		int _nMuon = 0;
+		for(std::vector<reco::Muon>::const_iterator mu=Handle_OfflineMuon->begin(); mu!=Handle_OfflineMuon->end(); ++mu)
 		{
-			const edm::ValueMap<float> ECALIso03 = *(Handle_OfflineECALPFIso03);
-			const edm::ValueMap<float> HCALIso03 = *(Handle_OfflineHCALPFIso03);
-			this->Muon_PFCluster03_ECAL[_nMuon] = ECALIso03[Ref_mu];
-			this->Muon_PFCluster03_HCAL[_nMuon] = HCALIso03[Ref_mu];
+			this->Muon_Pt[_nMuon] = mu->pt();
+			this->Muon_Eta[_nMuon] = mu->eta();
+			this->Muon_Phi[_nMuon] = mu->phi();
+			this->Muon_Px[_nMuon] = mu->px();
+			this->Muon_Py[_nMuon] = mu->py();
+			this->Muon_Pz[_nMuon] = mu->pz();
+			// this->Muon_dB[_nMuon] = mu->dB(); // -- dB is only availabe in pat::Muon -- //
+
+			this->Muon_Charge[_nMuon] = mu->charge();
+
+			if( mu->isGlobalMuon() ) this->Muon_IsGLB[_nMuon] = 1;
+			if( mu->isStandAloneMuon() ) this->Muon_IsSTA[_nMuon] = 1;
+			if( mu->isTrackerMuon() ) this->Muon_IsTRK[_nMuon] = 1;
+			if( mu->isPFMuon() ) this->Muon_IsPF[_nMuon] = 1;
+			if( muon::isTightMuon( (*mu), pv ) ) this->Muon_IsTight[_nMuon] = 1;
+			if( muon::isMediumMuon( (*mu) ) ) this->Muon_IsMedium[_nMuon] = 1;
+			if( muon::isLooseMuon( (*mu) ) ) this->Muon_IsLoose[_nMuon] = 1;
+
+			this->Muon_PFIso03_Charged[_nMuon] = mu->pfIsolationR03().sumChargedHadronPt;
+			this->Muon_PFIso03_Neutral[_nMuon] = mu->pfIsolationR03().sumNeutralHadronEt;
+			this->Muon_PFIso03_Photon[_nMuon] = mu->pfIsolationR03().sumPhotonEt;
+			this->Muon_PFIso03_SumPU[_nMuon] = mu->pfIsolationR03().sumPUPt;
+
+			this->Muon_PFIso04_Charged[_nMuon] = mu->pfIsolationR04().sumChargedHadronPt;
+			this->Muon_PFIso04_Neutral[_nMuon] = mu->pfIsolationR04().sumNeutralHadronEt;
+			this->Muon_PFIso04_Photon[_nMuon] = mu->pfIsolationR04().sumPhotonEt;
+			this->Muon_PFIso04_SumPU[_nMuon] = mu->pfIsolationR04().sumPUPt;
+
+			reco::MuonRef Ref_mu = reco::MuonRef(Handle_OfflineMuon, _nMuon);
+
+			if( Flag_Valid_Iso03 )
+			{
+				const edm::ValueMap<float> ECALIso03 = *(Handle_OfflineECALPFIso03);
+				const edm::ValueMap<float> HCALIso03 = *(Handle_OfflineHCALPFIso03);
+				this->Muon_PFCluster03_ECAL[_nMuon] = ECALIso03[Ref_mu];
+				this->Muon_PFCluster03_HCAL[_nMuon] = HCALIso03[Ref_mu];
+			}
+
+			if( Flag_Valid_Iso04 )
+			{
+				const edm::ValueMap<float> ECALIso04 = *(Handle_OfflineECALPFIso04);
+				const edm::ValueMap<float> HCALIso04 = *(Handle_OfflineHCALPFIso04);
+				this->Muon_PFCluster04_ECAL[_nMuon] = ECALIso04[Ref_mu];
+				this->Muon_PFCluster04_HCAL[_nMuon] = HCALIso04[Ref_mu];
+			}
+
+			reco::TrackRef GlbTrk = mu->globalTrack();
+			if( GlbTrk.isNonnull() )
+			{
+				this->Muon_NormChi2_GlbTrk[_nMuon] = GlbTrk->normalizedChi2();
+
+				const reco::HitPattern & GlbHit = GlbTrk->hitPattern();
+				this->Muon_nTrackerHit_GlbTrk[_nMuon] = GlbHit.numberOfValidTrackerHits();
+				this->Muon_nTrackerLayer_GlbTrk[_nMuon] = GlbHit.trackerLayersWithMeasurement();
+				this->Muon_nPixelHit_GlbTrk[_nMuon] = GlbHit.numberOfValidPixelHits();
+				this->Muon_nMuonHit_GlbTrk[_nMuon] = GlbHit.numberOfValidMuonHits();
+			}
+
+			reco::TrackRef InnerTrk = mu->innerTrack();
+			if( InnerTrk.isNonnull() )
+			{
+				this->Muon_NormChi2_InnerTrk[_nMuon] = InnerTrk->normalizedChi2();
+
+				const reco::HitPattern & InnerHit = InnerTrk->hitPattern();
+				this->Muon_nTrackerHit_InnerTrk[_nMuon] = InnerHit.numberOfValidTrackerHits();
+				this->Muon_nTrackerLayer_InnerTrk[_nMuon] = InnerHit.trackerLayersWithMeasurement();
+				this->Muon_nPixelHit_InnerTrk[_nMuon] = InnerHit.numberOfValidPixelHits();
+			}
+
+			this->Muon_dxyVTX_BestTrk[_nMuon] = mu->muonBestTrack()->dxy( pv.position() );
+			this->Muon_dzVTX_BestTrk[_nMuon] = mu->muonBestTrack()->dz( pv.position() );
+
+			this->Muon_nMatchedStation[_nMuon] = mu->numberOfMatchedStations();
+			this->Muon_nMatchedRPCLayer[_nMuon] = mu->numberOfMatchedRPCLayers();
+			this->Muon_StationMask[_nMuon] = mu->stationMask();
+
+			_nMuon++;
 		}
+		this->nMuon = _nMuon;
 
-		if( Flag_Valid_Iso04 )
-		{
-			const edm::ValueMap<float> ECALIso04 = *(Handle_OfflineECALPFIso04);
-			const edm::ValueMap<float> HCALIso04 = *(Handle_OfflineHCALPFIso04);
-			this->Muon_PFCluster04_ECAL[_nMuon] = ECALIso04[Ref_mu];
-			this->Muon_PFCluster04_HCAL[_nMuon] = HCALIso04[Ref_mu];
-		}
-
-		reco::TrackRef GlbTrk = mu->globalTrack();
-		if( GlbTrk.isNonnull() )
-		{
-			this->Muon_NormChi2_GlbTrk[_nMuon] = GlbTrk->normalizedChi2();
-
-			const reco::HitPattern & GlbHit = GlbTrk->hitPattern();
-			this->Muon_nTrackerHit_GlbTrk[_nMuon] = GlbHit.numberOfValidTrackerHits();
-			this->Muon_nTrackerLayer_GlbTrk[_nMuon] = GlbHit.trackerLayersWithMeasurement();
-			this->Muon_nPixelHit_GlbTrk[_nMuon] = GlbHit.numberOfValidPixelHits();
-			this->Muon_nMuonHit_GlbTrk[_nMuon] = GlbHit.numberOfValidMuonHits();
-		}
-
-		reco::TrackRef InnerTrk = mu->innerTrack();
-		if( InnerTrk.isNonnull() )
-		{
-			this->Muon_NormChi2_InnerTrk[_nMuon] = InnerTrk->normalizedChi2();
-
-			const reco::HitPattern & InnerHit = InnerTrk->hitPattern();
-			this->Muon_nTrackerHit_InnerTrk[_nMuon] = InnerHit.numberOfValidTrackerHits();
-			this->Muon_nTrackerLayer_InnerTrk[_nMuon] = InnerHit.trackerLayersWithMeasurement();
-			this->Muon_nPixelHit_InnerTrk[_nMuon] = InnerHit.numberOfValidPixelHits();
-		}
-
-		this->Muon_dxyVTX_BestTrk[_nMuon] = mu->muonBestTrack()->dxy( pv.position() );
-		this->Muon_dzVTX_BestTrk[_nMuon] = mu->muonBestTrack()->dz( pv.position() );
-
-		this->Muon_nMatchedStation[_nMuon] = mu->numberOfMatchedStations();
-		this->Muon_nMatchedRPCLayer[_nMuon] = mu->numberOfMatchedRPCLayers();
-		this->Muon_StationMask[_nMuon] = mu->stationMask();
-
-		_nMuon++;
 	}
-	this->nMuon = _nMuon;
+	// else
+	// {
+	// 	std::cout << "Handle_OfflineMuon is not valid ... muon variables will not be filled" << std::endl;
+	// }
+
 }
 
 void ntupler::Fill_HLT(const edm::Event &iEvent)
