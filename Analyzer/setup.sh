@@ -12,8 +12,9 @@ export ROOT_INCLUDE_PATH=${KP_ANALYZER_PATH}:${ROOT_INCLUDE_PATH}
 
 # -- ntuple path -- #
 export KP_DATA_PATH=""
-if [ $HOSTNAME == "tamsa2.snu.ac.kr" ] || [ "compute-"=~"$HOSTNAME" ] ; # -- 147.47.242.67 -- # 
-then 
+if [[ "tamsa2.snu.ac.kr" == $HOSTNAME ]] || [[ "compute-" =~ "$HOSTNAME" ]]; # -- 147.47.242.67 -- # 
+then
+	echo "tamsa2 server setting"
 	KP_DATA_PATH="/data5/Users/kplee/TriggerStudyNtuple"
 
 	# -- cmssw setup -- #
@@ -24,5 +25,8 @@ then
 	cd /share_home/kplee/TagProbe/v20170815_1st_MuonPOG_92Xv2_TrkIter/CMSSW_9_2_4/src
 	eval `scramv1 runtime -sh` # -- equivalent to cmsenv (cmsenv doesn't work. why?) -- #
 	cd $KP_ANALYZER_PATH
-
+	
+elif [ "muon" == $HOSTNAME ]; 
+then
+	KP_DATA_PATH=/scratch/kplee/TriggerStudyNtuple
 fi
