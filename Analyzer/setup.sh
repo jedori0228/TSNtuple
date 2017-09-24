@@ -5,6 +5,10 @@ fi
 
 # -- analyzer path (do not insert "/" in the end of the path)-- #
 export KP_ANALYZER_PATH=$(pwd)
+export KP_INCLUDE_PATH=$KP_ANALYZER_PATH/Include
+
+# -- root setup -- #
+export ROOT_INCLUDE_PATH=${KP_ANALYZER_PATH}:${ROOT_INCLUDE_PATH}
 
 # -- ntuple path -- #
 export KP_DATA_PATH=""

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
@@ -128,7 +130,7 @@ public:
 	NtupleHandle( TChain* _chain)
 	{
 		this->chain = _chain;
-		chain->SetBranchStatus("*", 0);
+		// chain->SetBranchStatus("*", 0);
 
 		this->TurnOnBranches_GenParticle();
 		this->TurnOnBranches_Event();

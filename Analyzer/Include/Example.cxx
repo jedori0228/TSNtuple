@@ -6,6 +6,7 @@ void Example()
 {
 	TChain *chain = new TChain("ntupler/ntuple");
 	chain->Add("Local/ntuple_withoutFix.root");
+	// chain->Add("/Users/KyeongPil_Lee/ServiceWorks/TriggerStudyNtuple/Analyzer/Rate/Local/ntuple_*.root");
 
 	NtupleHandle *ntuple = new NtupleHandle( chain );
 	// ntuple->TurnOffBranches_All();
