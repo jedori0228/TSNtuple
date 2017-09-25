@@ -26,6 +26,147 @@
 #define nMaxLumiBlock 5000
 #define LumiBlockTime 23.31
 
+// -- HLT_Physics_part[0-7]_v7 -- //
+// -- 7.5e33: 320
+// -- 1.0e34: 400
+// -- 1.2e34: 500
+// -- 1.4e34: 580
+// -- 1.6e34: 580
+
+vector<Int_t> vec_Prescale_Run301567 = {400, 320};
+vector<Double_t> vec_LS_Run301567 = {20, 267, 99999};
+
+vector<Int_t> vec_Prescale_Run301627 = {400, 320, 400, 320};
+vector<Double_t> vec_LS_Run301627 = {45, 63, 82, 264, 99999};
+
+vector<Int_t> vec_Prescale_Run301664 = {320, 400, 320};
+vector<Double_t> vec_LS_Run301664 = {27, 49, 203, 99999};
+
+vector<Int_t> vec_Prescale_Run301665 = {320};
+vector<Double_t> vec_LS_Run301665 = {1, 99999};
+
+vector<Int_t> vec_Prescale_Run301694 = {580, 580};
+vector<Double_t> vec_LS_Run301694 = {27, 64, 99999};
+
+vector<Int_t> vec_Prescale_Run301912 = {320};
+vector<Double_t> vec_LS_Run301912 = {43, 99999};
+
+vector<Int_t> vec_Prescale_Run301913 = {320};
+vector<Double_t> vec_LS_Run301913 = {1, 99999};
+
+vector<Int_t> vec_Prescale_Run301914 = {320};
+vector<Double_t> vec_LS_Run301914 = {1, 99999};
+
+vector<Int_t> vec_Prescale_Run301941 = {580, 320};
+vector<Double_t> vec_LS_Run301941 = {11, 32, 99999};
+
+vector<Int_t> vec_Prescale_Run301959 = {400, 320, 0};
+vector<Double_t> vec_LS_Run301959 = {23, 433, 1061, 99999};
+
+Int_t Find_PrescaleValue( Int_t RunNum, Int_t LumiBlockNum )
+{
+	vector<Int_t> vec_Prescale;
+	vector<Double_t> vec_LS;
+	if( RunNum == 301567 )
+	{
+		vec_Prescale = vec_Prescale_Run301567;
+		vec_LS = vec_LS_Run301567;
+	}
+	else if( RunNum == 301627 )
+	{
+		vec_Prescale = vec_Prescale_Run301627;
+		vec_LS = vec_LS_Run301627;
+	}
+	else if( RunNum == 301664 )
+	{
+		vec_Prescale = vec_Prescale_Run301664;
+		vec_LS = vec_LS_Run301664;
+	}
+	else if( RunNum == 301665 )
+	{
+		vec_Prescale = vec_Prescale_Run301665;
+		vec_LS = vec_LS_Run301665;
+	}
+	else if( RunNum == 301694 )
+	{
+		vec_Prescale = vec_Prescale_Run301694;
+		vec_LS = vec_LS_Run301694;
+	}
+	else if( RunNum == 301912 )
+	{
+		vec_Prescale = vec_Prescale_Run301912;
+		vec_LS = vec_LS_Run301912;
+	}
+	else if( RunNum == 301913 )
+	{
+		vec_Prescale = vec_Prescale_Run301913;
+		vec_LS = vec_LS_Run301913;
+	}
+	else if( RunNum == 301914 )
+	{
+		vec_Prescale = vec_Prescale_Run301914;
+		vec_LS = vec_LS_Run301914;
+	}
+	else if( RunNum == 301941 )
+	{
+		vec_Prescale = vec_Prescale_Run301941;
+		vec_LS = vec_LS_Run301941;
+	}
+	else if( RunNum == 301959 )
+	{
+		vec_Prescale = vec_Prescale_Run301959;
+		vec_LS = vec_LS_Run301959;
+	}
+
+	// -- find pre-scale value -- //
+	Double_t Prescale = 0;
+
+	Int_t nBin = (Int_t)vec_Prescale.size();
+	for(Int_t i=0; i<nBin; i++)
+	{
+		Double_t LowerEdge = vec_LS[i];
+		Double_t UpperEdge = vec_LS[i+1];
+
+		if( LumiBlockNum >= LowerEdge && LumiBlockNum < UpperEdge )
+		{
+			Prescale = vec_Prescale[i];
+			break;
+		}
+	}
+
+	// printf("[Run = %d, LS = %d] -> Prescale = %.0lf\n", RunNum, LumiBlockNum, Prescale);
+
+	return Prescale;
+}
+
+
+// Int_t Find_PrescaleValue( Double_t InstLumi )
+// {
+// 	Int_t Prescale = 0;
+// 	UInt_t nBin = (Int_t)vec_Prescale.size();
+
+// 	if( InstLumi > vec_LumiEdge[nBin] ) // -- extrapolation to higher lumi. -- //
+// 		Prescale = vec_Prescale[nBin-1];
+// 	else
+// 	{
+// 		for(UInt_t i=0; i<nBin; i++)
+// 		{
+// 			Double_t LowerEdge = vec_LumiEdge[i];
+// 			Double_t UpperEdge = vec_LumiEdge[i+1];
+
+// 			if( InstLumi > LowerEdge && InstLumi < UpperEdge )
+// 			{
+// 				Prescale = vec_Prescale[i];
+// 				break;
+// 			}
+// 		}
+// 	}
+
+// 	// printf("[Inst.Lumi = %lf] -> Prescale = %.0lf\n", InstLumi, Prescale);
+
+// 	return Prescale;
+// }
+
 class LumiBlockInfo
 {
 public:
@@ -33,13 +174,20 @@ public:
 
 	Int_t nEvent;
 	Int_t nFiredEvent;
-	Double_t nFiredEvent_Scaled2e34;
+
+	Int_t nEvent_UnPS;
+	Int_t nFiredEvent_UnPS;
+	
+	Double_t nFiredEvent_UnPS_Scaled2e34;
+	
 	Double_t Sum_InstLumi;
 	Double_t Mean_InstLumi;
 	Double_t Sum_nVertices;
 	Double_t Mean_nVertices;
+
 	Double_t Rate;
-	Double_t Rate_Scaled2e34;
+	Double_t Rate_UnPS;
+	Double_t Rate_UnPS_Scaled2e34;
 
 	LumiBlockInfo( Int_t _Num )
 	{
@@ -49,12 +197,19 @@ public:
 
 	void Fill( KPEvent &event, TString TriggerTag )
 	{
-		this->nEvent++;
+		Double_t Prescale = Find_PrescaleValue( event.RunNum, event.LumiBlockNum );
+
+		this->nEvent += 1;
+		this->nEvent_UnPS += Prescale;
+
 		this->Sum_InstLumi = Sum_InstLumi + event.InstLumi;
 		this->Sum_nVertices = Sum_nVertices + event.nVertices;
 
 		if( std::find(event.vec_FiredTrigger->begin(), event.vec_FiredTrigger->end(), TriggerTag) != event.vec_FiredTrigger->end() ) // -- if trigger is fired -- //
-			this->nFiredEvent++;
+		{
+			this->nFiredEvent += 1;
+			this->nFiredEvent_UnPS += Prescale;
+		}
 	}
 
 	void Calc_Rate()
@@ -64,15 +219,22 @@ public:
 			this->Mean_InstLumi = 0;
 			this->Mean_nVertices = 0;
 			this->Rate = 0;
+			this->Rate_UnPS = 0;
+			this->Rate_UnPS_Scaled2e34 = 0;
 		}
 		else
 		{
 			this->Mean_InstLumi = this->Sum_InstLumi / this->nEvent; // -- divided by total # events, not only # fired events! -- //
 			this->Mean_nVertices = this->Sum_nVertices / this->nEvent;
 			this->Rate = this->nFiredEvent / LumiBlockTime; // -- unit: Hz -- //
+			this->Rate_UnPS = this->nFiredEvent_UnPS / LumiBlockTime;
 
-			this->nFiredEvent_Scaled2e34 = this->nFiredEvent * ( 20000.0 / this->Mean_InstLumi );
-			this->Rate_Scaled2e34 = this->nFiredEvent_Scaled2e34 / LumiBlockTime;
+			Double_t SF_Lumi = 20000.0 / this->Mean_InstLumi;
+			this->nFiredEvent_UnPS_Scaled2e34 = this->nFiredEvent_UnPS * SF_Lumi;
+			this->Rate_UnPS_Scaled2e34 = this->nFiredEvent_UnPS_Scaled2e34 / LumiBlockTime;
+
+			// printf("[%d lumi-block] (# fired events, # fired rate, un-prescaled # rate, scaled to 2e34 rate) = (%d, %lf, %lf, %lf)\n",
+			// 	this->LumiBlockNum, this->nFiredEvent, this->Rate, this->Rate_UnPS, this->Rate_UnPS_Scaled2e34);
 		}
 
 	}
@@ -82,11 +244,20 @@ private:
 	{
 		this->nEvent = 0;
 		this->nFiredEvent = 0;
+
+		this->nEvent_UnPS = 0;
+		this->nFiredEvent_UnPS = 0;
+
+		this->nFiredEvent_UnPS_Scaled2e34 = 0;
+
 		this->Sum_InstLumi = 0;
 		this->Mean_InstLumi = 0;
 		this->Sum_nVertices = 0;
 		this->Mean_nVertices = 0;
+
 		this->Rate = 0;
+		this->Rate_UnPS = 0;
+		this->Rate_UnPS_Scaled2e34 = 0;
 	}
 };
 
@@ -138,18 +309,25 @@ public:
 	TH1D* h_LumiBlock_vs_InstLumiMean;
 	TH1D* h_LumiBlock_vs_nVerticesMean;
 	TH1D* h_LumiBlock_vs_Rate;
-	TH1D* h_LumiBlock_vs_nFiredEvent_Scaled2e34;
-	TH1D* h_LumiBlock_vs_Rate_Scaled2e34;
+
+	TH1D* h_LumiBlock_vs_nFiredEvent_UnPS;
+	TH1D* h_LumiBlock_vs_Rate_UnPS;
+
+	TH1D* h_LumiBlock_vs_nFiredEvent_UnPS_Scaled2e34;
+	TH1D* h_LumiBlock_vs_Rate_UnPS_Scaled2e34;
 
 	// -- just 1 bin -- //
 	TH1D* h_TotalRate;
-	TH1D* h_TotalRate_Scaled2e34;
+	TH1D* h_TotalRate_UnPS;
+	TH1D* h_TotalRate_UnPS_Scaled2e34;
 
 	Int_t nFiredEvent;
-	Double_t nFiredEvent_Scaled2e34;
+	Int_t nFiredEvent_UnPS;
+	Double_t nFiredEvent_UnPS_Scaled2e34;
 	Int_t nLumiBlock;
 	Double_t TotalRate;
-	Double_t TotalRate_Scaled2e34;
+	Double_t TotalRate_UnPS;
+	Double_t TotalRate_UnPS_Scaled2e34;
 
 	RunHistContainer( TString _Tag )
 	{
@@ -176,14 +354,23 @@ public:
 		this->h_LumiBlock_vs_Rate->SetBinContent(LumiBlockNum, Info->Rate );
 		this->h_LumiBlock_vs_Rate->SetBinError(LumiBlockNum, Info->Rate * (1.0 / sqrt(Info->nFiredEvent)) );
 
-		this->h_LumiBlock_vs_nFiredEvent_Scaled2e34->SetBinContent(LumiBlockNum, Info->nFiredEvent_Scaled2e34 );
-		this->h_LumiBlock_vs_nFiredEvent_Scaled2e34->SetBinError(LumiBlockNum, 0);
+		// -- un-prescaled -- //
+		this->h_LumiBlock_vs_nFiredEvent_UnPS->SetBinContent(LumiBlockNum, Info->nFiredEvent_UnPS );
+		this->h_LumiBlock_vs_nFiredEvent_UnPS->SetBinError(LumiBlockNum, 0);
 
-		this->h_LumiBlock_vs_Rate_Scaled2e34->SetBinContent(LumiBlockNum, Info->Rate_Scaled2e34 );
-		this->h_LumiBlock_vs_Rate_Scaled2e34->SetBinError(LumiBlockNum, 0);
+		this->h_LumiBlock_vs_Rate_UnPS->SetBinContent(LumiBlockNum, Info->Rate_UnPS );
+		this->h_LumiBlock_vs_Rate_UnPS->SetBinError(LumiBlockNum, 0);
+
+		// -- scaled to 2e34 -- //
+		this->h_LumiBlock_vs_nFiredEvent_UnPS_Scaled2e34->SetBinContent(LumiBlockNum, Info->nFiredEvent_UnPS_Scaled2e34 );
+		this->h_LumiBlock_vs_nFiredEvent_UnPS_Scaled2e34->SetBinError(LumiBlockNum, 0);
+
+		this->h_LumiBlock_vs_Rate_UnPS_Scaled2e34->SetBinContent(LumiBlockNum, Info->Rate_UnPS_Scaled2e34 );
+		this->h_LumiBlock_vs_Rate_UnPS_Scaled2e34->SetBinError(LumiBlockNum, 0);
 
 		this->nFiredEvent += Info->nFiredEvent;
-		this->nFiredEvent_Scaled2e34 += Info->nFiredEvent_Scaled2e34;
+		this->nFiredEvent_UnPS += Info->nFiredEvent_UnPS;
+		this->nFiredEvent_UnPS_Scaled2e34 += Info->nFiredEvent_UnPS_Scaled2e34;
 		this->nLumiBlock += 1;
 	}
 
@@ -193,19 +380,24 @@ public:
 		if( this->nLumiBlock == 0 )
 		{
 			this->TotalRate = 0;
-			this->TotalRate_Scaled2e34 = 0;
+			this->TotalRate_UnPS = 0;
+			this->TotalRate_UnPS_Scaled2e34 = 0;
 		}
 		else
 		{
 			this->TotalRate = this->nFiredEvent / (this->nLumiBlock * LumiBlockTime);
-			this->TotalRate_Scaled2e34 = this->nFiredEvent_Scaled2e34 / (this->nLumiBlock * LumiBlockTime);
+			this->TotalRate_UnPS = this->nFiredEvent_UnPS / (this->nLumiBlock * LumiBlockTime);
+			this->TotalRate_UnPS_Scaled2e34 = this->nFiredEvent_UnPS_Scaled2e34 / (this->nLumiBlock * LumiBlockTime);
 		}
 
 		this->h_TotalRate->SetBinContent(1, this->TotalRate);
 		this->h_TotalRate->SetBinError(1, 0);
 
-		this->h_TotalRate_Scaled2e34->SetBinContent(1, this->TotalRate_Scaled2e34);
-		this->h_TotalRate_Scaled2e34->SetBinError(1, 0);
+		this->h_TotalRate_UnPS->SetBinContent(1, this->TotalRate_UnPS);
+		this->h_TotalRate_UnPS->SetBinError(1, 0);
+
+		this->h_TotalRate_UnPS_Scaled2e34->SetBinContent(1, this->TotalRate_UnPS_Scaled2e34);
+		this->h_TotalRate_UnPS_Scaled2e34->SetBinError(1, 0);
 
 		f_output->cd();
 		for( const auto& h : this->vec_Hist )
@@ -229,23 +421,35 @@ private:
 		this->h_LumiBlock_vs_Rate = new TH1D("h_LumiBlock_vs_Rate_"+this->Tag, "", nMaxLumiBlock, 1, nMaxLumiBlock+1 ); // -- starts at 1 -- //
 		this->vec_Hist.push_back( this->h_LumiBlock_vs_Rate );
 
-		this->h_LumiBlock_vs_nFiredEvent_Scaled2e34 = new TH1D("h_LumiBlock_vs_nFiredEvent_Scaled2e34_"+this->Tag, "", nMaxLumiBlock, 1, nMaxLumiBlock+1 ); // -- starts at 1 -- //
-		this->vec_Hist.push_back( this->h_LumiBlock_vs_nFiredEvent_Scaled2e34 );
+		this->h_LumiBlock_vs_nFiredEvent_UnPS = new TH1D("h_LumiBlock_vs_nFiredEvent_UnPS_"+this->Tag, "", nMaxLumiBlock, 1, nMaxLumiBlock+1 ); // -- starts at 1 -- //
+		this->vec_Hist.push_back( this->h_LumiBlock_vs_nFiredEvent_UnPS );
 
-		this->h_LumiBlock_vs_Rate_Scaled2e34 = new TH1D("h_LumiBlock_vs_Rate_Scaled2e34_"+this->Tag, "", nMaxLumiBlock, 1, nMaxLumiBlock+1 ); // -- starts at 1 -- //
-		this->vec_Hist.push_back( this->h_LumiBlock_vs_Rate_Scaled2e34 );
+		this->h_LumiBlock_vs_Rate_UnPS = new TH1D("h_LumiBlock_vs_Rate_UnPS_"+this->Tag, "", nMaxLumiBlock, 1, nMaxLumiBlock+1 ); // -- starts at 1 -- //
+		this->vec_Hist.push_back( this->h_LumiBlock_vs_Rate_UnPS );
+
+		this->h_LumiBlock_vs_nFiredEvent_UnPS_Scaled2e34 = new TH1D("h_LumiBlock_vs_nFiredEvent_UnPS_Scaled2e34_"+this->Tag, "", nMaxLumiBlock, 1, nMaxLumiBlock+1 ); // -- starts at 1 -- //
+		this->vec_Hist.push_back( this->h_LumiBlock_vs_nFiredEvent_UnPS_Scaled2e34 );
+
+		this->h_LumiBlock_vs_Rate_UnPS_Scaled2e34 = new TH1D("h_LumiBlock_vs_Rate_UnPS_Scaled2e34_"+this->Tag, "", nMaxLumiBlock, 1, nMaxLumiBlock+1 ); // -- starts at 1 -- //
+		this->vec_Hist.push_back( this->h_LumiBlock_vs_Rate_UnPS_Scaled2e34 );
+
 
 		this->h_TotalRate = new TH1D("h_TotalRate_"+this->Tag, "", 1, 0, 1);
 		this->vec_Hist.push_back( this->h_TotalRate );
 
-		this->h_TotalRate_Scaled2e34 = new TH1D("h_TotalRate_Scaled2e34_"+this->Tag, "", 1, 0, 1);
-		this->vec_Hist.push_back( this->h_TotalRate_Scaled2e34 );
+		this->h_TotalRate_UnPS = new TH1D("h_TotalRate_UnPS_"+this->Tag, "", 1, 0, 1);
+		this->vec_Hist.push_back( this->h_TotalRate_UnPS );
+
+		this->h_TotalRate_UnPS_Scaled2e34 = new TH1D("h_TotalRate_UnPS_Scaled2e34_"+this->Tag, "", 1, 0, 1);
+		this->vec_Hist.push_back( this->h_TotalRate_UnPS_Scaled2e34 );
 
 		this->nFiredEvent = 0;
-		this->nFiredEvent_Scaled2e34 = 0;
+		this->nFiredEvent_UnPS = 0;
+		this->nFiredEvent_UnPS_Scaled2e34 = 0;
 		this->nLumiBlock = 0;
 		this->TotalRate = 0;
-		this->TotalRate_Scaled2e34 = 0;
+		this->TotalRate_UnPS = 0;
+		this->TotalRate_UnPS_Scaled2e34 = 0;
 	}
 };
 
@@ -256,19 +460,26 @@ public:
 
 	vector<TH1D*> vec_Hist;
 	TH1D* h_TotalRate;
-	TH1D* h_TotalRate_Scaled2e34;
+	TH1D* h_TotalRate_UnPS;
+	TH1D* h_TotalRate_UnPS_Scaled2e34;
 
 	Int_t nFiredEvent;
-	Double_t nFiredEvent_Scaled2e34;
+	Double_t nFiredEvent_UnPS;
+	Double_t nFiredEvent_UnPS_Scaled2e34;
+
 	Int_t nLumiBlock;
 	Double_t TotalRate;
-	Double_t TotalRate_Scaled2e34;
+	Double_t TotalRate_UnPS;
+	Double_t TotalRate_UnPS_Scaled2e34;
 
 	vector<TH2D*> vec_2DHist;
 	TH2D* h2D_Lumi_Rate;
-	TH2D* h2D_Lumi_Rate_Scaled2e34;
+	TH2D* h2D_Lumi_Rate_UnPS;
+	TH2D* h2D_Lumi_Rate_UnPS_Scaled2e34;
+
 	TH2D* h2D_nVertices_Rate;
-	TH2D* h2D_nVertices_Rate_Scaled2e34;
+	TH2D* h2D_nVertices_Rate_UnPS;
+	TH2D* h2D_nVertices_Rate_UnPS_Scaled2e34;
 
 	RateHistContainer( TString _Tag )
 	{
@@ -279,14 +490,17 @@ public:
 	void Fill( LumiBlockInfo *Info )
 	{
 		this->nFiredEvent += Info->nFiredEvent;
-		this->nFiredEvent_Scaled2e34 += Info->nFiredEvent_Scaled2e34;
+		this->nFiredEvent_UnPS += Info->nFiredEvent_UnPS;
+		this->nFiredEvent_UnPS_Scaled2e34 += Info->nFiredEvent_UnPS_Scaled2e34;
 		this->nLumiBlock += 1;
 
 		this->h2D_Lumi_Rate->Fill( Info->Mean_InstLumi, Info->Rate );
-		this->h2D_Lumi_Rate_Scaled2e34->Fill( Info->Mean_InstLumi, Info->Rate_Scaled2e34 );
+		this->h2D_Lumi_Rate_UnPS->Fill( Info->Mean_InstLumi, Info->Rate_UnPS );
+		this->h2D_Lumi_Rate_UnPS_Scaled2e34->Fill( Info->Mean_InstLumi, Info->Rate_UnPS_Scaled2e34 );
 
 		this->h2D_nVertices_Rate->Fill( Info->Mean_nVertices, Info->Rate );
-		this->h2D_nVertices_Rate_Scaled2e34->Fill( Info->Mean_nVertices, Info->Rate_Scaled2e34 );
+		this->h2D_nVertices_Rate_UnPS->Fill( Info->Mean_nVertices, Info->Rate_UnPS );
+		this->h2D_nVertices_Rate_UnPS_Scaled2e34->Fill( Info->Mean_nVertices, Info->Rate_UnPS_Scaled2e34 );
 	}
 
 	void Save( TFile *f_output )
@@ -295,20 +509,25 @@ public:
 		if( this->nLumiBlock == 0 )
 		{
 			this->TotalRate = 0;
-			this->TotalRate_Scaled2e34 = 0;
+			this->TotalRate_UnPS = 0;
+			this->TotalRate_UnPS_Scaled2e34 = 0;
 		}
 		else
 		{
 			this->TotalRate = this->nFiredEvent / (this->nLumiBlock * LumiBlockTime);
-			this->TotalRate_Scaled2e34 = this->nFiredEvent_Scaled2e34 / (this->nLumiBlock * LumiBlockTime);
+			this->TotalRate_UnPS = this->nFiredEvent_UnPS / (this->nLumiBlock * LumiBlockTime);
+			this->TotalRate_UnPS_Scaled2e34 = this->nFiredEvent_UnPS_Scaled2e34 / (this->nLumiBlock * LumiBlockTime);
 		}
 
 
 		this->h_TotalRate->SetBinContent(1, this->TotalRate);
 		this->h_TotalRate->SetBinError(1, 0);
 
-		this->h_TotalRate_Scaled2e34->SetBinContent(1, this->TotalRate_Scaled2e34);
-		this->h_TotalRate_Scaled2e34->SetBinError(1, 0);
+		this->h_TotalRate_UnPS->SetBinContent(1, this->TotalRate_UnPS);
+		this->h_TotalRate_UnPS->SetBinError(1, 0);
+
+		this->h_TotalRate_UnPS_Scaled2e34->SetBinContent(1, this->TotalRate_UnPS_Scaled2e34);
+		this->h_TotalRate_UnPS_Scaled2e34->SetBinError(1, 0);
 
 		f_output->cd();
 		for( const auto* h : this->vec_Hist )
@@ -323,23 +542,33 @@ private:
 		this->h_TotalRate = new TH1D("h_TotalRate_"+this->Tag, "", 1, 0, 1 );
 		this->vec_Hist.push_back( this->h_TotalRate );
 
-		this->h_TotalRate_Scaled2e34 = new TH1D("h_TotalRate_Scaled2e34_"+this->Tag, "", 1, 0, 1 );
-		this->vec_Hist.push_back( this->h_TotalRate_Scaled2e34 );
+		this->h_TotalRate_UnPS = new TH1D("h_TotalRate_UnPS_"+this->Tag, "", 1, 0, 1 );
+		this->vec_Hist.push_back( this->h_TotalRate_UnPS );
+
+		this->h_TotalRate_UnPS_Scaled2e34 = new TH1D("h_TotalRate_UnPS_Scaled2e34_"+this->Tag, "", 1, 0, 1 );
+		this->vec_Hist.push_back( this->h_TotalRate_UnPS_Scaled2e34 );
 
 		this->h2D_Lumi_Rate = new TH2D("h2D_Lumi_Rate_"+this->Tag, "", 2000, 1000 ,20000, 200, 0, 200 );
 		this->vec_2DHist.push_back( this->h2D_Lumi_Rate );
 
-		this->h2D_Lumi_Rate_Scaled2e34 = new TH2D("h2D_Lumi_Rate_Scaled2e34_"+this->Tag, "", 2000, 1000 ,20000, 200, 0, 200 );
-		this->vec_2DHist.push_back( this->h2D_Lumi_Rate_Scaled2e34 );
+		this->h2D_Lumi_Rate_UnPS = new TH2D("h2D_Lumi_Rate_UnPS_"+this->Tag, "", 2000, 1000 ,20000, 200, 0, 200 );
+		this->vec_2DHist.push_back( this->h2D_Lumi_Rate_UnPS );
+
+		this->h2D_Lumi_Rate_UnPS_Scaled2e34 = new TH2D("h2D_Lumi_Rate_UnPS_Scaled2e34_"+this->Tag, "", 2000, 1000 ,20000, 200, 0, 200 );
+		this->vec_2DHist.push_back( this->h2D_Lumi_Rate_UnPS_Scaled2e34 );
 
 		this->h2D_nVertices_Rate = new TH2D("h2D_nVertices_Rate_"+this->Tag, "", 100, 0, 100, 100, 0, 100 );
 		this->vec_2DHist.push_back( this->h2D_nVertices_Rate );
 
-		this->h2D_nVertices_Rate_Scaled2e34 = new TH2D("h2D_nVertices_Rate_Scaled2e34_"+this->Tag, "", 100, 0, 100, 100, 0, 100 );
-		this->vec_2DHist.push_back( this->h2D_nVertices_Rate_Scaled2e34 );
+		this->h2D_nVertices_Rate_UnPS = new TH2D("h2D_nVertices_Rate_UnPS_"+this->Tag, "", 100, 0, 100, 100, 0, 100 );
+		this->vec_2DHist.push_back( this->h2D_nVertices_Rate_UnPS );
+
+		this->h2D_nVertices_Rate_UnPS_Scaled2e34 = new TH2D("h2D_nVertices_Rate_UnPS_Scaled2e34_"+this->Tag, "", 100, 0, 100, 100, 0, 100 );
+		this->vec_2DHist.push_back( this->h2D_nVertices_Rate_UnPS_Scaled2e34 );
 
 		this->nFiredEvent = 0;
-		this->nFiredEvent_Scaled2e34 = 0;
+		this->nFiredEvent_UnPS = 0;
+		this->nFiredEvent_UnPS_Scaled2e34 = 0;
 		this->nLumiBlock = 0;
 	}
 };
@@ -475,8 +704,8 @@ public:
 				if( LumiBlockInfo->nEvent > 0 )
 				{
 					if( debug )
-						printf("[Run=%d, LumiBlock=%d] (nEvent, nFiredEvent, Rate) = (%d, %d, %lf)\n",
-							vec_RunInfo[i]->RunNum, LumiBlockInfo->LumiBlockNum, LumiBlockInfo->nEvent, LumiBlockInfo->nFiredEvent, LumiBlockInfo->Rate);
+						printf("[Run=%d, LumiBlock=%d] (nEvent, nFiredEvent, Rate, Rate_UnPS, Rate_UnPS_Scaled2e34) = (%d, %d, %lf, %lf, %lf)\n",
+							vec_RunInfo[i]->RunNum, LumiBlockInfo->LumiBlockNum, LumiBlockInfo->nEvent, LumiBlockInfo->nFiredEvent, LumiBlockInfo->Rate, LumiBlockInfo->Rate_UnPS, LumiBlockInfo->Rate_UnPS_Scaled2e34);
 
 					// -- fill histogram for each run -- //
 					vec_RunHist[i]->Fill( LumiBlockInfo );
@@ -497,13 +726,16 @@ public:
 		for( const auto& RunHist : vec_RunHist )
 		{
 			Double_t RunRate = RunHist->TotalRate;
-			Double_t RunRate_Scaled = RunHist->TotalRate_Scaled2e34;
-			printf("[%s] (run rate, run rate scaled w.r.t 2e34) = (%lf, %lf)\n", RunHist->Tag.Data(), RunRate, RunRate_Scaled);
+			Double_t RunRate_UnPS = RunHist->TotalRate_UnPS;
+			Double_t RunRate_UnPS_Scaled2e34 = RunHist->TotalRate_UnPS_Scaled2e34;
+			printf("[%s] (run rate, un-prescaled run rate, un-prescaled run rate scaled w.r.t 2e34) = (%lf, %lf, %lf)\n",
+				RunHist->Tag.Data(), RunRate, RunRate_UnPS, RunRate_UnPS_Scaled2e34);
 		}
 
 		Double_t TotalRate = RateHist->TotalRate;
-		Double_t TotalRate_Scaled2e34 = RateHist->TotalRate_Scaled2e34;
-		printf("[Total] (rate, rate scaled w.r.t 2e34) = (%lf, %lf)\n", TotalRate, TotalRate_Scaled2e34);
+		Double_t TotalRate_UnPS = RateHist->TotalRate_UnPS;
+		Double_t TotalRate_UnPS_Scaled2e34 = RateHist->TotalRate_UnPS_Scaled2e34;
+		printf("[Total] (rate, un-prescaled rate, un-prescaled rate scaled w.r.t 2e34) = (%lf, %lf, %lf)\n", TotalRate, TotalRate_UnPS, TotalRate_UnPS_Scaled2e34);
 
 		cout << "finished" << endl;
 	}
