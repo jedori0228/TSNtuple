@@ -1,3 +1,4 @@
+#define nDataset 7
 #include <Rate/TriggerRateTool.h>
 
 void MuonTriggerRate_afterFix( TString Trigger )
@@ -5,14 +6,14 @@ void MuonTriggerRate_afterFix( TString Trigger )
 	TString DataBasePath = gSystem->Getenv("KP_DATA_PATH");
 	vector< TString > vec_Data = 
 	{
-		DataBasePath+"/92X/HLTReRunNtuple_v20170923_withFix_HLTPhysics1_Run2017Cv3/*.root",
-		DataBasePath+"/92X/HLTReRunNtuple_v20170923_withFix_HLTPhysics2_Run2017Cv3/*.root",
-		DataBasePath+"/92X/HLTReRunNtuple_v20170923_withFix_HLTPhysics3_Run2017Cv3/*.root",
-		DataBasePath+"/92X/HLTReRunNtuple_v20170923_withFix_HLTPhysics4_Run2017Cv3/*.root",
-		DataBasePath+"/92X/HLTReRunNtuple_v20170923_withFix_HLTPhysics5_Run2017Cv3/*.root",
-		DataBasePath+"/92X/HLTReRunNtuple_v20170923_withFix_HLTPhysics6_Run2017Cv3/*.root",
-		DataBasePath+"/92X/HLTReRunNtuple_v20170923_withFix_HLTPhysics7_Run2017Cv3/*.root",
-		DataBasePath+"/92X/HLTReRunNtuple_v20170923_withFix_HLTPhysics8_Run2017Cv3/*.root"
+		DataBasePath+"/92X/CRABOutputs/HLTReRunNtuple_v20170923_withFix_HLTPhysics1_Run2017Cv3/*.root",
+		DataBasePath+"/92X/CRABOutputs/HLTReRunNtuple_v20170923_withFix_HLTPhysics2_Run2017Cv3/*.root",
+		// DataBasePath+"/92X/CRABOutputs/HLTReRunNtuple_v20170923_withFix_HLTPhysics3_Run2017Cv3/*.root",
+		DataBasePath+"/92X/CRABOutputs/HLTReRunNtuple_v20170923_withFix_HLTPhysics4_Run2017Cv3/*.root",
+		DataBasePath+"/92X/CRABOutputs/HLTReRunNtuple_v20170923_withFix_HLTPhysics5_Run2017Cv3/*.root",
+		DataBasePath+"/92X/CRABOutputs/HLTReRunNtuple_v20170923_withFix_HLTPhysics6_Run2017Cv3/*.root",
+		DataBasePath+"/92X/CRABOutputs/HLTReRunNtuple_v20170923_withFix_HLTPhysics7_Run2017Cv3/*.root",
+		DataBasePath+"/92X/CRABOutputs/HLTReRunNtuple_v20170923_withFix_HLTPhysics8_Run2017Cv3/*.root"
 	};
 
 	vector< Int_t > vec_RunNum = 

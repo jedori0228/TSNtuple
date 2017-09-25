@@ -1,0 +1,12 @@
+{
+	"CodeName": "MuonTriggerRate_beforeFix.cxx",
+	"TriggerList": [
+		"HLT_IsoMu27_v13",
+		"HLT_IsoMu24_v10",
+		"HLT_Mu50_v11",
+		"HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v12",
+		"HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v13",
+		"HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v3",
+		"HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v3"
+	]
+}
