@@ -172,11 +172,11 @@ class LumiBlockInfo
 public:
 	Int_t LumiBlockNum;
 
-	Int_t nEvent;
-	Int_t nFiredEvent;
+	Double_t nEvent;
+	Double_t nFiredEvent;
 
-	Int_t nEvent_UnPS;
-	Int_t nFiredEvent_UnPS;
+	Double_t nEvent_UnPS;
+	Double_t nFiredEvent_UnPS;
 	
 	Double_t nFiredEvent_UnPS_Scaled2e34;
 	
@@ -226,6 +226,16 @@ public:
 		{
 			this->Mean_InstLumi = this->Sum_InstLumi / this->nEvent; // -- divided by total # events, not only # fired events! -- //
 			this->Mean_nVertices = this->Sum_nVertices / this->nEvent;
+
+			// -- normalized to the # datasets included: HLTPhysicsN datasets -- //
+			this->nEvent = this->nEvent / (Double_t)nDataset;
+			this->nEvent_UnPS = this->nEvent_UnPS / (Double_t)nDataset;
+
+			this->nFiredEvent = this->nFiredEvent / (Double_t)nDataset;
+			this->nFiredEvent_UnPS = this->nFiredEvent_UnPS / (Double_t)nDataset;
+			this->nFiredEvent_UnPS_Scaled2e34 = this->nFiredEvent_UnPS_Scaled2e34 / (Double_t)nDataset;
+			///////////////////////////////////////////////////////////////////////
+
 			this->Rate = this->nFiredEvent / LumiBlockTime; // -- unit: Hz -- //
 			this->Rate_UnPS = this->nFiredEvent_UnPS / LumiBlockTime;
 
@@ -321,8 +331,8 @@ public:
 	TH1D* h_TotalRate_UnPS;
 	TH1D* h_TotalRate_UnPS_Scaled2e34;
 
-	Int_t nFiredEvent;
-	Int_t nFiredEvent_UnPS;
+	Double_t nFiredEvent;
+	Double_t nFiredEvent_UnPS;
 	Double_t nFiredEvent_UnPS_Scaled2e34;
 	Int_t nLumiBlock;
 	Double_t TotalRate;
@@ -463,7 +473,7 @@ public:
 	TH1D* h_TotalRate_UnPS;
 	TH1D* h_TotalRate_UnPS_Scaled2e34;
 
-	Int_t nFiredEvent;
+	Double_t nFiredEvent;
 	Double_t nFiredEvent_UnPS;
 	Double_t nFiredEvent_UnPS_Scaled2e34;
 
@@ -704,7 +714,7 @@ public:
 				if( LumiBlockInfo->nEvent > 0 )
 				{
 					if( debug )
-						printf("[Run=%d, LumiBlock=%d] (nEvent, nFiredEvent, Rate, Rate_UnPS, Rate_UnPS_Scaled2e34) = (%d, %d, %lf, %lf, %lf)\n",
+						printf("[Run=%d, LumiBlock=%d] (nEvent, nFiredEvent, Rate, Rate_UnPS, Rate_UnPS_Scaled2e34) = (%.1lf, %.1lf, %lf, %lf, %lf)\n",
 							vec_RunInfo[i]->RunNum, LumiBlockInfo->LumiBlockNum, LumiBlockInfo->nEvent, LumiBlockInfo->nFiredEvent, LumiBlockInfo->Rate, LumiBlockInfo->Rate_UnPS, LumiBlockInfo->Rate_UnPS_Scaled2e34);
 
 					// -- fill histogram for each run -- //
@@ -728,14 +738,15 @@ public:
 			Double_t RunRate = RunHist->TotalRate;
 			Double_t RunRate_UnPS = RunHist->TotalRate_UnPS;
 			Double_t RunRate_UnPS_Scaled2e34 = RunHist->TotalRate_UnPS_Scaled2e34;
-			printf("[%s] (run rate, un-prescaled run rate, un-prescaled run rate scaled w.r.t 2e34) = (%lf, %lf, %lf)\n",
-				RunHist->Tag.Data(), RunRate, RunRate_UnPS, RunRate_UnPS_Scaled2e34);
+			printf("[%s] (# fired events, run rate, un-prescaled run rate, un-prescaled run rate scaled w.r.t 2e34) = (%.1lf, %lf, %lf, %lf)\n",
+				RunHist->Tag.Data(), RunHist->nFiredEvent, RunRate, RunRate_UnPS, RunRate_UnPS_Scaled2e34);
 		}
 
 		Double_t TotalRate = RateHist->TotalRate;
 		Double_t TotalRate_UnPS = RateHist->TotalRate_UnPS;
 		Double_t TotalRate_UnPS_Scaled2e34 = RateHist->TotalRate_UnPS_Scaled2e34;
-		printf("[Total] (rate, un-prescaled rate, un-prescaled rate scaled w.r.t 2e34) = (%lf, %lf, %lf)\n", TotalRate, TotalRate_UnPS, TotalRate_UnPS_Scaled2e34);
+		printf("[Total] (# fired events, rate, un-prescaled rate, un-prescaled rate scaled w.r.t 2e34) = (%.1lf, %lf, %lf, %lf)\n", 
+			RateHist->nFiredEvent, TotalRate, TotalRate_UnPS, TotalRate_UnPS_Scaled2e34);
 
 		cout << "finished" << endl;
 	}

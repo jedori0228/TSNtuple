@@ -1,4 +1,6 @@
+#define nDataset 7
 #include <Rate/TriggerRateTool.h>
+
 
 void MuonTriggerRate( TString Trigger )
 {

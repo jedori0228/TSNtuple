@@ -1,3 +1,4 @@
+#define nDataset 7
 #include <Rate/TriggerRateTool.h>
 
 void MuonTriggerRate_beforeFix( TString Trigger )
@@ -7,7 +8,7 @@ void MuonTriggerRate_beforeFix( TString Trigger )
 	{
 		DataBasePath+"/92X/HLTReRunNtuple_v20170923_HLTPhysics1_Run2017Cv3/*.root",
 		DataBasePath+"/92X/HLTReRunNtuple_v20170923_HLTPhysics2_Run2017Cv3/*.root",
-		DataBasePath+"/92X/HLTReRunNtuple_v20170923_HLTPhysics3_Run2017Cv3/*.root",
+		// DataBasePath+"/92X/HLTReRunNtuple_v20170923_HLTPhysics3_Run2017Cv3/*.root",
 		DataBasePath+"/92X/HLTReRunNtuple_v20170923_HLTPhysics4_Run2017Cv3/*.root",
 		DataBasePath+"/92X/HLTReRunNtuple_v20170923_HLTPhysics5_Run2017Cv3/*.root",
 		DataBasePath+"/92X/HLTReRunNtuple_v20170923_HLTPhysics6_Run2017Cv3/*.root",
