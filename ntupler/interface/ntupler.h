@@ -99,6 +99,7 @@ private:
 	TTree *ntuple;
 	static const int ArrSize = 2000;
 
+	bool IsRealData;
 	int RunNum;
 	int LumiBlockNum;
 	unsigned long long EventNum;
@@ -107,6 +108,9 @@ private:
 	double Rho_Offline;
 	double BX_ID;
 	double InstLumi;
+	double DataPU;
+	double DataPURMS;
+	double BunchLumi;
 	int TruePU;
 	double GenEventWeight;
 

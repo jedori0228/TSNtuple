@@ -82,6 +82,7 @@ Token_GenParticle			( consumes<reco::GenParticleCollection> 			(iConfig.getUntra
 void ntupler::analyze(const edm::Event &iEvent, const edm::EventSetup &iSetup)
 {
 	this->Init();
+	this->IsRealData = iEvent.isRealData();
 	this->RunNum = iEvent.id().run();
 	this->LumiBlockNum = iEvent.id().luminosityBlock();
 	this->EventNum = iEvent.id().event();
@@ -112,7 +113,12 @@ void ntupler::analyze(const edm::Event &iEvent, const edm::EventSetup &iSetup)
 		edm::Handle<LumiScalersCollection> Handle_LumiScaler;
 		iEvent.getByToken(Token_LumiScaler, Handle_LumiScaler);
 		if (Handle_LumiScaler->begin() != Handle_LumiScaler->end())
+		{
 			this->InstLumi = Handle_LumiScaler->begin()->instantLumi();
+			this->DataPU = Handle_LumiScaler->begin()->pileup();
+			this->DataPURMS = Handle_LumiScaler->begin()->pileupRMS();
+			this->BunchLumi = Handle_LumiScaler->begin()->bunchLumi();
+		}
 	}
 
 	// -- True PU info: only for MC -- //
@@ -153,6 +159,7 @@ void ntupler::beginJob()
 
 void ntupler::Init()
 {
+	this->IsRealData = false;
 	this->RunNum = -999;
 	this->LumiBlockNum = -999;
 	this->EventNum = 0;
@@ -160,6 +167,9 @@ void ntupler::Init()
 	this->Rho_Offline = -999;
 	this->BX_ID = -999;
 	this->InstLumi = -999;
+	this->DataPU = -999;
+	this->DataPURMS = -999;
+	this->BunchLumi = -999;
 	this->TruePU = -999;
 	this->GenEventWeight = -999;
 
@@ -306,6 +316,7 @@ void ntupler::Init()
 
 void ntupler::Make_Branch()
 {
+	this->ntuple->Branch("IsRealData", &IsRealData, "IsRealData/O"); // -- O: boolean -- //
 	this->ntuple->Branch("RunNum",&RunNum,"RunNum/I");
 	this->ntuple->Branch("LumiBlockNum",&LumiBlockNum,"LumiBlockNum/I");
 	this->ntuple->Branch("EventNum",&EventNum,"EventNum/l"); // -- unsigned long long -- //
@@ -313,6 +324,9 @@ void ntupler::Make_Branch()
 	this->ntuple->Branch("Rho_Offline", &Rho_Offline, "Rho_Offline/D");
 	this->ntuple->Branch("BX_ID", &BX_ID, "BX_ID/D");
 	this->ntuple->Branch("InstLumi", &InstLumi, "InstLumi/D");
+	this->ntuple->Branch("DataPU", &DataPU, "DataPU/D");
+	this->ntuple->Branch("DataPURMS", &DataPURMS, "DataPURMS/D");
+	this->ntuple->Branch("BunchLumi", &BunchLumi, "BunchLumi/D");
 	this->ntuple->Branch("TruePU", &TruePU, "TruePU/I");
 
 	this->ntuple->Branch("GenEventWeight", &GenEventWeight, "GenEventWeight/D");
