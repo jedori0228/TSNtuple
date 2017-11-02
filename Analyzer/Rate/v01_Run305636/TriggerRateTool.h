@@ -27,7 +27,7 @@
 #define LumiBlockTime 23.31
 
 vector<Int_t> vec_Prescale_Run305636 = {0, 1160, 0, 1160};
-vector<Double_t> vec_Prescale_Run305636 = {1, 60, 167, 199, 99999};
+vector<Double_t> vec_LS_Run305636 = {1, 60, 167, 199, 99999};
 
 Int_t Find_PrescaleValue( Int_t RunNum, Int_t LumiBlockNum )
 {
@@ -36,7 +36,7 @@ Int_t Find_PrescaleValue( Int_t RunNum, Int_t LumiBlockNum )
 	if( RunNum == 305636 )
 	{
 		vec_Prescale = vec_Prescale_Run305636;
-		vec_LS = vec_Prescale_Run305636;
+		vec_LS = vec_LS_Run305636;
 	}
 
 	// -- find pre-scale value -- //
@@ -671,8 +671,11 @@ public:
 		Double_t TotalRate = RateHist->TotalRate;
 		Double_t TotalRate_UnPS = RateHist->TotalRate_UnPS;
 		Double_t TotalRate_UnPS_Scaled2e34 = RateHist->TotalRate_UnPS_Scaled2e34;
-		printf("[Total] (# fired events, rate, un-prescaled rate, un-prescaled rate scaled w.r.t 2e34) = (%.1lf, %lf, %lf, %lf)\n", 
-			RateHist->nFiredEvent, TotalRate, TotalRate_UnPS, TotalRate_UnPS_Scaled2e34);
+		printf("[Total]\n");
+		printf("\t# fired events (# total fired events / nDataset): %.1lf\n", RateHist->nFiredEvent);
+		printf("\trate: %lf\n", TotalRate);
+		printf("\tun-prescaled rate: %lf\n", TotalRate_UnPS);
+		printf("\tun-prescaled rate scaled w.r.t 2e34: %lf\n", TotalRate_UnPS_Scaled2e34);
 
 		cout << "finished" << endl;
 	}
