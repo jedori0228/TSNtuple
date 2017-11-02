@@ -14,7 +14,7 @@ class KPEvent
 public:
 	Bool_t Flag_IsNonNull;
 
-	Bool_t			Flag_IsMC;
+	Bool_t			IsRealData;
 	Int_t           RunNum;
 	Int_t           LumiBlockNum;
 	ULong64_t       EventNum;
@@ -22,6 +22,9 @@ public:
 	Double_t        Rho_Offline;
 	Double_t        BX_ID;
 	Double_t        InstLumi;
+	Double_t        DataPU;
+	Double_t        DataPURMS;
+	Double_t        BunchLumi;
 	Int_t           TruePU;
 	Double_t        Rho;
 	Double_t        RhoECAL;
@@ -41,7 +44,7 @@ public:
 	KPEvent()
 	{
 		this->Flag_IsNonNull = kFALSE;
-		this->Flag_IsMC = kFALSE;
+		this->IsRealData = kFALSE;
 
 		this->RunNum = 0;
 		this->LumiBlockNum = 0;
@@ -60,16 +63,16 @@ public:
 		this->nMuon = -999;
 	}
 
-	KPEvent( NtupleHandle *ntuple, Bool_t IsMC )
+	KPEvent( NtupleHandle *ntuple )
 	{
-		this->Fill( ntuple, IsMC );
+		this->Fill( ntuple );
 	}
 
-	void Fill( NtupleHandle* ntuple, Bool_t IsMC )
+	void Fill( NtupleHandle* ntuple )
 	{
 		this->Flag_IsNonNull = kTRUE;
 
-		this->Flag_IsMC = IsMC;
+		this->IsRealData = ntuple->IsRealData;
 		this->RunNum = ntuple->RunNum;
 		this->LumiBlockNum = ntuple->LumiBlockNum;
 		this->EventNum = ntuple->EventNum;
@@ -77,6 +80,9 @@ public:
 		this->Rho_Offline = ntuple->Rho_Offline;
 		this->BX_ID = ntuple->BX_ID;
 		this->InstLumi = ntuple->InstLumi;
+		this->DataPU = ntuple->DataPU;
+		this->DataPURMS = ntuple->DataPURMS;
+		this->BunchLumi = ntuple->BunchLumi;
 		this->TruePU = ntuple->TruePU;
 		this->Rho = ntuple->Rho; // -- online -- //
 		this->RhoECAL = ntuple->RhoECAL;

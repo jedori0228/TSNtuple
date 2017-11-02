@@ -13,6 +13,7 @@ class NtupleHandle
 public:
 	TChain *chain;
 
+	Bool_t			IsRealData;
 	Int_t           RunNum;
 	Int_t           LumiBlockNum;
 	ULong64_t       EventNum;
@@ -20,6 +21,9 @@ public:
 	Double_t        Rho_Offline;
 	Double_t        BX_ID;
 	Double_t        InstLumi;
+	Double_t		DataPU;
+	Double_t		DataPURMS;
+	Double_t		BunchLumi;
 	Int_t           TruePU;
 	Double_t        Rho;
 	Double_t        RhoECAL;
@@ -151,6 +155,9 @@ public:
 
 	void TurnOnBranches_Event()
 	{
+		chain->SetBranchStatus("IsRealData", 1);
+		chain->SetBranchAddress("IsRealData", &IsRealData);
+
 		chain->SetBranchStatus("RunNum", 1);
 		chain->SetBranchAddress("RunNum", &RunNum);
 
@@ -165,6 +172,15 @@ public:
 
 		chain->SetBranchStatus("InstLumi", 1);
 		chain->SetBranchAddress("InstLumi", &InstLumi);
+
+		chain->SetBranchStatus("DataPU", 1);
+		chain->SetBranchAddress("DataPU", &DataPU);
+
+		chain->SetBranchStatus("DataPURMS", 1);
+		chain->SetBranchAddress("DataPURMS", &DataPURMS);
+
+		chain->SetBranchStatus("BunchLumi", 1);
+		chain->SetBranchAddress("BunchLumi", &BunchLumi);
 
 		chain->SetBranchStatus("TruePU", 1);
 		chain->SetBranchAddress("TruePU", &TruePU);
