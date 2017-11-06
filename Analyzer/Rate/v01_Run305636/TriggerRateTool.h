@@ -476,22 +476,22 @@ private:
 		this->h_TotalRate_UnPS_Scaled2e34 = new TH1D("h_TotalRate_UnPS_Scaled2e34_"+this->Tag, "", 1, 0, 1 );
 		this->vec_Hist.push_back( this->h_TotalRate_UnPS_Scaled2e34 );
 
-		this->h2D_Lumi_Rate = new TH2D("h2D_Lumi_Rate_"+this->Tag, "", 2000, 1000 ,20000, 200, 0, 200 );
+		this->h2D_Lumi_Rate = new TH2D("h2D_Lumi_Rate_"+this->Tag, "", 2000, 1000 ,20000, 500, 0, 500 );
 		this->vec_2DHist.push_back( this->h2D_Lumi_Rate );
 
-		this->h2D_Lumi_Rate_UnPS = new TH2D("h2D_Lumi_Rate_UnPS_"+this->Tag, "", 2000, 1000 ,20000, 200, 0, 200 );
+		this->h2D_Lumi_Rate_UnPS = new TH2D("h2D_Lumi_Rate_UnPS_"+this->Tag, "", 2000, 1000 ,20000, 500, 0, 500 );
 		this->vec_2DHist.push_back( this->h2D_Lumi_Rate_UnPS );
 
-		this->h2D_Lumi_Rate_UnPS_Scaled2e34 = new TH2D("h2D_Lumi_Rate_UnPS_Scaled2e34_"+this->Tag, "", 2000, 1000 ,20000, 200, 0, 200 );
+		this->h2D_Lumi_Rate_UnPS_Scaled2e34 = new TH2D("h2D_Lumi_Rate_UnPS_Scaled2e34_"+this->Tag, "", 2000, 1000 ,20000, 500, 0, 500 );
 		this->vec_2DHist.push_back( this->h2D_Lumi_Rate_UnPS_Scaled2e34 );
 
-		this->h2D_PU_Rate = new TH2D("h2D_PU_Rate_"+this->Tag, "", 150, 0, 150, 200, 0, 200 );
+		this->h2D_PU_Rate = new TH2D("h2D_PU_Rate_"+this->Tag, "", 150, 0, 150, 500, 0, 500 );
 		this->vec_2DHist.push_back( this->h2D_PU_Rate );
 
-		this->h2D_PU_Rate_UnPS = new TH2D("h2D_PU_Rate_UnPS_"+this->Tag, "", 150, 0, 150, 200, 0, 200 );
+		this->h2D_PU_Rate_UnPS = new TH2D("h2D_PU_Rate_UnPS_"+this->Tag, "", 150, 0, 150, 500, 0, 500 );
 		this->vec_2DHist.push_back( this->h2D_PU_Rate_UnPS );
 
-		this->h2D_PU_Rate_UnPS_Scaled2e34 = new TH2D("h2D_PU_Rate_UnPS_Scaled2e34_"+this->Tag, "", 150, 0, 150, 200, 0, 200 );
+		this->h2D_PU_Rate_UnPS_Scaled2e34 = new TH2D("h2D_PU_Rate_UnPS_Scaled2e34_"+this->Tag, "", 150, 0, 150, 500, 0, 500 );
 		this->vec_2DHist.push_back( this->h2D_PU_Rate_UnPS_Scaled2e34 );
 
 		this->h2D_nVertices_Rate = new TH2D("h2D_nVertices_Rate_"+this->Tag, "", 100, 0, 100, 100, 0, 100 );
