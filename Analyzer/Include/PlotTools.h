@@ -109,16 +109,16 @@ void SetAxis_BottomPad( TAxis *X_axis, TAxis *Y_axis, TString XTitle, TString YT
 void SetAxis_2D( TAxis *X_axis, TAxis *Y_axis, TString XTitle, TString YTitle )
 {
 	X_axis->SetTitle( XTitle );
-	X_axis->SetLabelSize(0.04);
-	X_axis->SetTitleOffset(1.1);
-	X_axis->SetTitleSize(0.05);
+	X_axis->SetLabelSize(0.03);
+	X_axis->SetTitleOffset(1.35);
+	X_axis->SetTitleSize(0.04);
 	X_axis->SetNoExponent();
 	X_axis->SetMoreLogLabels();
 
 	Y_axis->SetTitle( YTitle );
-	Y_axis->SetTitleSize(0.05);
-	Y_axis->SetTitleOffset(1.4);
-	Y_axis->SetLabelSize(0.04);
+	Y_axis->SetTitleSize(0.04);
+	Y_axis->SetTitleOffset(1.5);
+	Y_axis->SetLabelSize(0.03);
 }
 
 void SetCanvas_Square( TCanvas*& c, TString CanvasName, Bool_t isLogx = kFALSE, Bool_t isLogy = kFALSE, Double_t SizeX = 800, Double_t SizeY = 800 )
@@ -398,18 +398,6 @@ TH1D* MultiplyEachBin_byBinWidth( TH1D* h, TString HistName = "" )
 	}
 
 	return h_return;
-}
-
-TGraphAsymmErrors* MakeGraph_Ratio( TGraphAsymmErrors* g_NUM, TGraphAsymmErrors *g_DEN, TString GraphName = "" )
-{
-	TGraphExt *Graph = new TGraphExt( kBlack, "temp" );
-	Graph->Set_Graph( g_NUM );
-	Graph->CalcRatio_DEN( g_DEN );
-
-	if( GraphName != "" )
-		Graph->g_ratio->SetName(GraphName);
-
-	return Graph->g_ratio;
 }
 
 void SaveAsHist_OneContent( Double_t content, TString HistName, TFile *f_output )
@@ -755,8 +743,11 @@ private:
 		this->minZ = -999;
 		this->maxZ = -999;
 
-		this->hasRebin = kFALSE;
-		this->nRebin = 1;
+		this->hasRebinX = kFALSE;
+		this->nRebinX = 1;
+
+		this->hasRebinY = kFALSE;
+		this->nRebinY = 1;
 
 		// this->isLogX = kFALSE;
 		// this->isLogY = kFALSE;
@@ -807,7 +798,7 @@ public:
 		this->SetAttributes(); // -- setting after drawing: to be consistent with TGraphExt case -- //
 	}
 
-	void DrawRatioAndSet( TString DrawOp, TString ratioTitle, Double_t minRatio = 0.5, Double_t maxRatio = 1.5 );
+	void DrawRatioAndSet( TString DrawOp, TString ratioTitle, Double_t minRatio = 0.5, Double_t maxRatio = 1.5 )
 	{
 		this->h_ratio->Draw( DrawOp );
 		this->SetAttributesRatio(ratioTitle, minRatio, maxRatio);
@@ -916,7 +907,7 @@ public:
 		this->h = NULL;
 	}
 
-	TH2Ext( SampleInfo* _sampleInfo, HistInfo* _histInfo, TString histName = "" ): TH1Ext()
+	TH2Ext( SampleInfo* _sampleInfo, HistInfo* _histInfo, TString histName = "" ): TH2Ext()
 	{
 		this->sampleInfo = _sampleInfo;
 		this->histInfo = _histInfo;
@@ -947,6 +938,7 @@ protected:
 		if( drawOp.Contains("SCAT") )
 		{
 			this->h->SetMarkerStyle( 20 );
+			this->h->SetLineColorAlpha( kWhite, 0 );
 			this->h->SetMarkerColor( this->sampleInfo->color );
 		}
 
@@ -969,7 +961,7 @@ protected:
 	}
 };
 
-class TGraphExt: public BaseExt
+class TGraphExt
 {
 public:
 	TGraphAsymmErrors* g;
@@ -988,7 +980,7 @@ public:
 		this->g_ratio = NULL;
 	}
 
-	TGraphExt( SampleInfo* _sampleInfo, HistInfo* _histInfo, TString graphName = "" ): TH1Ext()
+	TGraphExt( SampleInfo* _sampleInfo, HistInfo* _histInfo, TString graphName = "" ): TGraphExt()
 	{
 		this->sampleInfo = _sampleInfo;
 		this->histInfo = _histInfo;
@@ -1015,7 +1007,7 @@ public:
 		this->g_ratio = this->MakeRatioGraph( g_NUM, g );
 	}
 
-	void DrawRatioAndSet( TString DrawOp, TString ratioTitle, Double_t minRatio = 0.5, Double_t maxRatio = 1.5 );
+	void DrawRatioAndSet( TString DrawOp, TString ratioTitle, Double_t minRatio = 0.5, Double_t maxRatio = 1.5 )
 	{
 		this->g_ratio->Draw( DrawOp );
 		this->SetAttributesRatio(ratioTitle, minRatio, maxRatio);
@@ -1048,9 +1040,6 @@ protected:
 
 		if( this->histInfo->hasYRange )
 			g->GetYaxis()->SetRangeUser( this->histInfo->minY, this->histInfo->maxY );
-
-		if( this->histInfo->hasZRange )
-			g->GetZaxis()->SetRangeUser( this->histInfo->minZ, this->histInfo->maxZ );
 
 		if( this->hasRatio )
 			SetAxis_TopPad( this->g->GetXaxis(), this->g->GetYaxis(), this->histInfo->titleY );
