@@ -235,6 +235,10 @@ void ntupler::Init()
 		this->Muon_IsMedium[i] = 0;
 		this->Muon_IsLoose[i] = 0;
 
+		this->Muon_Iso03_sumPt[i] = -999;
+		this->Muon_Iso03_hadEt[i] = -999;
+		this->Muon_Iso03_emEt[i] = -999;
+
 		this->Muon_PFIso03_Charged[i] = -999;
 		this->Muon_PFIso03_Neutral[i] = -999;
 		this->Muon_PFIso03_Photon[i] = -999;
@@ -384,6 +388,10 @@ void ntupler::Make_Branch()
 	this->ntuple->Branch("Muon_IsTight", &Muon_IsTight, "Muon_IsTight[nMuon]/I");
 	this->ntuple->Branch("Muon_IsMedium", &Muon_IsMedium, "Muon_IsMedium[nMuon]/I");
 	this->ntuple->Branch("Muon_IsLoose", &Muon_IsLoose, "Muon_IsLoose[nMuon]/I");
+
+	this->ntuple->Branch("Muon_Iso03_sumPt", &Muon_Iso03_sumPt, "Muon_Iso03_sumPt[nMuon]/D");
+	this->ntuple->Branch("Muon_Iso03_hadEt", &Muon_Iso03_hadEt, "Muon_Iso03_hadEt[nMuon]/D");
+	this->ntuple->Branch("Muon_Iso03_emEt", &Muon_Iso03_emEt, "Muon_Iso03_emEt[nMuon]/D");
 	this->ntuple->Branch("Muon_PFIso03_Charged", &Muon_PFIso03_Charged, "Muon_PFIso03_Charged[nMuon]/D");
 	this->ntuple->Branch("Muon_PFIso03_Neutral", &Muon_PFIso03_Neutral, "Muon_PFIso03_Neutral[nMuon]/D");
 	this->ntuple->Branch("Muon_PFIso03_Photon", &Muon_PFIso03_Photon, "Muon_PFIso03_Photon[nMuon]/D");
@@ -486,6 +494,10 @@ void ntupler::Fill_Muon(const edm::Event &iEvent)
 			if( muon::isTightMuon( (*mu), pv ) ) this->Muon_IsTight[_nMuon] = 1;
 			if( muon::isMediumMuon( (*mu) ) ) this->Muon_IsMedium[_nMuon] = 1;
 			if( muon::isLooseMuon( (*mu) ) ) this->Muon_IsLoose[_nMuon] = 1;
+
+			this->Muon_Iso03_sumPt = mu->isolationR03().sumPt;
+			this->Muon_Iso03_hadEt = mu->isolationR03().hadEt;
+			this->Muon_Iso03_emEt = mu->isolationR03().emEt;
 
 			this->Muon_PFIso03_Charged[_nMuon] = mu->pfIsolationR03().sumChargedHadronPt;
 			this->Muon_PFIso03_Neutral[_nMuon] = mu->pfIsolationR03().sumNeutralHadronEt;

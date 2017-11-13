@@ -171,6 +171,10 @@ private:
 	int Muon_IsMedium[ArrSize];
 	int Muon_IsLoose[ArrSize];
 
+	double Muon_Iso03_sumPt[ArrSize];
+	double Muon_Iso03_hadEt[ArrSize];
+	double Muon_Iso03_emEt[ArrSize];
+
 	double Muon_PFIso03_Charged[ArrSize];
 	double Muon_PFIso03_Neutral[ArrSize];
 	double Muon_PFIso03_Photon[ArrSize];
