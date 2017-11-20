@@ -228,6 +228,33 @@ public:
 	}
 };
 
+class KPHLTObject: public KPObject
+{
+public:
+	TString FilterName;
+
+	KPHLTObject(): KPObject() { this->Init(); }
+
+	KPHLTObject(NtupleHandle* ntuple, Int_t index)
+	{
+		this->Flag_IsNonNull = kTRUE;
+		this->Fill(ntuple, index);
+	}
+
+	void Fill(NtupleHandle* ntuple, Int_t index)
+	{
+		this->FilterName = ntuple->vec_FilterName->at(index);
+		this->Pt = ntuple->vec_HLTObj_Pt->at(index);
+		this->Eta = ntuple->vec_HLTObj_Eta->at(index);
+		this->Phi = ntuple->vec_HLTObj_Phi->at(index);
+	}
+
+	void Init()
+	{
+		this->FilterName = "";
+	}
+};
+
 class KPMuon: public KPObject
 {
 public:
@@ -248,6 +275,7 @@ public:
 	Double_t        PFIso04_Neutral;
 	Double_t        PFIso04_Photon;
 	Double_t        PFIso04_SumPU;
+	Double_t 		RelPFIso_dBeta;
 	Double_t        PFCluster03_ECAL;
 	Double_t        PFCluster03_HCAL;
 	Double_t        PFCluster04_ECAL;
@@ -321,6 +349,35 @@ public:
 		this->nMatchedStation = ntuple->Muon_nMatchedStation[index];
 		this->nMatchedRPCLayer = ntuple->Muon_nMatchedRPCLayer[index];
 		this->StationMask = ntuple->Muon_StationMask[index];
+
+		// -- https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideMuonIdRun2#Muon_Isolation -- //
+		this->RelPFIso_dBeta = (PFIso04_Charged + max(0., PFIso04_Neutral + this->PFIso04_Photon - 0.5*this->PFIso04_SumPU))/this->Pt;
+	}
+
+	Bool_t IsHLTFilterMatched(NtupleHandle *ntuple, TString filterName)
+	{
+		Bool_t flag = kFALSE;
+		KPEvent event(ntuple);
+
+		for(Int_t i_hlt=0; i_hlt<event.nHLTObject; i_hlt++)
+		{
+			KPHLTObject HLTObj( ntuple, i_hlt );
+
+			if( HLTObj.FilterName.Contains(filterName) )
+			{
+				TLorentzVector vec_TrigObj;
+				vec_TrigObj.SetPtEtaPhiM( HLTObj.Pt, HLTObj.Eta, HLTObj.Phi, M_Mu );
+
+				Double_t dR = this->LVec_P.DeltaR( vec_TrigObj );
+				if( dR < 0.2 )
+				{
+					flag = kTRUE;
+					break;
+				}
+			}
+		}
+
+		return flag;
 	}
 
 	void Init()
@@ -360,33 +417,6 @@ public:
 		this->nMatchedStation = 0;
 		this->nMatchedRPCLayer = 0;
 		this->StationMask = 0;
-	}
-};
-
-class KPHLTObject: public KPObject
-{
-public:
-	TString FilterName;
-
-	KPHLTObject(): KPObject() { this->Init(); }
-
-	KPHLTObject(NtupleHandle* ntuple, Int_t index)
-	{
-		this->Flag_IsNonNull = kTRUE;
-		this->Fill(ntuple, index);
-	}
-
-	void Fill(NtupleHandle* ntuple, Int_t index)
-	{
-		this->FilterName = ntuple->vec_FilterName->at(index);
-		this->Pt = ntuple->vec_HLTObj_Pt->at(index);
-		this->Eta = ntuple->vec_HLTObj_Eta->at(index);
-		this->Phi = ntuple->vec_HLTObj_Phi->at(index);
-	}
-
-	void Init()
-	{
-		this->FilterName = "";
 	}
 };
 
