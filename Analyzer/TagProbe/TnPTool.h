@@ -328,10 +328,12 @@ public:
 	TH1D* CalcTnPEff_CutAndCount( TString varName )
 	{
 		TH1D* hEff = Get_Hist( this->fileName, "hEffTemplate"+varName, "hEff"+varName);
-		Int_t nBin = hEffTemplate->GetNbinsX();
+		Int_t nBin = hEff->GetNbinsX();
 
 		vector< TH1D* > vec_HistPass;
 		vector< TH1D* > vec_HistFail;
+
+		TString histNameBase = TString::Format("h%s", varName.Data());
 		for(Int_t i=0; i<nBin; i++)
 		{
 			TString binInfo = TString::Format("%02dbin", i);
