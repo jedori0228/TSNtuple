@@ -71,14 +71,26 @@ public:
 
 	void AddDataPath( TString value )
 	{
+		printf("[AddDataPath] %s\n", value.Data());
 		vec_DataPath.push_back( value );
 	}
 
+	// void Produce()
+	// {
+	// 	Int_t nDataPath = this->vec_DataPath.size();
+	// 	for(Int_t i=0; i<nDataPath; i++)
+	// 		this->Produce( this->vec_DataPath[i], i );
+	// }
+
+	// void Produce( TString dataPath, Int_t i_dataPath )
 	void Produce()
 	{
+		// printf( "[Produce] dataPath (%02d-th) = %s\n", i_dataPath, dataPath.Data() );
+
 		TChain *chain = new TChain("ntupler/ntuple");
 		for(const auto& dataPath : vec_DataPath )
 			chain->Add(dataPath);
+		// chain->Add(dataPath);
 
 		NtupleHandle *ntuple = new NtupleHandle( chain );
 		// ntuple->TurnOffBranches_All();
@@ -88,7 +100,7 @@ public:
 		Int_t nEvent = chain->GetEntries();
 		std::cout << "[Total event: " << nEvent << "]" << std::endl;
 
-		// nEvent = 100;
+		// nEvent = 1000000;
 		for(Int_t i_ev=0; i_ev<nEvent; i_ev++)
 		{
 			loadBar(i_ev+1, nEvent, 100, 100);
@@ -122,11 +134,24 @@ public:
 
 			for( const auto& tnpPair : vec_tnpPairIsoMu27 )
 				tnpHistIsoMu27->Fill( tnpPair, weight );
+
+			// // -- reduce memeory usage -- //
+			// for( const auto& tnpPair : vec_tnpPairIsoMu27 )
+			// 	delete tnpPair;
+			// vec_tnpPairIsoMu27.clear();
+
 		} // -- end of event iteration -- //
 
-		TFile *f_IsoMu27 = TFile::Open(fileName, "RECREATE");
+		// TString fileName_ith = this->fileName;
+		// fileName_ith.ReplaceAll(".root", TString::Format("_v%02d.root", i_dataPath) );
+		// TFile *f_IsoMu27 = TFile::Open(fileName_ith, "RECREATE");
+		TFile *f_IsoMu27 = TFile::Open(this->fileName, "RECREATE");
 		tnpHistIsoMu27->Save( f_IsoMu27 );
 		f_IsoMu27->Close();
+
+		// -- reduce memeory usage -- //
+		delete tnpHistIsoMu27;
+		// delete f_IsoMu27;
 
 		cout << "finished" << endl;
 	}

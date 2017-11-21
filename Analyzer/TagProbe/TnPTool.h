@@ -149,6 +149,43 @@ public:
 		this->Init();
 	}
 
+	~TnPHistProducer()
+	{
+		for(const auto& hist : vec_HistPtBinPass )
+			delete hist;
+
+		for(const auto& hist : vec_HistPtBinFail )
+			delete hist;
+
+		for(const auto& hist : vec_HistHighPtBinPass )
+			delete hist;
+
+		for(const auto& hist : vec_HistHighPtBinFail )
+			delete hist;
+
+		for(const auto& hist : vec_HistEtaBinPass )
+			delete hist;
+
+		for(const auto& hist : vec_HistEtaBinFail )
+			delete hist;
+
+		for(const auto& hist : vec_HistPhiBinPass )
+			delete hist;
+
+		for(const auto& hist : vec_HistPhiBinFail )
+			delete hist;
+
+		for(const auto& hist : vec_HistVtxBinPass )
+			delete hist;
+
+		for(const auto& hist : vec_HistVtxBinFail )
+			delete hist;
+
+
+		for(const auto& templateHist : vec_TemplateHist )
+			delete templateHist;
+	}
+
 	void Save( TFile *f_output )
 	{
 		f_output->cd();
