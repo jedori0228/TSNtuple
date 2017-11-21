@@ -391,9 +391,20 @@ public:
 			Double_t nEventPass = this->CountEvent( vec_HistPass[i] );
 			Double_t nEventFail = this->CountEvent( vec_HistFail[i] );
 
-			Double_t Eff = nEventPass / (nEventPass + nEventFail);
-			Double_t RelUncEff = this->CalcRelEffError( nEventPass, nEventFail );
-			Double_t AbsUncEff = Eff * RelUncEff;
+			Double_t nEventTotal = nEventPass + nEventFail;
+			Double_t Eff = 0;
+			Double_t AbsUncEff = 0;
+			if( nEventTotal == 0 )
+			{
+				Eff = 0;
+				AbsUncEff = 0;
+			}
+			else
+			{
+				Eff = nEventPass / nEventTotal;
+				Double_t RelUncEff = this->CalcRelEffError( nEventPass, nEventTotal );
+				AbsUncEff = Eff * RelUncEff;
+			}
 
 			hEff->SetBinContent(i_bin, Eff);
 			hEff->SetBinError(i_bin, AbsUncEff);
@@ -428,10 +439,9 @@ private:
 		return nTotEvent;
 	}
 
-	Double_t CalcRelEffError( Double_t nEventPass, Double_t nEventFail )
+	Double_t CalcRelEffError( Double_t nEventPass, Double_t nEventTotal )
 	{
 		Double_t RelUnc_NUM = sqrt(nEventPass) / nEventPass;
-		Double_t nEventTotal = nEventPass+nEventFail;
 		Double_t RelUnc_DEN = sqrt(nEventTotal) / nEventTotal;
 
 		Double_t RelUnc_Eff = sqrt( RelUnc_NUM*RelUnc_NUM + RelUnc_DEN*RelUnc_DEN);
