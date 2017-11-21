@@ -118,6 +118,8 @@ public:
 class TnPHistProducer
 {
 public:
+	Double_t pTCut;
+
 	Int_t nPtBin;
 	Int_t nHighPtBin;
 	Int_t nEtaBin;
@@ -224,30 +226,36 @@ public:
 			templateHist->Write();
 	}
 
+	void SetPtThreshold( Double_t _value )
+	{
+		this->pTCut = _value;
+	}
+
 	void Fill( TnPPair *pair, Double_t weight = 1.0 )
 	{
-		Double_t mass = pair->Mass();
 		if( pair->isPassingProbe )
 		{
-			this->FindBinAndFill( mass, weight, pair->probe.Pt, this->nPtBin, this->arr_PtBinEdge, this->vec_HistPtBinPass );
-			this->FindBinAndFill( mass, weight, pair->probe.Pt, this->nHighPtBin, this->arr_HighPtBinEdge, this->vec_HistHighPtBinPass );
-			this->FindBinAndFill( mass, weight, pair->probe.Eta, this->nEtaBin, this->arr_EtaBinEdge, this->vec_HistEtaBinPass );
-			this->FindBinAndFill( mass, weight, pair->probe.Phi, this->nPhiBin, this->arr_PhiBinEdge, this->vec_HistPhiBinPass );
-			this->FindBinAndFill( mass, weight, pair->nVertices, this->nVtxBin, this->arr_VtxBinEdge, this->vec_HistVtxBinPass );
+			this->FindBinAndFill( pair, weight, pair->probe.Pt, this->nPtBin, this->arr_PtBinEdge, this->vec_HistPtBinPass, kFALSE );
+			this->FindBinAndFill( pair, weight, pair->probe.Pt, this->nHighPtBin, this->arr_HighPtBinEdge, this->vec_HistHighPtBinPass, kFALSE );
+			this->FindBinAndFill( pair, weight, pair->probe.Eta, this->nEtaBin, this->arr_EtaBinEdge, this->vec_HistEtaBinPass );
+			this->FindBinAndFill( pair, weight, pair->probe.Phi, this->nPhiBin, this->arr_PhiBinEdge, this->vec_HistPhiBinPass );
+			this->FindBinAndFill( pair, weight, pair->nVertices, this->nVtxBin, this->arr_VtxBinEdge, this->vec_HistVtxBinPass );
 
 		}
 		else
 		{
-			this->FindBinAndFill( mass, weight, pair->probe.Pt, this->nPtBin, this->arr_PtBinEdge, this->vec_HistPtBinFail );
-			this->FindBinAndFill( mass, weight, pair->probe.Pt, this->nHighPtBin, this->arr_HighPtBinEdge, this->vec_HistHighPtBinFail );
-			this->FindBinAndFill( mass, weight, pair->probe.Eta, this->nEtaBin, this->arr_EtaBinEdge, this->vec_HistEtaBinFail );
-			this->FindBinAndFill( mass, weight, pair->probe.Phi, this->nPhiBin, this->arr_PhiBinEdge, this->vec_HistPhiBinFail );
-			this->FindBinAndFill( mass, weight, pair->nVertices, this->nVtxBin, this->arr_VtxBinEdge, this->vec_HistVtxBinFail );
+			this->FindBinAndFill( pair, weight, pair->probe.Pt, this->nPtBin, this->arr_PtBinEdge, this->vec_HistPtBinFail, kFALSE );
+			this->FindBinAndFill( pair, weight, pair->probe.Pt, this->nHighPtBin, this->arr_HighPtBinEdge, this->vec_HistHighPtBinFail, kFALSE );
+			this->FindBinAndFill( pair, weight, pair->probe.Eta, this->nEtaBin, this->arr_EtaBinEdge, this->vec_HistEtaBinFail );
+			this->FindBinAndFill( pair, weight, pair->probe.Phi, this->nPhiBin, this->arr_PhiBinEdge, this->vec_HistPhiBinFail );
+			this->FindBinAndFill( pair, weight, pair->nVertices, this->nVtxBin, this->arr_VtxBinEdge, this->vec_HistVtxBinFail );
 		}
 	}
 private:
 	void Init()
 	{
+		this->pTCut = 0;
+
 		vector<Double_t> vec_PtBinEdge = {0, 10, 15, 20, 22, 24, 26, 27, 28, 30, 40, 50, 60, 80, 120, 200, 500};
 		vector<Double_t> vec_HighPtBinEdge = {0, 10, 15, 20, 25, 30, 40, 45, 48, 50, 52, 55, 60, 80, 120, 200, 500};
 		vector<Double_t> vec_EtaBinEdge = {-2.4, -2.1, -1.6, -1.2, -0.9, -0.3, -0.2, 0, 0.2, 0.3, 0.9, 1.2, 1.6, 2.1, 2.4};
@@ -326,8 +334,15 @@ private:
 		}
 	}
 
-	void FindBinAndFill( Double_t pairMass, Double_t weight, Double_t binValue, Int_t nBin, Double_t *arr_BinEdge, vector<TH1D*> vec_Hist )
+	void FindBinAndFill( TnPPair *pair, Double_t weight, Double_t binValue, Int_t nBin, Double_t *arr_BinEdge, vector<TH1D*> vec_Hist, Bool_t hasPtCut = kTRUE )
 	{
+		if( hasPtCut )
+		{
+			if( pair->probe.Pt < this->PtCut )
+				return;
+		}
+		
+		Double_t pairMass = pair->Mass();
 		for(Int_t i=0; i<nBin; i++)
 		{
 			if( binValue > arr_BinEdge[i] && binValue < arr_BinEdge[i+1] )
@@ -394,7 +409,7 @@ public:
 			Double_t nEventTotal = nEventPass + nEventFail;
 			Double_t Eff = 0;
 			Double_t AbsUncEff = 0;
-			if( nEventTotal == 0 )
+			if( nEventTotal == 0 || nEventPass == 0 )
 			{
 				Eff = 0;
 				AbsUncEff = 0;
@@ -408,6 +423,9 @@ public:
 
 			hEff->SetBinContent(i_bin, Eff);
 			hEff->SetBinError(i_bin, AbsUncEff);
+
+			// printf("[%02d bin: from %.1lf to %.1lf] (Eff, Eff_Err, nEventPass, nEventTotal) = (%.3lf, %.3lf, %.1lf, %.1lf)\n", 
+			// 	i_bin, hEff->GetBinLowEdge(i_bin), hEff->GetBinLowEdge(i_bin+1), Eff, AbsUncEff, nEventPass, nEventTotal);
 		}
 
 		return hEff;

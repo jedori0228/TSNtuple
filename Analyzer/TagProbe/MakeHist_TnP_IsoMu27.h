@@ -96,6 +96,7 @@ public:
 		// ntuple->TurnOffBranches_All();
 
 		TnPHistProducer* tnpHistIsoMu27 = new TnPHistProducer();
+		tnpHistIsoMu27->SetPtThreshold( 29 ); // -- only probes above this pT cut will be filled in histograms -- //
 
 		Int_t nEvent = chain->GetEntries();
 		std::cout << "[Total event: " << nEvent << "]" << std::endl;
