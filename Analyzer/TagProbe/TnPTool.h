@@ -338,7 +338,7 @@ private:
 	{
 		if( hasPtCut )
 		{
-			if( pair->probe.Pt < this->PtCut )
+			if( pair->probe.Pt < this->pTCut )
 				return;
 		}
 		
