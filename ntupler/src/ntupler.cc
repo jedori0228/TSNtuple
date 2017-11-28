@@ -56,6 +56,8 @@ Token_OfflineMuon			( consumes< std::vector<reco::Muon> > 				(iConfig.getUntrac
 Token_OfflineVertex			( consumes< reco::VertexCollection >				(iConfig.getUntrackedParameter<edm::InputTag>("OfflineVertex")) ),
 Token_TriggerResults		( consumes<edm::TriggerResults>						(iConfig.getUntrackedParameter<edm::InputTag>("TriggerResults")) ),
 Token_TriggerEvent			( consumes<trigger::TriggerEvent>					(iConfig.getUntrackedParameter<edm::InputTag>("TriggerEvent")) ),
+Token_MyTriggerResults		( consumes<edm::TriggerResults>						(iConfig.getUntrackedParameter<edm::InputTag>("MyTriggerResults")) ),
+Token_MyTriggerEvent		( consumes<trigger::TriggerEvent>					(iConfig.getUntrackedParameter<edm::InputTag>("MyTriggerEvent")) ),
 Token_L3Muon				( consumes<reco::RecoChargedCandidateCollection> 	(iConfig.getUntrackedParameter<edm::InputTag>("L3Muon")) ),
 Token_L2Muon				( consumes<reco::RecoChargedCandidateCollection>	(iConfig.getUntrackedParameter<edm::InputTag>("L2Muon")) ),
 Token_L1Muon				( consumes<l1t::MuonBxCollection> 					(iConfig.getUntrackedParameter<edm::InputTag>("L1Muon")) ),
@@ -72,6 +74,7 @@ Token_OfflineHCALPFIso03	( consumes<edm::ValueMap<float>> 					(iConfig.getUntra
 Token_OfflineECALPFIso04	( consumes<edm::ValueMap<float>> 					(iConfig.getUntrackedParameter<edm::InputTag>("OfflineECALPFIso04")) ),
 Token_OfflineHCALPFIso04	( consumes<edm::ValueMap<float>> 					(iConfig.getUntrackedParameter<edm::InputTag>("OfflineHCALPFIso04")) ),
 Token_LumiScaler			( consumes<LumiScalersCollection> 					(iConfig.getUntrackedParameter<edm::InputTag>("LumiScaler")) ),
+Token_OfflineLumiScaler		( consumes<LumiScalersCollection> 					(iConfig.getUntrackedParameter<edm::InputTag>("OfflineLumiScaler")) ),
 Token_PUSummaryInfo			( consumes< std::vector<PileupSummaryInfo> > 		(iConfig.getUntrackedParameter<edm::InputTag>("PUSummaryInfo")) ),
 Token_GenEventInfo			( consumes< GenEventInfoProduct >					(iConfig.getUntrackedParameter<edm::InputTag>("GenEventInfo")) ),
 Token_GenParticle			( consumes<reco::GenParticleCollection> 			(iConfig.getUntrackedParameter<edm::InputTag>("GenParticle")) )
@@ -119,6 +122,15 @@ void ntupler::analyze(const edm::Event &iEvent, const edm::EventSetup &iSetup)
 			this->DataPURMS = Handle_LumiScaler->begin()->pileupRMS();
 			this->BunchLumi = Handle_LumiScaler->begin()->bunchLumi();
 		}
+
+		edm::Handle<LumiScalersCollection> Handle_OfflineLumiScaler;
+		if( iEvent.getByToken(Token_OfflineLumiScaler, Handle_OfflineLumiScaler) )
+		{
+			this->OfflineInstLumi = Handle_OfflineLumiScaler->begin()->instantLumi();
+			this->OfflineDataPU = Handle_OfflineLumiScaler->begin()->pileup();
+			this->OfflineDataPURMS = Handle_OfflineLumiScaler->begin()->pileupRMS();
+			this->OfflineBunchLumi = Handle_OfflineLumiScaler->begin()->bunchLumi();
+		}
 	}
 
 	// -- True PU info: only for MC -- //
@@ -142,6 +154,7 @@ void ntupler::analyze(const edm::Event &iEvent, const edm::EventSetup &iSetup)
 
 	this->Fill_Muon(iEvent);
 	this->Fill_HLT(iEvent);
+	this->Fill_MYHLT(iEvent);
 	this->Fill_HLTMuon(iEvent);
 	this->Fill_L1Muon(iEvent);
 	if( !iEvent.isRealData() ) this->Fill_GenParticle(iEvent);
@@ -170,6 +183,10 @@ void ntupler::Init()
 	this->DataPU = -999;
 	this->DataPURMS = -999;
 	this->BunchLumi = -999;
+	this->OfflineInstLumi = -999;
+	this->OfflineDataPU = -999;
+	this->OfflineDataPURMS = -999;
+	this->OfflineBunchLumi = -999;
 	this->TruePU = -999;
 	this->GenEventWeight = -999;
 
@@ -205,11 +222,19 @@ void ntupler::Init()
 		this->GenParticle_isMostlyLikePythia6Status3[i] = 0;
 	}
 
+	// -- original trigger objects- - //
 	this->vec_FiredTrigger.clear();
 	this->vec_FilterName.clear();
 	this->vec_HLTObj_Pt.clear();
 	this->vec_HLTObj_Eta.clear();
 	this->vec_HLTObj_Phi.clear();
+
+	// -- HLT rerun objects -- //
+	this->vec_MyFiredTrigger.clear();
+	this->vec_MyFilterName.clear();
+	this->vec_MyHLTObj_Pt.clear();
+	this->vec_MyHLTObj_Eta.clear();
+	this->vec_MyHLTObj_Phi.clear();
 
 	this->Rho = -999;
 	this->RhoECAL = -999;
@@ -331,6 +356,10 @@ void ntupler::Make_Branch()
 	this->ntuple->Branch("DataPU", &DataPU, "DataPU/D");
 	this->ntuple->Branch("DataPURMS", &DataPURMS, "DataPURMS/D");
 	this->ntuple->Branch("BunchLumi", &BunchLumi, "BunchLumi/D");
+	this->ntuple->Branch("OfflineInstLumi", &OfflineInstLumi, "OfflineInstLumi/D");
+	this->ntuple->Branch("OfflineDataPU", &OfflineDataPU, "OfflineDataPU/D");
+	this->ntuple->Branch("OfflineDataPURMS", &OfflineDataPURMS, "OfflineDataPURMS/D");
+	this->ntuple->Branch("OfflineBunchLumi", &OfflineBunchLumi, "OfflineBunchLumi/D");
 	this->ntuple->Branch("TruePU", &TruePU, "TruePU/I");
 
 	this->ntuple->Branch("GenEventWeight", &GenEventWeight, "GenEventWeight/D");
@@ -366,6 +395,12 @@ void ntupler::Make_Branch()
 	this->ntuple->Branch("vec_HLTObj_Pt", &vec_HLTObj_Pt);
 	this->ntuple->Branch("vec_HLTObj_Eta", &vec_HLTObj_Eta);
 	this->ntuple->Branch("vec_HLTObj_Phi", &vec_HLTObj_Phi);
+
+	this->ntuple->Branch("vec_MyFiredTrigger", &vec_MyFiredTrigger);
+	this->ntuple->Branch("vec_MyFilterName", &vec_MyFilterName);
+	this->ntuple->Branch("vec_MyHLTObj_Pt", &vec_MyHLTObj_Pt);
+	this->ntuple->Branch("vec_MyHLTObj_Eta", &vec_MyHLTObj_Eta);
+	this->ntuple->Branch("vec_MyHLTObj_Phi", &vec_MyHLTObj_Phi);
 
 	this->ntuple->Branch("Rho", &Rho, "Rho/D");
 	this->ntuple->Branch("RhoECAL", &RhoECAL, "RhoECAL/D");
@@ -619,6 +654,62 @@ void ntupler::Fill_HLT(const edm::Event &iEvent)
 				this->vec_HLTObj_Pt.push_back( triggerObj.pt() );
 				this->vec_HLTObj_Eta.push_back( triggerObj.eta() );
 				this->vec_HLTObj_Phi.push_back( triggerObj.phi() );
+			}
+		} // -- end of if( muon filters )-- // 
+	} // -- end of filter iteration -- //
+}
+
+// -- basically same with Fill_HLT except for rho variable part -- //
+void ntupler::Fill_MYHLT(const edm::Event &iEvent)
+{
+	edm::Handle<edm::TriggerResults>  Handle_TriggerResults;
+	iEvent.getByToken(Token_MyTriggerResults, Handle_TriggerResults);
+
+	edm::Handle<trigger::TriggerEvent> Handle_TriggerEvent;
+	iEvent.getByToken(Token_MyTriggerEvent, Handle_TriggerEvent);
+
+	edm::TriggerNames TrigNames = iEvent.triggerNames(*Handle_TriggerResults);
+
+	for(unsigned int itrig=0; itrig<TrigNames.size(); ++itrig)
+	{
+		LogDebug("triggers") << TrigNames.triggerName(itrig);
+
+		if( Handle_TriggerResults->accept(itrig) )
+		{
+			std::string PathName = TrigNames.triggerName(itrig);
+
+			if( PathName.find("HLT_IsoMu") != std::string::npos ||
+				PathName.find("HLT_Mu45") != std::string::npos ||
+				PathName.find("HLT_Mu5") != std::string::npos ||
+				PathName.find("HLT_TkMu5") != std::string::npos ||
+				PathName.find("HLT_IsoTkMu") != std::string::npos ||
+				PathName.find("HLT_Mu17") != std::string::npos ||
+				PathName.find("HLT_Mu8_T") != std::string::npos ) this->vec_MyFiredTrigger.push_back( PathName );
+		} // -- if fired -- //
+	} // -- iteration over all trigger names -- //
+
+	const trigger::size_type nFilters(Handle_TriggerEvent->sizeFilters());
+	for( trigger::size_type i_filter=0; i_filter<nFilters; i_filter++)
+	{
+		std::string filterTag = Handle_TriggerEvent->filterTag(i_filter).encode();
+
+		if( filterTag.find("sMu") != std::string::npos &&
+			filterTag.find("Tau") == std::string::npos &&
+			filterTag.find("EG") == std::string::npos &&
+			filterTag.find("MultiFit") == std::string::npos )
+		{
+			trigger::Keys objectKeys = Handle_TriggerEvent->filterKeys(i_filter);
+			const trigger::TriggerObjectCollection& triggerObjects(Handle_TriggerEvent->getObjects());
+
+			for( trigger::size_type i_key=0; i_key<objectKeys.size(); i_key++)
+			{
+				trigger::size_type objKey = objectKeys.at(i_key);
+				const trigger::TriggerObject& triggerObj(triggerObjects[objKey]);
+
+				this->vec_MyFilterName.push_back( filterTag );
+				this->vec_MyHLTObj_Pt.push_back( triggerObj.pt() );
+				this->vec_MyHLTObj_Eta.push_back( triggerObj.eta() );
+				this->vec_MyHLTObj_Phi.push_back( triggerObj.phi() );
 			}
 		} // -- end of if( muon filters )-- // 
 	} // -- end of filter iteration -- //

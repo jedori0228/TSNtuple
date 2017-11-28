@@ -60,6 +60,7 @@ private:
 	void Init();
 	void Make_Branch();
 	void Fill_HLT(const edm::Event &iEvent);
+	void Fill_MYHLT(const edm::Event &iEvent);
 	void Fill_Muon(const edm::Event &iEvent);
 	void Fill_HLTMuon(const edm::Event &iEvent);
 	void Fill_L1Muon(const edm::Event &iEvent);
@@ -69,6 +70,8 @@ private:
 	edm::EDGetTokenT< reco::VertexCollection >					Token_OfflineVertex;
 	edm::EDGetTokenT<edm::TriggerResults>						Token_TriggerResults;
 	edm::EDGetTokenT<trigger::TriggerEvent>						Token_TriggerEvent;
+	edm::EDGetTokenT<edm::TriggerResults>						Token_MyTriggerResults;
+	edm::EDGetTokenT<trigger::TriggerEvent>						Token_MyTriggerEvent;
 
 	edm::EDGetTokenT<reco::RecoChargedCandidateCollection> 		Token_L3Muon;
 	edm::EDGetTokenT<reco::RecoChargedCandidateCollection>		Token_L2Muon;
@@ -92,6 +95,7 @@ private:
 	edm::EDGetTokenT<edm::ValueMap<float>> 						Token_OfflineHCALPFIso04;
 
 	edm::EDGetTokenT<LumiScalersCollection> 					Token_LumiScaler;
+	edm::EDGetTokenT<LumiScalersCollection> 					Token_OfflineLumiScaler;
 	edm::EDGetTokenT< std::vector<PileupSummaryInfo> > 			Token_PUSummaryInfo;
 	edm::EDGetTokenT< GenEventInfoProduct >						Token_GenEventInfo;
 	edm::EDGetTokenT<reco::GenParticleCollection> 				Token_GenParticle;
@@ -111,6 +115,10 @@ private:
 	double DataPU;
 	double DataPURMS;
 	double BunchLumi;
+	double OfflineInstLumi;
+	double OfflineDataPU;
+	double OfflineDataPURMS;
+	double OfflineBunchLumi;
 	int TruePU;
 	double GenEventWeight;
 
