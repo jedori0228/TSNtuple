@@ -5,13 +5,13 @@ using namespace std;
 void Example()
 {
 	TChain *chain = new TChain("ntupler/ntuple");
-	chain->Add("Local/ntuple_withoutFix.root");
+	// chain->Add("Local/ntuple_withoutFix.root");
 	// chain->Add("/Users/KyeongPil_Lee/ServiceWorks/TriggerStudyNtuple/Analyzer/Rate/Local/ntuple_*.root");
+	chain->Add("/Users/KyeongPil_Lee/ServiceWorks/HLTReRun/v20171109_Menu3p1_3p2_4p0_Efficiency/ntuple_Menu3p1.root");
 
 	NtupleHandle *ntuple = new NtupleHandle( chain );
 	// ntuple->TurnOffBranches_All();
 
-	Bool_t Flag_IsMC = kFALSE;
 	Int_t nEvent = chain->GetEntries();
 	std::cout << "[Total event: " << nEvent << "]" << std::endl;
 
@@ -21,11 +21,11 @@ void Example()
 	{
 		ntuple->GetEvent( i_ev );
 
-		KPEvent event( ntuple, Flag_IsMC );
+		KPEvent event( ntuple );
 		printf("[%d event]\n", i_ev);
-		printf("\t(run, rumi, event, BX_ID, InstLumi) = (%d, %d, %llu, %lf, %e)\n", event.RunNum, event.LumiBlockNum, event.EventNum, event.BX_ID, event.InstLumi);
-		printf("\t(nFiredTrigger, nHLTObj, nMuon, nL3Muon, nL2Muon, nTKMuon, nL1Muon) = (%d, %d, %d, %d, %d, %d, %d)\n", 
-			event.nFiredTrigger, event.nHLTObject, event.nMuon, event.nL3Muon, event.nL2Muon, event.nTkMuon, event.nL1Muon );
+		printf("\t(run, rumi, event, BX_ID, InstLumi, OfflineInstLumi) = (%d, %d, %llu, %lf, %e, %e)\n", event.RunNum, event.LumiBlockNum, event.EventNum, event.BX_ID, event.InstLumi, event.OfflineInstLumi);
+		printf("\t(nFiredTrigger, nHLTObj, nMyFiredTrigger, nMyHLTObj, nMuon, nL3Muon, nL2Muon, nTKMuon, nL1Muon) = (%d, %d, %d, %d, %d, %d, %d, %d, %d)\n", 
+			event.nFiredTrigger, event.nHLTObject, event.nMyFiredTrigger, event.nMyHLTObject, event.nMuon, event.nL3Muon, event.nL2Muon, event.nTkMuon, event.nL1Muon );
 
 		Bool_t Flag_Print = kFALSE;
 		if( event.nFiredTrigger != 0 ) Flag_Print = kTRUE;
@@ -34,6 +34,10 @@ void Example()
 		{
 			cout << "[Full list of fired muon trigger]" << endl;
 			for( const auto& trigger : *event.vec_FiredTrigger )
+				cout << "\t" << trigger << endl;
+
+			cout << "[Full list of fired muon trigger AFTER RERUN HLT]" << endl;
+			for( const auto& trigger : *event.vec_MyFiredTrigger )
 				cout << "\t" << trigger << endl;
 		}
 
@@ -62,6 +66,19 @@ void Example()
 			{
 				printf("\t[%d HLT object]\n", i_hlt);
 				printf("\t\t(FilterName, Pt, Eta, Phi) = (%s, %lf, %lf, %lf)\n", HLTObj.FilterName.Data(), HLTObj.Pt, HLTObj.Eta, HLTObj.Phi);
+			}
+		}
+
+		///////////////////////////////////////
+		// -- HLT objects after rerun HLT -- //
+		///////////////////////////////////////
+		for(Int_t i_hlt=0; i_hlt<event.nMyHLTObject; i_hlt++)
+		{
+			KPMYHLTObject MYHLTObj( ntuple, i_hlt );
+			if( Flag_Print )
+			{
+				printf("\t[%d HLT object]\n", i_hlt);
+				printf("\t\t(FilterName, Pt, Eta, Phi) = (%s, %lf, %lf, %lf)\n", MYHLTObj.FilterName.Data(), MYHLTObj.Pt, MYHLTObj.Eta, MYHLTObj.Phi);
 			}
 		}
 

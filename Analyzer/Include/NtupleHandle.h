@@ -24,6 +24,10 @@ public:
 	Double_t		DataPU;
 	Double_t		DataPURMS;
 	Double_t		BunchLumi;
+	Double_t        OfflineInstLumi;
+	Double_t		OfflineDataPU;
+	Double_t		OfflineDataPURMS;
+	Double_t		OfflineBunchLumi;
 	Int_t           TruePU;
 	Double_t        Rho;
 	Double_t        RhoECAL;
@@ -60,6 +64,11 @@ public:
 	vector<double>  *vec_HLTObj_Pt;
 	vector<double>  *vec_HLTObj_Eta;
 	vector<double>  *vec_HLTObj_Phi;
+	vector<string>  *vec_MyFiredTrigger;
+	vector<string>  *vec_MyFilterName;
+	vector<double>  *vec_MyHLTObj_Pt;
+	vector<double>  *vec_MyHLTObj_Eta;
+	vector<double>  *vec_MyHLTObj_Phi;
 
 	Int_t           nMuon;
 	Double_t        Muon_Pt[ArrSize];   //[nMuon]
@@ -182,6 +191,18 @@ public:
 		chain->SetBranchStatus("BunchLumi", 1);
 		chain->SetBranchAddress("BunchLumi", &BunchLumi);
 
+		chain->SetBranchStatus("OfflineInstLumi", 1);
+		chain->SetBranchAddress("OfflineInstLumi", &OfflineInstLumi);
+
+		chain->SetBranchStatus("OfflineDataPU", 1);
+		chain->SetBranchAddress("OfflineDataPU", &OfflineDataPU);
+
+		chain->SetBranchStatus("OfflineDataPURMS", 1);
+		chain->SetBranchAddress("OfflineDataPURMS", &OfflineDataPURMS);
+
+		chain->SetBranchStatus("OfflineBunchLumi", 1);
+		chain->SetBranchAddress("OfflineBunchLumi", &OfflineBunchLumi);
+
 		chain->SetBranchStatus("TruePU", 1);
 		chain->SetBranchAddress("TruePU", &TruePU);
 
@@ -206,6 +227,15 @@ public:
 		chain->SetBranchStatus("vec_FiredTrigger", 1);
 		chain->SetBranchAddress("vec_FiredTrigger", &vec_FiredTrigger);
 
+		chain->SetBranchStatus("vec_FilterName", 1);
+		chain->SetBranchAddress("vec_FilterName", &vec_FilterName);
+
+		chain->SetBranchStatus("vec_MyFiredTrigger", 1);
+		chain->SetBranchAddress("vec_MyFiredTrigger", &vec_MyFiredTrigger);
+
+		chain->SetBranchStatus("vec_MyFilterName", 1);
+		chain->SetBranchAddress("vec_MyFilterName", &vec_MyFilterName);
+
 		// -- # particles -- //
 		chain->SetBranchStatus("nGenParticle", 1);
 		chain->SetBranchAddress("nGenParticle", &nGenParticle);
@@ -228,9 +258,6 @@ public:
 
 	void TurnOnBranches_HLT()
 	{
-		chain->SetBranchStatus("vec_FilterName", 1);
-		chain->SetBranchAddress("vec_FilterName", &vec_FilterName);
-
 		chain->SetBranchStatus("vec_HLTObj_Pt", 1);
 		chain->SetBranchAddress("vec_HLTObj_Pt", &vec_HLTObj_Pt);
 
@@ -239,6 +266,16 @@ public:
 
 		chain->SetBranchStatus("vec_HLTObj_Phi", 1);
 		chain->SetBranchAddress("vec_HLTObj_Phi", &vec_HLTObj_Phi);
+
+
+		chain->SetBranchStatus("vec_MyHLTObj_Pt", 1);
+		chain->SetBranchAddress("vec_MyHLTObj_Pt", &vec_MyHLTObj_Pt);
+
+		chain->SetBranchStatus("vec_MyHLTObj_Eta", 1);
+		chain->SetBranchAddress("vec_MyHLTObj_Eta", &vec_MyHLTObj_Eta);
+
+		chain->SetBranchStatus("vec_MyHLTObj_Phi", 1);
+		chain->SetBranchAddress("vec_MyHLTObj_Phi", &vec_MyHLTObj_Phi);
 	}
 
 	void TurnOnBranches_GenParticle()

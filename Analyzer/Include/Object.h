@@ -25,17 +25,26 @@ public:
 	Double_t        DataPU;
 	Double_t        DataPURMS;
 	Double_t        BunchLumi;
+	Double_t        OfflineInstLumi;
+	Double_t        OfflineDataPU;
+	Double_t        OfflineDataPURMS;
+	Double_t        OfflineBunchLumi;
 	Int_t           TruePU;
 	Double_t        Rho;
 	Double_t        RhoECAL;
 	Double_t        RhoHCAL;
 	Double_t        GenEventWeight;
 	vector<string> *vec_FiredTrigger;
+	vector<string> *vec_FilterName;
+	vector<string> *vec_MyFiredTrigger;
+	vector<string> *vec_MyFilterName;
 
 	Int_t           nGenParticle;
 	Int_t           nMuon;
-	Int_t			nHLTObject;
 	Int_t			nFiredTrigger;
+	Int_t			nHLTObject;
+	Int_t			nMyFiredTrigger;
+	Int_t			nMyHLTObject;
 	Int_t			nL3Muon;
 	Int_t			nTkMuon;
 	Int_t			nL2Muon;
@@ -53,6 +62,13 @@ public:
 		this->Rho_Offline = 0;
 		this->BX_ID = 0;
 		this->InstLumi = 0;
+		this->DataPU = 0;
+		this->DataPURMS = 0;
+		this->BunchLumi = 0;
+		this->OfflineInstLumi = 0;
+		this->OfflineDataPU = 0;
+		this->OfflineDataPURMS = 0;
+		this->OfflineBunchLumi = 0;
 		this->TruePU = 0;
 		this->Rho = 0;
 		this->RhoECAL = 0;
@@ -83,17 +99,27 @@ public:
 		this->DataPU = ntuple->DataPU;
 		this->DataPURMS = ntuple->DataPURMS;
 		this->BunchLumi = ntuple->BunchLumi;
+		this->OfflineInstLumi = ntuple->OfflineInstLumi;
+		this->OfflineDataPU = ntuple->OfflineDataPU;
+		this->OfflineDataPURMS = ntuple->OfflineDataPURMS;
+		this->OfflineBunchLumi = ntuple->OfflineBunchLumi;
 		this->TruePU = ntuple->TruePU;
 		this->Rho = ntuple->Rho; // -- online -- //
 		this->RhoECAL = ntuple->RhoECAL;
 		this->RhoHCAL = ntuple->RhoHCAL;
 		this->GenEventWeight = ntuple->GenEventWeight;
 		this->vec_FiredTrigger = ntuple->vec_FiredTrigger;
+		this->vec_FilterName = ntuple->vec_FilterName;
+		this->vec_MyFiredTrigger = ntuple->vec_MyFiredTrigger;
+		this->vec_MyFilterName = ntuple->vec_MyFilterName;
 
 		this->nGenParticle = ntuple->nGenParticle;
 		this->nMuon = ntuple->nMuon;
-		this->nHLTObject = (Int_t)ntuple->vec_FilterName->size();
 		this->nFiredTrigger = (Int_t)this->vec_FiredTrigger->size();
+		this->nHLTObject = (Int_t)this->vec_FilterName->size();
+
+		this->nMyFiredTrigger = (Int_t)this->vec_MyFiredTrigger->size();
+		this->nMyHLTObject = (Int_t)this->vec_MyFilterName->size();
 
 		this->nL3Muon = ntuple->nL3Muon;
 		this->nL2Muon = ntuple->nL2Muon;
@@ -247,6 +273,33 @@ public:
 		this->Pt = ntuple->vec_HLTObj_Pt->at(index);
 		this->Eta = ntuple->vec_HLTObj_Eta->at(index);
 		this->Phi = ntuple->vec_HLTObj_Phi->at(index);
+	}
+
+	void Init()
+	{
+		this->FilterName = "";
+	}
+};
+
+class KPMYHLTObject: public KPObject
+{
+public:
+	TString FilterName;
+
+	KPMYHLTObject(): KPObject() { this->Init(); }
+
+	KPMYHLTObject(NtupleHandle* ntuple, Int_t index)
+	{
+		this->Flag_IsNonNull = kTRUE;
+		this->Fill(ntuple, index);
+	}
+
+	void Fill(NtupleHandle* ntuple, Int_t index)
+	{
+		this->FilterName = ntuple->vec_MyFilterName->at(index);
+		this->Pt = ntuple->vec_MyHLTObj_Pt->at(index);
+		this->Eta = ntuple->vec_MyHLTObj_Eta->at(index);
+		this->Phi = ntuple->vec_MyHLTObj_Phi->at(index);
 	}
 
 	void Init()
