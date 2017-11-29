@@ -530,9 +530,9 @@ void ntupler::Fill_Muon(const edm::Event &iEvent)
 			if( muon::isMediumMuon( (*mu) ) ) this->Muon_IsMedium[_nMuon] = 1;
 			if( muon::isLooseMuon( (*mu) ) ) this->Muon_IsLoose[_nMuon] = 1;
 
-			this->Muon_Iso03_sumPt = mu->isolationR03().sumPt;
-			this->Muon_Iso03_hadEt = mu->isolationR03().hadEt;
-			this->Muon_Iso03_emEt = mu->isolationR03().emEt;
+			this->Muon_Iso03_sumPt[_nMuon] = mu->isolationR03().sumPt;
+			this->Muon_Iso03_hadEt[_nMuon] = mu->isolationR03().hadEt;
+			this->Muon_Iso03_emEt[_nMuon] = mu->isolationR03().emEt;
 
 			this->Muon_PFIso03_Charged[_nMuon] = mu->pfIsolationR03().sumChargedHadronPt;
 			this->Muon_PFIso03_Neutral[_nMuon] = mu->pfIsolationR03().sumNeutralHadronEt;

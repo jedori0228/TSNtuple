@@ -157,6 +157,12 @@ private:
 	vector< double > vec_HLTObj_Eta;
 	vector< double > vec_HLTObj_Phi;
 
+	vector< std::string > vec_MyFiredTrigger;
+	vector< std::string > vec_MyFilterName;
+	vector< double > vec_MyHLTObj_Pt;
+	vector< double > vec_MyHLTObj_Eta;
+	vector< double > vec_MyHLTObj_Phi;
+
 	double Rho;
 	double RhoECAL;
 	double RhoHCAL;
