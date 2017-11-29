@@ -48,7 +48,7 @@ public:
 	{
 		Bool_t flag = kFALSE;
 		// if( probe.IsHLTFilterMatched( ntuple, "hltL3crIsoL1sMu22Or25L1f0L2f10QL3f27QL3trkIsoFiltered0p07" ) )
-		if( probe.IsHLTFilterMatched( ntuple, "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q" ) )
+		if( probe.IsMYHLTFilterMatched( ntuple, "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered50Q" ) )
 			flag = kTRUE;
 
 		return flag;

@@ -433,6 +433,33 @@ public:
 		return flag;
 	}
 
+	// -- match to the trigger objects produced by rerun HLT -- //
+	Bool_t IsMYHLTFilterMatched(NtupleHandle *ntuple, TString filterName)
+	{
+		Bool_t flag = kFALSE;
+		KPEvent event(ntuple);
+
+		for(Int_t i_hlt=0; i_hlt<event.nMyHLTObject; i_hlt++)
+		{
+			KPMYHLTObject MYHLTObj( ntuple, i_hlt );
+
+			if( MYHLTObj.FilterName.Contains(filterName) )
+			{
+				TLorentzVector vec_TrigObj;
+				vec_TrigObj.SetPtEtaPhiM( MYHLTObj.Pt, MYHLTObj.Eta, MYHLTObj.Phi, M_Mu );
+
+				Double_t dR = this->LVec_P.DeltaR( vec_TrigObj );
+				if( dR < 0.2 )
+				{
+					flag = kTRUE;
+					break;
+				}
+			}
+		}
+
+		return flag;
+	}
+
 	void Init()
 	{
 		this->dB = 0;

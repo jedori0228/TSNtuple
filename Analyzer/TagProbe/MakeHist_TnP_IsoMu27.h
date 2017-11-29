@@ -47,7 +47,7 @@ public:
 	Bool_t IsPassingProbe( KPMuon probe, NtupleHandle *ntuple )
 	{
 		Bool_t flag = kFALSE;
-		if( probe.IsHLTFilterMatched( ntuple, "hltL3crIsoL1sMu22Or25L1f0L2f10QL3f27QL3trkIsoFiltered0p07" ) )
+		if( probe.IsMYHLTFilterMatched( ntuple, "hltL3crIsoL1sMu22Or25L1f0L2f10QL3f27QL3trkIsoFiltered0p07" ) )
 			flag = kTRUE;
 
 		return flag;

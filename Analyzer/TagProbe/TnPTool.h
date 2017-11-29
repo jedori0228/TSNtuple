@@ -424,8 +424,8 @@ public:
 			hEff->SetBinContent(i_bin, Eff);
 			hEff->SetBinError(i_bin, AbsUncEff);
 
-			// printf("[%02d bin: from %.1lf to %.1lf] (Eff, Eff_Err, nEventPass, nEventTotal) = (%.3lf, %.3lf, %.1lf, %.1lf)\n", 
-			// 	i_bin, hEff->GetBinLowEdge(i_bin), hEff->GetBinLowEdge(i_bin+1), Eff, AbsUncEff, nEventPass, nEventTotal);
+			printf("[%02d bin: from %.1lf to %.1lf] (Eff, Eff_Err, nEventPass, nEventTotal) = (%.3lf, %.3lf, %.1lf, %.1lf)\n", 
+				i_bin, hEff->GetBinLowEdge(i_bin), hEff->GetBinLowEdge(i_bin+1), Eff, AbsUncEff, nEventPass, nEventTotal);
 		}
 
 		return hEff;
