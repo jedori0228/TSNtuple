@@ -320,6 +320,10 @@ public:
 	Int_t           IsTight;
 	Int_t           IsMedium;
 	Int_t           IsLoose;
+	Int_t			IsHighPt;
+	Double_t        Iso03_sumPt;
+	Double_t        Iso03_hadEt;
+	Double_t        Iso03_emEt;
 	Double_t        PFIso03_Charged;
 	Double_t        PFIso03_Neutral;
 	Double_t        PFIso03_Photon;
@@ -329,6 +333,7 @@ public:
 	Double_t        PFIso04_Photon;
 	Double_t        PFIso04_SumPU;
 	Double_t 		RelPFIso_dBeta;
+	Double_t		RelTrkIso;
 	Double_t        PFCluster03_ECAL;
 	Double_t        PFCluster03_HCAL;
 	Double_t        PFCluster04_ECAL;
@@ -376,6 +381,10 @@ public:
 		this->IsTight = ntuple->Muon_IsTight[index];
 		this->IsMedium = ntuple->Muon_IsMedium[index];
 		this->IsLoose = ntuple->Muon_IsLoose[index];
+
+		this->Iso03_sumPt = ntuple->Muon_Iso03_sumPt[index];
+		this->Iso03_hadEt = ntuple->Muon_Iso03_hadEt[index];
+		this->Iso03_emEt = ntuple->Muon_Iso03_emEt[index];
 		this->PFIso03_Charged = ntuple->Muon_PFIso03_Charged[index];
 		this->PFIso03_Neutral = ntuple->Muon_PFIso03_Neutral[index];
 		this->PFIso03_Photon = ntuple->Muon_PFIso03_Photon[index];
@@ -405,6 +414,10 @@ public:
 
 		// -- https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideMuonIdRun2#Muon_Isolation -- //
 		this->RelPFIso_dBeta = (PFIso04_Charged + max(0., PFIso04_Neutral + this->PFIso04_Photon - 0.5*this->PFIso04_SumPU))/this->Pt;
+		this->RelTrkIso = this->Iso03_sumPt / this->Pt;
+
+		// -- should be added later -- //
+		this->IsHighPt = 0;
 	}
 
 	Bool_t IsHLTFilterMatched(NtupleHandle *ntuple, TString filterName)

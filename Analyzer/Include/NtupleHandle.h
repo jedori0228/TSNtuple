@@ -86,6 +86,9 @@ public:
 	Int_t           Muon_IsTight[ArrSize];   //[nMuon]
 	Int_t           Muon_IsMedium[ArrSize];   //[nMuon]
 	Int_t           Muon_IsLoose[ArrSize];   //[nMuon]
+	Double_t        Muon_Iso03_sumPt[ArrSize];   //[nMuon]
+	Double_t        Muon_Iso03_hadEt[ArrSize];   //[nMuon]
+	Double_t        Muon_Iso03_emEt[ArrSize];   //[nMuon]
 	Double_t        Muon_PFIso03_Charged[ArrSize];   //[nMuon]
 	Double_t        Muon_PFIso03_Neutral[ArrSize];   //[nMuon]
 	Double_t        Muon_PFIso03_Photon[ArrSize];   //[nMuon]
@@ -402,6 +405,15 @@ public:
 
 		chain->SetBranchStatus("Muon_IsLoose", 1);
 		chain->SetBranchAddress("Muon_IsLoose", &Muon_IsLoose);
+
+		chain->SetBranchStatus("Muon_Iso03_sumPt", 1);
+		chain->SetBranchAddress("Muon_Iso03_sumPt", &Muon_Iso03_sumPt);
+
+		chain->SetBranchStatus("Muon_Iso03_hadEt", 1);
+		chain->SetBranchAddress("Muon_Iso03_hadEt", &Muon_Iso03_hadEt);
+
+		chain->SetBranchStatus("Muon_Iso03_emEt", 1);
+		chain->SetBranchAddress("Muon_Iso03_emEt", &Muon_Iso03_emEt);
 
 		chain->SetBranchStatus("Muon_PFIso03_Charged", 1);
 		chain->SetBranchAddress("Muon_PFIso03_Charged", &Muon_PFIso03_Charged);
