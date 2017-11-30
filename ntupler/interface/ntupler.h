@@ -184,6 +184,7 @@ private:
 	int Muon_IsTight[ArrSize];
 	int Muon_IsMedium[ArrSize];
 	int Muon_IsLoose[ArrSize];
+	int Muon_IsHighPt[ArrSize];
 
 	double Muon_Iso03_sumPt[ArrSize];
 	double Muon_Iso03_hadEt[ArrSize];
@@ -215,6 +216,9 @@ private:
 	int Muon_nTrackerHit_InnerTrk[ArrSize];
 	int Muon_nTrackerLayer_InnerTrk[ArrSize];
 	int Muon_nPixelHit_InnerTrk[ArrSize];
+
+	double Muon_Pt_TunePTrk[ArrSize];
+	double Muon_PtError_TunePTrk[ArrSize];
 
 	double Muon_dxyVTX_BestTrk[ArrSize];
 	double Muon_dzVTX_BestTrk[ArrSize];
