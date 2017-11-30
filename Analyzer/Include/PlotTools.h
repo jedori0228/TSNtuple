@@ -855,7 +855,6 @@ public:
 		h_ratio->Divide( h_NUM, this->h );
 	}
 
-protected:
 	void SetAttributes()
 	{
 		this->h->SetTitle("");
@@ -1009,6 +1008,13 @@ public:
 			this->g = Get_Graph( this->sampleInfo->fileName, this->histInfo->name );
 		else
 			this->g = Get_Graph( this->sampleInfo->fileName, graphName );
+	}
+
+	TGraphExt( SampleInfo* _sampleInfo, HistInfo* _histInfo, TGraphAsymmErrors* _g ): TGraphExt()
+	{
+		this->sampleInfo = _sampleInfo;
+		this->histInfo = _histInfo;
+		this->g = (TGraphAsymmErrors*)_g->Clone();
 	}
 
 	void DrawAndSet( TString drawOp )
