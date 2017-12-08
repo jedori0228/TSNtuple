@@ -19,7 +19,8 @@ for jobInfo in JobInfo["JobInfo"]:
 
 	List_rootCMD.append( rootCMD )
 
-f = open("script_Run.sh", "w")
+scriptName = "scriptRun_"+JSONFileName.split(".json")[0]+".sh"
+f = open(scriptName, "w")
 f.write("#!bin/bash\n\n");
 
 for rootCMD in List_rootCMD:
@@ -30,5 +31,5 @@ f.close()
 
 print "+" * 100
 print "script_Run.sh is generated. Run the script: "
-print "source script_Run.sh >&log_script_Run.log&"
+print "source %s >&log_%s.log&" % (scriptName, scriptName.split(".sh")[0])
 print "+" * 100

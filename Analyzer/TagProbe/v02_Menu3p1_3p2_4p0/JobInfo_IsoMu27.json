@@ -2,127 +2,18 @@
 	"Macro": "MakeHist_TnP_IsoMu27.cxx",
 	"JobInfo":[
 		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p1_EphemeralHLTPhysics1_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p1_v01.root"
+			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171129_SingleMuon_Run2017Dv1_302525_to_302634_GoldenJSON_Menu3p1/ntuple_*.root",
+			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p1_AddMoreData.root"
 		},
 
 		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p1_EphemeralHLTPhysics2_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p1_v02.root"
+			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171129_SingleMuon_Run2017Dv1_302525_to_302634_GoldenJSON_Menu3p2/ntuple_*.root",
+			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p2_AddMoreData.root"
 		},
 
 		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p1_EphemeralHLTPhysics3_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p1_v03.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p1_EphemeralHLTPhysics4_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p1_v04.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p1_EphemeralHLTPhysics5_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p1_v05.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p1_EphemeralHLTPhysics6_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p1_v06.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p1_EphemeralHLTPhysics7_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p1_v07.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p1_EphemeralHLTPhysics8_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p1_v08.root"
-		},
-
-
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p2_EphemeralHLTPhysics1_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p2_v01.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p2_EphemeralHLTPhysics2_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p2_v02.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p2_EphemeralHLTPhysics3_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p2_v03.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p2_EphemeralHLTPhysics4_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p2_v04.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p2_EphemeralHLTPhysics5_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p2_v05.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p2_EphemeralHLTPhysics6_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p2_v06.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p2_EphemeralHLTPhysics7_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p2_v07.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu3p2_EphemeralHLTPhysics8_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu3p2_v08.root"
-		},
-
-
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu4p0_EphemeralHLTPhysics1_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu4p0_v01.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu4p0_EphemeralHLTPhysics2_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu4p0_v02.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu4p0_EphemeralHLTPhysics3_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu4p0_v03.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu4p0_EphemeralHLTPhysics4_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu4p0_v04.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu4p0_EphemeralHLTPhysics5_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu4p0_v05.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu4p0_EphemeralHLTPhysics6_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu4p0_v06.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu4p0_EphemeralHLTPhysics7_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu4p0_v07.root"
-		},
-
-		{
-			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171109_Menu4p0_EphemeralHLTPhysics8_Run2017Dv1/ntuple_*.root",
-			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu4p0_v08.root"
+			"DataPath": "/scratch/kplee/TriggerStudyNtuple/92X/TSntuple_v20171129_SingleMuon_Run2017Dv1_302525_to_302634_GoldenJSON_Menu4p0/ntuple_*.root",
+			"OutputFileName": "ROOTFile_MakeHist_TnP_IsoMu27_Menu4p0_AddMoreData.root"
 		}
 	]
 }
