@@ -50,13 +50,14 @@ public:
 	Int_t			nL2Muon;
 	Int_t			nL1Muon;
 
-	~KPEvent()
-	{
-		delete vec_FiredTrigger;
-		delete vec_FilterName;
-		delete vec_MyFiredTrigger;
-		delete vec_MyFilterName;
-	}
+	// -- it makes seg. fault. why?! -- //
+	// ~KPEvent()
+	// {
+	// 	delete vec_FiredTrigger;
+	// 	delete vec_FilterName;
+	// 	delete vec_MyFiredTrigger;
+	// 	delete vec_MyFilterName;
+	// }
 
 	KPEvent()
 	{
@@ -628,14 +629,21 @@ public:
 		{
 			KPL1Muon l1Mu( ntuple, i );
 
+			// printf("[%d-th L1 muon] (pT, eta, phi) = (%.3lf, %.3lf, %.3lf)\n", i, l1Mu.Pt, l1Mu.Eta, l1Mu.Phi);
+
 			if( l1Mu.Pt > ptCut && l1Mu.Quality == 12 )
 			{
-				Double_t dR = this->Lvec_P.DeltaR( l1Mu.LVec_P ); // -- dR between L1 and offline muon -- //
+				Double_t dR = this->LVec_P.DeltaR( l1Mu.LVec_P ); // -- dR between L1 and offline muon -- //
 
 				if( dR < 0.3 )
-					flag = kTRUE:
+				{
+					flag = kTRUE;
+					break;
+				}
 			}
 		}
+
+		return flag;
 	}
 
 	void Init()
