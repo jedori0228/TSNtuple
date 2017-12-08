@@ -138,6 +138,8 @@ public:
 			for( const auto& tnpPair : vec_myTnpPair )
 				tnpHist->Fill( tnpPair, weight );
 
+
+
 			// // -- reduce memeory usage -- //
 			// for( const auto& tnpPair : vec_myTnpPair )
 			// 	delete tnpPair;
@@ -148,6 +150,7 @@ public:
 		// TString fileName_ith = this->fileName;
 		// fileName_ith.ReplaceAll(".root", TString::Format("_v%02d.root", i_dataPath) );
 		// TFile *f_output = TFile::Open(fileName_ith, "RECREATE");
+
 		TFile *f_output = TFile::Open(this->fileName, "RECREATE");
 		tnpHist->Save( f_output );
 		f_output->Close();
