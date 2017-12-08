@@ -50,6 +50,14 @@ public:
 	Int_t			nL2Muon;
 	Int_t			nL1Muon;
 
+	~KPEvent()
+	{
+		delete vec_FiredTrigger;
+		delete vec_FilterName;
+		delete vec_MyFiredTrigger;
+		delete vec_MyFilterName;
+	}
+
 	KPEvent()
 	{
 		this->Flag_IsNonNull = kFALSE;
@@ -308,6 +316,143 @@ public:
 	}
 };
 
+class KPL3Muon: public KPObject
+{
+public:
+	Double_t        Charge;
+	Double_t        TrkPt;
+	Double_t        TrkIso;
+	Double_t        ECALIso;
+	Double_t        HCALIso;
+
+	KPL3Muon(): KPObject() { this->Init(); }
+
+	KPL3Muon(NtupleHandle* ntuple, Int_t index)
+	{
+		this->Flag_IsNonNull = kTRUE;
+		this->Fill(ntuple, index);
+	}
+
+	void Fill(NtupleHandle* ntuple, Int_t index)
+	{
+		this->Pt = ntuple->L3Muon_Pt[index];
+		this->Eta = ntuple->L3Muon_Eta[index];
+		this->Phi = ntuple->L3Muon_Phi[index];
+		this->LVec_P.SetPtEtaPhiM( this->Pt, this->Eta, this->Phi, M_Mu );
+
+		this->Charge = ntuple->L3Muon_Charge[index];
+		this->TrkPt = ntuple->L3Muon_TrkPt[index];
+		this->TrkIso = ntuple->L3Muon_TrkIso[index];
+		this->ECALIso = ntuple->L3Muon_ECALIso[index];
+		this->HCALIso = ntuple->L3Muon_HCALIso[index];
+	}
+
+	void Init()
+	{
+		this->Charge = 0;
+		this->TrkPt = 0;
+		this->TrkIso = 0;
+		this->ECALIso = 0;
+		this->HCALIso = 0;
+	}
+};
+
+class KPL2Muon: public KPObject
+{
+public:
+	Double_t        Charge;
+	Double_t        TrkPt;
+
+	KPL2Muon(): KPObject() { this->Init(); }
+
+	KPL2Muon(NtupleHandle* ntuple, Int_t index)
+	{
+		this->Flag_IsNonNull = kTRUE;
+		this->Fill(ntuple, index);
+	}
+
+	void Fill(NtupleHandle* ntuple, Int_t index)
+	{
+		this->Pt = ntuple->L2Muon_Pt[index];
+		this->Eta = ntuple->L2Muon_Eta[index];
+		this->Phi = ntuple->L2Muon_Phi[index];
+		this->LVec_P.SetPtEtaPhiM( this->Pt, this->Eta, this->Phi, M_Mu );
+
+		this->Charge = ntuple->L2Muon_Charge[index];
+		this->TrkPt = ntuple->L2Muon_TrkPt[index];
+	}
+
+	void Init()
+	{
+		this->Charge = 0;
+		this->TrkPt = 0;
+	}
+};
+
+class KPTkMuon: public KPObject
+{
+public:
+	Double_t        Charge;
+	Double_t        TrkPt;
+
+	KPTkMuon(): KPObject() { this->Init(); }
+
+	KPTkMuon(NtupleHandle* ntuple, Int_t index)
+	{
+		this->Flag_IsNonNull = kTRUE;
+		this->Fill(ntuple, index);
+	}
+
+	void Fill(NtupleHandle* ntuple, Int_t index)
+	{
+		this->Pt = ntuple->TkMuon_Pt[index];
+		this->Eta = ntuple->TkMuon_Eta[index];
+		this->Phi = ntuple->TkMuon_Phi[index];
+		this->LVec_P.SetPtEtaPhiM( this->Pt, this->Eta, this->Phi, M_Mu );
+
+		this->Charge = ntuple->TkMuon_Charge[index];
+		this->TrkPt = ntuple->TkMuon_TrkPt[index];
+	}
+
+	void Init()
+	{
+		this->Charge = 0;
+		this->TrkPt = 0;
+	}
+};
+
+class KPL1Muon: public KPObject
+{
+public:
+	Double_t        Charge;
+	Double_t        Quality;
+
+	KPL1Muon(): KPObject() { this->Init(); }
+
+	KPL1Muon(NtupleHandle* ntuple, Int_t index)
+	{
+		this->Flag_IsNonNull = kTRUE;
+		this->Fill(ntuple, index);
+	}
+
+	void Fill(NtupleHandle* ntuple, Int_t index)
+	{
+		this->Pt = ntuple->L1Muon_Pt[index];
+		this->Eta = ntuple->L1Muon_Eta[index];
+		this->Phi = ntuple->L1Muon_Phi[index];
+		this->LVec_P.SetPtEtaPhiM( this->Pt, this->Eta, this->Phi, M_Mu );
+
+		this->Charge = ntuple->L1Muon_Charge[index];
+		this->Quality = ntuple->L1Muon_Quality[index];
+	}
+
+	void Init()
+	{
+		this->Charge = 0;
+		this->Quality = 0;
+	}
+};
+
 class KPMuon: public KPObject
 {
 public:
@@ -473,6 +618,26 @@ public:
 		return flag;
 	}
 
+	// -- matching with L1 object -- //
+	Bool_t IsL1Matched( NtupleHandle* ntuple, Double_t ptCut = 22 )
+	{
+		Bool_t flag = kFALSE;
+
+		KPEvent event(ntuple);
+		for(Int_t i=0; i<event.nL1Muon; i++)
+		{
+			KPL1Muon l1Mu( ntuple, i );
+
+			if( l1Mu.Pt > ptCut && l1Mu.Quality == 12 )
+			{
+				Double_t dR = this->Lvec_P.DeltaR( l1Mu.LVec_P ); // -- dR between L1 and offline muon -- //
+
+				if( dR < 0.3 )
+					flag = kTRUE:
+			}
+		}
+	}
+
 	void Init()
 	{
 		this->dB = 0;
@@ -510,142 +675,5 @@ public:
 		this->nMatchedStation = 0;
 		this->nMatchedRPCLayer = 0;
 		this->StationMask = 0;
-	}
-};
-
-class KPL3Muon: public KPObject
-{
-public:
-	Double_t        Charge;
-	Double_t        TrkPt;
-	Double_t        TrkIso;
-	Double_t        ECALIso;
-	Double_t        HCALIso;
-
-	KPL3Muon(): KPObject() { this->Init(); }
-
-	KPL3Muon(NtupleHandle* ntuple, Int_t index)
-	{
-		this->Flag_IsNonNull = kTRUE;
-		this->Fill(ntuple, index);
-	}
-
-	void Fill(NtupleHandle* ntuple, Int_t index)
-	{
-		this->Pt = ntuple->L3Muon_Pt[index];
-		this->Eta = ntuple->L3Muon_Eta[index];
-		this->Phi = ntuple->L3Muon_Phi[index];
-		this->LVec_P.SetPtEtaPhiM( this->Pt, this->Eta, this->Phi, M_Mu );
-
-		this->Charge = ntuple->L3Muon_Charge[index];
-		this->TrkPt = ntuple->L3Muon_TrkPt[index];
-		this->TrkIso = ntuple->L3Muon_TrkIso[index];
-		this->ECALIso = ntuple->L3Muon_ECALIso[index];
-		this->HCALIso = ntuple->L3Muon_HCALIso[index];
-	}
-
-	void Init()
-	{
-		this->Charge = 0;
-		this->TrkPt = 0;
-		this->TrkIso = 0;
-		this->ECALIso = 0;
-		this->HCALIso = 0;
-	}
-};
-
-class KPL2Muon: public KPObject
-{
-public:
-	Double_t        Charge;
-	Double_t        TrkPt;
-
-	KPL2Muon(): KPObject() { this->Init(); }
-
-	KPL2Muon(NtupleHandle* ntuple, Int_t index)
-	{
-		this->Flag_IsNonNull = kTRUE;
-		this->Fill(ntuple, index);
-	}
-
-	void Fill(NtupleHandle* ntuple, Int_t index)
-	{
-		this->Pt = ntuple->L2Muon_Pt[index];
-		this->Eta = ntuple->L2Muon_Eta[index];
-		this->Phi = ntuple->L2Muon_Phi[index];
-		this->LVec_P.SetPtEtaPhiM( this->Pt, this->Eta, this->Phi, M_Mu );
-
-		this->Charge = ntuple->L2Muon_Charge[index];
-		this->TrkPt = ntuple->L2Muon_TrkPt[index];
-	}
-
-	void Init()
-	{
-		this->Charge = 0;
-		this->TrkPt = 0;
-	}
-};
-
-class KPTkMuon: public KPObject
-{
-public:
-	Double_t        Charge;
-	Double_t        TrkPt;
-
-	KPTkMuon(): KPObject() { this->Init(); }
-
-	KPTkMuon(NtupleHandle* ntuple, Int_t index)
-	{
-		this->Flag_IsNonNull = kTRUE;
-		this->Fill(ntuple, index);
-	}
-
-	void Fill(NtupleHandle* ntuple, Int_t index)
-	{
-		this->Pt = ntuple->TkMuon_Pt[index];
-		this->Eta = ntuple->TkMuon_Eta[index];
-		this->Phi = ntuple->TkMuon_Phi[index];
-		this->LVec_P.SetPtEtaPhiM( this->Pt, this->Eta, this->Phi, M_Mu );
-
-		this->Charge = ntuple->TkMuon_Charge[index];
-		this->TrkPt = ntuple->TkMuon_TrkPt[index];
-	}
-
-	void Init()
-	{
-		this->Charge = 0;
-		this->TrkPt = 0;
-	}
-};
-
-class KPL1Muon: public KPObject
-{
-public:
-	Double_t        Charge;
-	Double_t        Quality;
-
-	KPL1Muon(): KPObject() { this->Init(); }
-
-	KPL1Muon(NtupleHandle* ntuple, Int_t index)
-	{
-		this->Flag_IsNonNull = kTRUE;
-		this->Fill(ntuple, index);
-	}
-
-	void Fill(NtupleHandle* ntuple, Int_t index)
-	{
-		this->Pt = ntuple->L1Muon_Pt[index];
-		this->Eta = ntuple->L1Muon_Eta[index];
-		this->Phi = ntuple->L1Muon_Phi[index];
-		this->LVec_P.SetPtEtaPhiM( this->Pt, this->Eta, this->Phi, M_Mu );
-
-		this->Charge = ntuple->L1Muon_Charge[index];
-		this->Quality = ntuple->L1Muon_Quality[index];
-	}
-
-	void Init()
-	{
-		this->Charge = 0;
-		this->Quality = 0;
 	}
 };
