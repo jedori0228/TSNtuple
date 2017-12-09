@@ -1,8 +1,8 @@
-#include <TagProbe/MakeHist_TnP_SingleMu22.h>
+#include <TagProbe/MakeHist_TnP_L1SingleMu22.h>
 
 void Setup( HistProducer* producer, TString dataType );
 
-void MakeHist_TnP_SingleMu22(TString dataType)
+void MakeHist_TnP_L1SingleMu22(TString dataType)
 {
 	HistProducer* producer = new HistProducer();
 	Setup( producer, dataType );
