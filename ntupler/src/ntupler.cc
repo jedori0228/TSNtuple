@@ -597,8 +597,8 @@ void ntupler::Fill_Muon(const edm::Event &iEvent)
 			reco::TrackRef TunePTrk = mu->tunePMuonBestTrack();
 			if( TunePTrk.isNonnull() )
 			{
-				this->Muon_Pt_TunePTrk = TunePTrk->pt();
-				this->Muon_PtError_TunePTrk = TunePTrk->ptError();
+				this->Muon_Pt_TunePTrk[_nMuon] = TunePTrk->pt();
+				this->Muon_PtError_TunePTrk[_nMuon] = TunePTrk->ptError();
 			}
 
 			this->Muon_dxyVTX_BestTrk[_nMuon] = mu->muonBestTrack()->dxy( pv.position() );
