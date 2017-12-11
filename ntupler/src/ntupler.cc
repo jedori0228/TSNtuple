@@ -1,5 +1,5 @@
 
-#include "TriggerStudyNtuple/ntupler/interface/ntupler.h"
+#include "TSNtuple/ntupler/interface/ntupler.h"
 
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"

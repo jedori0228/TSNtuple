@@ -23,7 +23,7 @@ process.load("Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cf
 process.load('Configuration.Geometry.GeometryRecoDB_cff')
 
 # -- ntupler -- #
-from TriggerStudyNtuple.ntupler.ntupler_cfi import *
+from TSNtuple.ntupler.ntupler_cfi import *
 
 process.ntupler = ntuplerBase.clone()
 process.ntupler.OfflineMuon = cms.untracked.InputTag("slimmedMuons")
