@@ -557,6 +557,13 @@ void ntupler::Make_Branch()
   this->ntuple->Branch("TkMuon_Charge", &TkMuon_Charge, "TkMuon_Charge[nTkMuon]/D");
   this->ntuple->Branch("TkMuon_TrkPt", &TkMuon_TrkPt, "TkMuon_TrkPt[nTkMuon]/D");
 
+  this->ntuple->Branch("nL1Muon", &nL1Muon, "nL1Muon/I");
+  this->ntuple->Branch("L1Muon_Pt", &L1Muon_Pt, "L1Muon_Pt[nL1Muon]/D");
+  this->ntuple->Branch("L1Muon_Eta", &L1Muon_Eta, "L1Muon_Eta[nL1Muon]/D");
+  this->ntuple->Branch("L1Muon_Phi", &L1Muon_Phi, "L1Muon_Phi[nL1Muon]/D");
+  this->ntuple->Branch("L1Muon_Charge", &L1Muon_Charge, "L1Muon_Charge[nL1Muon]/D");
+  this->ntuple->Branch("L1Muon_Quality", &L1Muon_Quality, "L1Muon_Quality[nL1Muon]/D");
+
   this->ntuple->Branch("nIterL3OI", &nIterL3OI, "nIterL3OI/I");
   this->ntuple->Branch("IterL3OI_TK_Pt", &IterL3OI_TK_Pt, "IterL3OI_TK_Pt[nIterL3OI]/D");
   this->ntuple->Branch("IterL3OI_TK_Eta", &IterL3OI_TK_Eta, "IterL3OI_TK_Eta[nIterL3OI]/D");
