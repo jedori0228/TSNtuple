@@ -32,4 +32,9 @@ ntuplerBase = cms.EDAnalyzer("ntupler",
 	PUSummaryInfo = cms.untracked.InputTag("addPileupInfo"),
 	GenEventInfo = cms.untracked.InputTag("generator"),
 	GenParticle = cms.untracked.InputTag("genParticles"),
+
+	IterL3OI           = cms.untracked.InputTag("hltL3MuonsIterL3OI", "", "MYHLT"),
+  IterL3IO_L2Seeded  = cms.untracked.InputTag("hltL3MuonsIterL3IO", "", "MYHLT"),
+  IterL3IO_FromL1    = cms.untracked.InputTag("hltIter2IterL3FromL1MuonMerged", "", "MYHLT"),
+  IterL3_FromL2      = cms.untracked.InputTag("hltIterL3MuonsFromL2LinksCombination", "", "MYHLT"),
 )
