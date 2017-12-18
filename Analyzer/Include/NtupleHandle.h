@@ -86,6 +86,7 @@ public:
 	Int_t           Muon_IsTight[ArrSize];   //[nMuon]
 	Int_t           Muon_IsMedium[ArrSize];   //[nMuon]
 	Int_t           Muon_IsLoose[ArrSize];   //[nMuon]
+  Int_t           Muon_IsHighPt[ArrSize];   //[nMuon]
 	Double_t        Muon_Iso03_sumPt[ArrSize];   //[nMuon]
 	Double_t        Muon_Iso03_hadEt[ArrSize];   //[nMuon]
 	Double_t        Muon_Iso03_emEt[ArrSize];   //[nMuon]
@@ -110,6 +111,8 @@ public:
 	Int_t           Muon_nTrackerHit_InnerTrk[ArrSize];   //[nMuon]
 	Int_t           Muon_nTrackerLayer_InnerTrk[ArrSize];   //[nMuon]
 	Int_t           Muon_nPixelHit_InnerTrk[ArrSize];   //[nMuon]
+  Double_t        Muon_Pt_TunePTrk[ArrSize];   //[nMuon]
+  Double_t        Muon_PtError_TunePTrk[ArrSize];   //[nMuon]
 	Double_t        Muon_dxyVTX_BestTrk[ArrSize];   //[nMuon]
 	Double_t        Muon_dzVTX_BestTrk[ArrSize];   //[nMuon]
 	Int_t           Muon_nMatchedStation[ArrSize];   //[nMuon]
@@ -143,6 +146,53 @@ public:
 	Double_t        L1Muon_Charge[ArrSize];   //[nL1Muon]
 	Double_t        L1Muon_Quality[ArrSize];   //[nL1Muon]
 
+  //==== IterL3 Variables
+  Int_t           nIterL3OI;
+  Double_t        IterL3OI_TK_Pt[ArrSize];   //[nIterL3OI]
+  Double_t        IterL3OI_TK_Eta[ArrSize];   //[nIterL3OI]
+  Double_t        IterL3OI_TK_Phi[ArrSize];   //[nIterL3OI]
+  Double_t        IterL3OI_TK_Charge[ArrSize];   //[nIterL3OI]
+  Double_t        IterL3OI_SA_Pt[ArrSize];   //[nIterL3OI]
+  Double_t        IterL3OI_SA_Eta[ArrSize];   //[nIterL3OI]
+  Double_t        IterL3OI_SA_Phi[ArrSize];   //[nIterL3OI]
+  Double_t        IterL3OI_SA_Charge[ArrSize];   //[nIterL3OI]
+  Double_t        IterL3OI_GL_Pt[ArrSize];   //[nIterL3OI]
+  Double_t        IterL3OI_GL_Eta[ArrSize];   //[nIterL3OI]
+  Double_t        IterL3OI_GL_Phi[ArrSize];   //[nIterL3OI]
+  Double_t        IterL3OI_GL_Charge[ArrSize];   //[nIterL3OI]
+  Int_t           nIterL3IO_L2Seeded;
+  Double_t        IterL3IO_L2Seeded_TK_Pt[ArrSize];   //[nIterL3IO_L2Seeded]
+  Double_t        IterL3IO_L2Seeded_TK_Eta[ArrSize];   //[nIterL3IO_L2Seeded]
+  Double_t        IterL3IO_L2Seeded_TK_Phi[ArrSize];   //[nIterL3IO_L2Seeded]
+  Double_t        IterL3IO_L2Seeded_TK_Charge[ArrSize];   //[nIterL3IO_L2Seeded]
+  Double_t        IterL3IO_L2Seeded_SA_Pt[ArrSize];   //[nIterL3IO_L2Seeded]
+  Double_t        IterL3IO_L2Seeded_SA_Eta[ArrSize];   //[nIterL3IO_L2Seeded]
+  Double_t        IterL3IO_L2Seeded_SA_Phi[ArrSize];   //[nIterL3IO_L2Seeded]
+  Double_t        IterL3IO_L2Seeded_SA_Charge[ArrSize];   //[nIterL3IO_L2Seeded]
+  Double_t        IterL3IO_L2Seeded_GL_Pt[ArrSize];   //[nIterL3IO_L2Seeded]
+  Double_t        IterL3IO_L2Seeded_GL_Eta[ArrSize];   //[nIterL3IO_L2Seeded]
+  Double_t        IterL3IO_L2Seeded_GL_Phi[ArrSize];   //[nIterL3IO_L2Seeded]
+  Double_t        IterL3IO_L2Seeded_GL_Charge[ArrSize];   //[nIterL3IO_L2Seeded]
+  Int_t           nIterL3IO_FromL1;
+  Double_t        IterL3IO_FromL1_Pt[ArrSize];   //[nIterL3IO_FromL1]
+  Double_t        IterL3IO_FromL1_Eta[ArrSize];   //[nIterL3IO_FromL1]
+  Double_t        IterL3IO_FromL1_Phi[ArrSize];   //[nIterL3IO_FromL1]
+  Double_t        IterL3IO_FromL1_Charge[ArrSize];   //[nIterL3IO_FromL1]
+  Int_t           nIterL3_FromL2;
+  Double_t        IterL3_FromL2_TK_Pt[ArrSize];   //[nIterL3_FromL2]
+  Double_t        IterL3_FromL2_TK_Eta[ArrSize];   //[nIterL3_FromL2]
+  Double_t        IterL3_FromL2_TK_Phi[ArrSize];   //[nIterL3_FromL2]
+  Double_t        IterL3_FromL2_TK_Charge[ArrSize];   //[nIterL3_FromL2]
+  Double_t        IterL3_FromL2_SA_Pt[ArrSize];   //[nIterL3_FromL2]
+  Double_t        IterL3_FromL2_SA_Eta[ArrSize];   //[nIterL3_FromL2]
+  Double_t        IterL3_FromL2_SA_Phi[ArrSize];   //[nIterL3_FromL2]
+  Double_t        IterL3_FromL2_SA_Charge[ArrSize];   //[nIterL3_FromL2]
+  Double_t        IterL3_FromL2_GL_Pt[ArrSize];   //[nIterL3_FromL2]
+  Double_t        IterL3_FromL2_GL_Eta[ArrSize];   //[nIterL3_FromL2]
+  Double_t        IterL3_FromL2_GL_Phi[ArrSize];   //[nIterL3_FromL2]
+  Double_t        IterL3_FromL2_GL_Charge[ArrSize];   //[nIterL3_FromL2]
+
+
 	NtupleHandle( TChain* _chain)
 	{
 		this->chain = _chain;
@@ -153,6 +203,7 @@ public:
 		this->TurnOnBranches_HLT();
 		this->TurnOnBranches_Muon();
 		this->TurnOnBranches_HLTRerunObject();
+    this->TurnOnBranches_IterL3();
 	}
 
 	void GetEvent(Int_t i_event )
@@ -257,6 +308,20 @@ public:
 
 		chain->SetBranchStatus("nL1Muon", 1);
 		chain->SetBranchAddress("nL1Muon", &nL1Muon);
+
+    chain->SetBranchStatus("nIterL3OI", 1);
+    chain->SetBranchAddress("nIterL3OI", &nIterL3OI);
+
+    chain->SetBranchStatus("nIterL3IO_L2Seeded", 1);
+    chain->SetBranchAddress("nIterL3IO_L2Seeded", &nIterL3IO_L2Seeded);
+
+    chain->SetBranchStatus("nIterL3IO_FromL1", 1);
+    chain->SetBranchAddress("nIterL3IO_FromL1", &nIterL3IO_FromL1);
+
+    chain->SetBranchStatus("nIterL3_FromL2", 1);
+    chain->SetBranchAddress("nIterL3_FromL2", &nIterL3_FromL2);
+
+
 	}
 
 	void TurnOnBranches_HLT()
@@ -406,6 +471,9 @@ public:
 		chain->SetBranchStatus("Muon_IsLoose", 1);
 		chain->SetBranchAddress("Muon_IsLoose", &Muon_IsLoose);
 
+    chain->SetBranchStatus("Muon_IsHighPt", 1);
+    chain->SetBranchAddress("Muon_IsHighPt", &Muon_IsHighPt);
+
 		chain->SetBranchStatus("Muon_Iso03_sumPt", 1);
 		chain->SetBranchAddress("Muon_Iso03_sumPt", &Muon_Iso03_sumPt);
 
@@ -477,6 +545,12 @@ public:
 
 		chain->SetBranchStatus("Muon_nPixelHit_InnerTrk", 1);
 		chain->SetBranchAddress("Muon_nPixelHit_InnerTrk", &Muon_nPixelHit_InnerTrk);
+
+    chain->SetBranchStatus("Muon_Pt_TunePTrk", 1);
+    chain->SetBranchAddress("Muon_Pt_TunePTrk", &Muon_Pt_TunePTrk);
+
+    chain->SetBranchStatus("Muon_PtError_TunePTrk", 1);
+    chain->SetBranchAddress("Muon_PtError_TunePTrk", &Muon_PtError_TunePTrk);
 
 		chain->SetBranchStatus("Muon_dxyVTX_BestTrk", 1);
 		chain->SetBranchAddress("Muon_dxyVTX_BestTrk", &Muon_dxyVTX_BestTrk);
@@ -568,5 +642,132 @@ public:
 		chain->SetBranchStatus("L1Muon_Quality", 1);
 		chain->SetBranchAddress("L1Muon_Quality", &L1Muon_Quality);
 	}
+
+  void TurnOnBranches_IterL3()
+  {
+
+    chain->SetBranchStatus("IterL3OI_TK_Pt", 1);
+    chain->SetBranchAddress("IterL3OI_TK_Pt", &IterL3OI_TK_Pt);
+
+    chain->SetBranchStatus("IterL3OI_TK_Eta", 1);
+    chain->SetBranchAddress("IterL3OI_TK_Eta", &IterL3OI_TK_Eta);
+
+    chain->SetBranchStatus("IterL3OI_TK_Phi", 1);
+    chain->SetBranchAddress("IterL3OI_TK_Phi", &IterL3OI_TK_Phi);
+
+    chain->SetBranchStatus("IterL3OI_TK_Charge", 1);
+    chain->SetBranchAddress("IterL3OI_TK_Charge", &IterL3OI_TK_Charge);
+
+    chain->SetBranchStatus("IterL3OI_SA_Pt", 1);
+    chain->SetBranchAddress("IterL3OI_SA_Pt", &IterL3OI_SA_Pt);
+
+    chain->SetBranchStatus("IterL3OI_SA_Eta", 1);
+    chain->SetBranchAddress("IterL3OI_SA_Eta", &IterL3OI_SA_Eta);
+
+    chain->SetBranchStatus("IterL3OI_SA_Phi", 1);
+    chain->SetBranchAddress("IterL3OI_SA_Phi", &IterL3OI_SA_Phi);
+
+    chain->SetBranchStatus("IterL3OI_SA_Charge", 1);
+    chain->SetBranchAddress("IterL3OI_SA_Charge", &IterL3OI_SA_Charge);
+
+    chain->SetBranchStatus("IterL3OI_GL_Pt", 1);
+    chain->SetBranchAddress("IterL3OI_GL_Pt", &IterL3OI_GL_Pt);
+
+    chain->SetBranchStatus("IterL3OI_GL_Eta", 1);
+    chain->SetBranchAddress("IterL3OI_GL_Eta", &IterL3OI_GL_Eta);
+
+    chain->SetBranchStatus("IterL3OI_GL_Phi", 1);
+    chain->SetBranchAddress("IterL3OI_GL_Phi", &IterL3OI_GL_Phi);
+
+    chain->SetBranchStatus("IterL3OI_GL_Charge", 1);
+    chain->SetBranchAddress("IterL3OI_GL_Charge", &IterL3OI_GL_Charge);
+
+    chain->SetBranchStatus("IterL3IO_L2Seeded_TK_Pt", 1);
+    chain->SetBranchAddress("IterL3IO_L2Seeded_TK_Pt", &IterL3IO_L2Seeded_TK_Pt);
+
+    chain->SetBranchStatus("IterL3IO_L2Seeded_TK_Eta", 1);
+    chain->SetBranchAddress("IterL3IO_L2Seeded_TK_Eta", &IterL3IO_L2Seeded_TK_Eta);
+
+    chain->SetBranchStatus("IterL3IO_L2Seeded_TK_Phi", 1);
+    chain->SetBranchAddress("IterL3IO_L2Seeded_TK_Phi", &IterL3IO_L2Seeded_TK_Phi);
+
+    chain->SetBranchStatus("IterL3IO_L2Seeded_TK_Charge", 1);
+    chain->SetBranchAddress("IterL3IO_L2Seeded_TK_Charge", &IterL3IO_L2Seeded_TK_Charge);
+
+    chain->SetBranchStatus("IterL3IO_L2Seeded_SA_Pt", 1);
+    chain->SetBranchAddress("IterL3IO_L2Seeded_SA_Pt", &IterL3IO_L2Seeded_SA_Pt);
+
+    chain->SetBranchStatus("IterL3IO_L2Seeded_SA_Eta", 1);
+    chain->SetBranchAddress("IterL3IO_L2Seeded_SA_Eta", &IterL3IO_L2Seeded_SA_Eta);
+
+    chain->SetBranchStatus("IterL3IO_L2Seeded_SA_Phi", 1);
+    chain->SetBranchAddress("IterL3IO_L2Seeded_SA_Phi", &IterL3IO_L2Seeded_SA_Phi);
+
+    chain->SetBranchStatus("IterL3IO_L2Seeded_SA_Charge", 1);
+    chain->SetBranchAddress("IterL3IO_L2Seeded_SA_Charge", &IterL3IO_L2Seeded_SA_Charge);
+
+    chain->SetBranchStatus("IterL3IO_L2Seeded_GL_Pt", 1);
+    chain->SetBranchAddress("IterL3IO_L2Seeded_GL_Pt", &IterL3IO_L2Seeded_GL_Pt);
+
+    chain->SetBranchStatus("IterL3IO_L2Seeded_GL_Eta", 1);
+    chain->SetBranchAddress("IterL3IO_L2Seeded_GL_Eta", &IterL3IO_L2Seeded_GL_Eta);
+
+    chain->SetBranchStatus("IterL3IO_L2Seeded_GL_Phi", 1);
+    chain->SetBranchAddress("IterL3IO_L2Seeded_GL_Phi", &IterL3IO_L2Seeded_GL_Phi);
+
+    chain->SetBranchStatus("IterL3IO_L2Seeded_GL_Charge", 1);
+    chain->SetBranchAddress("IterL3IO_L2Seeded_GL_Charge", &IterL3IO_L2Seeded_GL_Charge);
+
+    chain->SetBranchStatus("IterL3IO_FromL1_Pt", 1);
+    chain->SetBranchAddress("IterL3IO_FromL1_Pt", &IterL3IO_FromL1_Pt);
+
+    chain->SetBranchStatus("IterL3IO_FromL1_Eta", 1);
+    chain->SetBranchAddress("IterL3IO_FromL1_Eta", &IterL3IO_FromL1_Eta);
+
+    chain->SetBranchStatus("IterL3IO_FromL1_Phi", 1);
+    chain->SetBranchAddress("IterL3IO_FromL1_Phi", &IterL3IO_FromL1_Phi);
+
+    chain->SetBranchStatus("IterL3IO_FromL1_Charge", 1);
+    chain->SetBranchAddress("IterL3IO_FromL1_Charge", &IterL3IO_FromL1_Charge);
+
+    chain->SetBranchStatus("IterL3_FromL2_TK_Pt", 1);
+    chain->SetBranchAddress("IterL3_FromL2_TK_Pt", &IterL3_FromL2_TK_Pt);
+
+    chain->SetBranchStatus("IterL3_FromL2_TK_Eta", 1);
+    chain->SetBranchAddress("IterL3_FromL2_TK_Eta", &IterL3_FromL2_TK_Eta);
+
+    chain->SetBranchStatus("IterL3_FromL2_TK_Phi", 1);
+    chain->SetBranchAddress("IterL3_FromL2_TK_Phi", &IterL3_FromL2_TK_Phi);
+
+    chain->SetBranchStatus("IterL3_FromL2_TK_Charge", 1);
+    chain->SetBranchAddress("IterL3_FromL2_TK_Charge", &IterL3_FromL2_TK_Charge);
+
+    chain->SetBranchStatus("IterL3_FromL2_SA_Pt", 1);
+    chain->SetBranchAddress("IterL3_FromL2_SA_Pt", &IterL3_FromL2_SA_Pt);
+
+    chain->SetBranchStatus("IterL3_FromL2_SA_Eta", 1);
+    chain->SetBranchAddress("IterL3_FromL2_SA_Eta", &IterL3_FromL2_SA_Eta);
+
+    chain->SetBranchStatus("IterL3_FromL2_SA_Phi", 1);
+    chain->SetBranchAddress("IterL3_FromL2_SA_Phi", &IterL3_FromL2_SA_Phi);
+
+    chain->SetBranchStatus("IterL3_FromL2_SA_Charge", 1);
+    chain->SetBranchAddress("IterL3_FromL2_SA_Charge", &IterL3_FromL2_SA_Charge);
+
+    chain->SetBranchStatus("IterL3_FromL2_GL_Pt", 1);
+    chain->SetBranchAddress("IterL3_FromL2_GL_Pt", &IterL3_FromL2_GL_Pt);
+
+    chain->SetBranchStatus("IterL3_FromL2_GL_Eta", 1);
+    chain->SetBranchAddress("IterL3_FromL2_GL_Eta", &IterL3_FromL2_GL_Eta);
+
+    chain->SetBranchStatus("IterL3_FromL2_GL_Phi", 1);
+    chain->SetBranchAddress("IterL3_FromL2_GL_Phi", &IterL3_FromL2_GL_Phi);
+
+    chain->SetBranchStatus("IterL3_FromL2_GL_Charge", 1);
+    chain->SetBranchAddress("IterL3_FromL2_GL_Charge", &IterL3_FromL2_GL_Charge);
+
+
+
+  }
 
 };
