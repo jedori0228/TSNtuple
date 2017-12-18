@@ -454,6 +454,37 @@ public:
 	}
 };
 
+class KPIterL3Muon: public KPObject
+{
+public:
+  Double_t        Charge;
+
+  KPIterL3Muon(NtupleHandle *ntuple, TString ObjType, Int_t index)
+  {
+    this->Flag_IsNonNull = kTRUE;
+    this->Fill(ntuple, ObjType, index);
+  }
+
+  void Fill(NtupleHandle* ntuple, TString ObjType, Int_t index)
+  {
+    //=== Fill Variables
+    this->Pt = ntuple->GetVar(ObjType+"_Pt",index);
+    this->Eta = ntuple->GetVar(ObjType+"_Eta",index);
+    this->Phi = ntuple->GetVar(ObjType+"_Phi",index);
+    this->Charge = ntuple->GetVar(ObjType+"_Charge",index);
+
+    //==== Make TLorentzVector
+    this->LVec_P.SetPtEtaPhiM( this->Pt, this->Eta, this->Phi, M_Mu );
+  }
+
+  void Init()
+  {
+    this->Charge = 0;
+  }
+  void Fill( NtupleHandle* ntuple, Int_t index ){};
+
+};
+
 class KPMuon: public KPObject
 {
 public:
@@ -646,6 +677,32 @@ public:
 		return flag;
 	}
 
+  Bool_t IsIterL3ObjectMatched( NtupleHandle* ntuple, TString IterL3Obj ){
+    Bool_t flag = kFALSE;
+
+    KPEvent event(ntuple);
+
+    double ptCut = 10.; //FIXME
+
+    for(Int_t i_iterl3=0; i_iterl3<ntuple->GetVar("N_"+IterL3Obj,0); i_iterl3++){
+      KPIterL3Muon iterl3mu(ntuple, IterL3Obj, i_iterl3);
+
+      // printf("[%d-th L1 muon] (pT, eta, phi) = (%.3lf, %.3lf, %.3lf)\n", i, iterl3mu.Pt, iterl3mu.Eta, iterl3mu.Phi);
+
+      if( iterl3mu.Pt > ptCut ){
+        Double_t dR = this->LVec_P.DeltaR( iterl3mu.LVec_P ); // -- dR between L1 and offline muon -- //
+
+        if( dR < 0.3 )
+        {
+          flag = kTRUE;
+          break;
+        }
+      }
+    }
+
+    return flag;
+  }
+
 	void Init()
 	{
 		this->dB = 0;
@@ -684,37 +741,6 @@ public:
 		this->nMatchedRPCLayer = 0;
 		this->StationMask = 0;
 	}
-};
-
-class KPIterL3Muon: public KPObject
-{
-public:
-  Double_t        Charge;
-
-  KPIterL3Muon(NtupleHandle *ntuple, TString ObjType, Int_t index)
-  {
-    this->Flag_IsNonNull = kTRUE;
-    this->Fill(ntuple, ObjType, index);
-  }
-
-  void Fill(NtupleHandle* ntuple, TString ObjType, Int_t index)
-  {
-    //=== Fill Variables
-    this->Pt = ntuple->GetVar(ObjType+"_Pt",index);
-    this->Eta = ntuple->GetVar(ObjType+"_Eta",index);
-    this->Phi = ntuple->GetVar(ObjType+"_Phi",index);
-    this->Charge = ntuple->GetVar(ObjType+"_Charge",index);
-
-    //==== Make TLorentzVector
-    this->LVec_P.SetPtEtaPhiM( this->Pt, this->Eta, this->Phi, M_Mu );
-  }
-
-  void Init()
-  {
-    this->Charge = 0;
-  }
-  void Fill( NtupleHandle* ntuple, Int_t index ){};
-
 };
 
 
