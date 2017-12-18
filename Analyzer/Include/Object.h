@@ -685,3 +685,36 @@ public:
 		this->StationMask = 0;
 	}
 };
+
+class KPIterL3Muon: public KPObject
+{
+public:
+  Double_t        Charge;
+
+  KPIterL3Muon(NtupleHandle *ntuple, TString ObjType, Int_t index)
+  {
+    this->Flag_IsNonNull = kTRUE;
+    this->Fill(ntuple, ObjType, index);
+  }
+
+  void Fill(NtupleHandle* ntuple, TString ObjType, Int_t index)
+  {
+    //=== Fill Variables
+    this->Pt = ntuple->GetVar(ObjType+"_Pt",index);
+    this->Eta = ntuple->GetVar(ObjType+"_Eta",index);
+    this->Phi = ntuple->GetVar(ObjType+"_Phi",index);
+    this->Charge = ntuple->GetVar(ObjType+"_Charge",index);
+
+    //==== Make TLorentzVector
+    this->LVec_P.SetPtEtaPhiM( this->Pt, this->Eta, this->Phi, M_Mu );
+  }
+
+  void Init()
+  {
+    this->Charge = 0;
+  }
+  void Fill( NtupleHandle* ntuple, Int_t index ){};
+
+};
+
+

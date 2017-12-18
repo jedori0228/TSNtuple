@@ -192,7 +192,6 @@ public:
   Double_t        IterL3_FromL2_GL_Phi[ArrSize];   //[nIterL3_FromL2]
   Double_t        IterL3_FromL2_GL_Charge[ArrSize];   //[nIterL3_FromL2]
 
-
 	NtupleHandle( TChain* _chain)
 	{
 		this->chain = _chain;
@@ -769,5 +768,64 @@ public:
 
 
   }
+
+  //==== Test for IterL3 Objects
+  Double_t GetVar(TString var, Int_t index){
+
+    if(var=="N_IterL3OI_TK") return nIterL3OI;
+    else if(var=="IterL3OI_TK_Pt") return IterL3OI_TK_Pt[index];
+    else if(var=="IterL3OI_TK_Eta") return IterL3OI_TK_Eta[index];
+    else if(var=="IterL3OI_TK_Phi") return IterL3OI_TK_Phi[index];
+    else if(var=="IterL3OI_TK_Charge") return IterL3OI_TK_Charge[index];
+    else if(var=="N_IterL3OI_SA") return nIterL3OI;
+    else if(var=="IterL3OI_SA_Pt") return IterL3OI_SA_Pt[index];
+    else if(var=="IterL3OI_SA_Eta") return IterL3OI_SA_Eta[index];
+    else if(var=="IterL3OI_SA_Phi") return IterL3OI_SA_Phi[index];
+    else if(var=="IterL3OI_SA_Charge") return IterL3OI_SA_Charge[index];
+    else if(var=="N_IterL3OI_GL") return nIterL3OI;
+    else if(var=="IterL3OI_GL_Pt") return IterL3OI_GL_Pt[index];
+    else if(var=="IterL3OI_GL_Eta") return IterL3OI_GL_Eta[index];
+    else if(var=="IterL3OI_GL_Phi") return IterL3OI_GL_Phi[index];
+    else if(var=="IterL3OI_GL_Charge") return IterL3OI_GL_Charge[index];
+    else if(var=="N_IterL3IO_L2Seeded_TK") return nIterL3IO_L2Seeded;
+    else if(var=="IterL3IO_L2Seeded_TK_Pt") return IterL3IO_L2Seeded_TK_Pt[index];
+    else if(var=="IterL3IO_L2Seeded_TK_Eta") return IterL3IO_L2Seeded_TK_Eta[index];
+    else if(var=="IterL3IO_L2Seeded_TK_Phi") return IterL3IO_L2Seeded_TK_Phi[index];
+    else if(var=="IterL3IO_L2Seeded_TK_Charge") return IterL3IO_L2Seeded_TK_Charge[index];
+    else if(var=="N_IterL3IO_L2Seeded_SA") return nIterL3IO_L2Seeded;
+    else if(var=="IterL3IO_L2Seeded_SA_Pt") return IterL3IO_L2Seeded_SA_Pt[index];
+    else if(var=="IterL3IO_L2Seeded_SA_Eta") return IterL3IO_L2Seeded_SA_Eta[index];
+    else if(var=="IterL3IO_L2Seeded_SA_Phi") return IterL3IO_L2Seeded_SA_Phi[index];
+    else if(var=="IterL3IO_L2Seeded_SA_Charge") return IterL3IO_L2Seeded_SA_Charge[index];
+    else if(var=="N_IterL3IO_L2Seeded_GL") return nIterL3IO_L2Seeded;
+    else if(var=="IterL3IO_L2Seeded_GL_Pt") return IterL3IO_L2Seeded_GL_Pt[index];
+    else if(var=="IterL3IO_L2Seeded_GL_Eta") return IterL3IO_L2Seeded_GL_Eta[index];
+    else if(var=="IterL3IO_L2Seeded_GL_Phi") return IterL3IO_L2Seeded_GL_Phi[index];
+    else if(var=="IterL3IO_L2Seeded_GL_Charge") return IterL3IO_L2Seeded_GL_Charge[index];
+    else if(var=="N_IterL3IO_FromL1") return nIterL3IO_FromL1;
+    else if(var=="IterL3IO_FromL1_Pt") return IterL3IO_FromL1_Pt[index];
+    else if(var=="IterL3IO_FromL1_Eta") return IterL3IO_FromL1_Eta[index];
+    else if(var=="IterL3IO_FromL1_Phi") return IterL3IO_FromL1_Phi[index];
+    else if(var=="IterL3IO_FromL1_Charge") return IterL3IO_FromL1_Charge[index];
+    else if(var=="N_IterL3_FromL2_TK") return nIterL3_FromL2;
+    else if(var=="IterL3_FromL2_TK_Pt") return IterL3_FromL2_TK_Pt[index];
+    else if(var=="IterL3_FromL2_TK_Eta") return IterL3_FromL2_TK_Eta[index];
+    else if(var=="IterL3_FromL2_TK_Phi") return IterL3_FromL2_TK_Phi[index];
+    else if(var=="IterL3_FromL2_TK_Charge") return IterL3_FromL2_TK_Charge[index];
+    else if(var=="N_IterL3_FromL2_SA") return nIterL3_FromL2;
+    else if(var=="IterL3_FromL2_SA_Pt") return IterL3_FromL2_SA_Pt[index];
+    else if(var=="IterL3_FromL2_SA_Eta") return IterL3_FromL2_SA_Eta[index];
+    else if(var=="IterL3_FromL2_SA_Phi") return IterL3_FromL2_SA_Phi[index];
+    else if(var=="IterL3_FromL2_SA_Charge") return IterL3_FromL2_SA_Charge[index];
+    else if(var=="N_IterL3_FromL2_GL") return nIterL3_FromL2;
+    else if(var=="IterL3_FromL2_GL_Pt") return IterL3_FromL2_GL_Pt[index];
+    else if(var=="IterL3_FromL2_GL_Eta") return IterL3_FromL2_GL_Eta[index];
+    else if(var=="IterL3_FromL2_GL_Phi") return IterL3_FromL2_GL_Phi[index];
+    else if(var=="IterL3_FromL2_GL_Charge") return IterL3_FromL2_GL_Charge[index];
+
+
+    else return -999;
+  }
+
 
 };

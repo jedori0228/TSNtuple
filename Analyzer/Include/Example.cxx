@@ -17,6 +17,19 @@ void Example()
 
 	// nEvent = 100;
 
+  vector<TString> IterL3MuonObjs = {
+    "IterL3OI_TK",
+    "IterL3OI_SA",
+    "IterL3OI_GL",
+    "IterL3IO_L2Seeded_TK",
+    "IterL3IO_L2Seeded_SA",
+    "IterL3IO_L2Seeded_GL",
+    "IterL3IO_FromL1",
+    "IterL3_FromL2_TK",
+    "IterL3_FromL2_SA",
+    "IterL3_FromL2_GL",
+  };
+
 	for(Int_t i_ev=0; i_ev<nEvent; i_ev++)
 	{
 		ntuple->GetEvent( i_ev );
@@ -133,6 +146,24 @@ void Example()
 				printf("\t\t(Pt, eta, phi, charge, Quality) = (%lf, %lf, %lf, %lf, %lf)\n", l1mu.Pt, l1mu.Eta, l1mu.Phi, l1mu.Charge, l1mu.Quality);
 			}
 		}
+
+    ///////////////////////
+    // -- IterL3 muon -- //
+    ///////////////////////
+
+    for(unsigned int a=0; a<IterL3MuonObjs.size(); a++){
+
+      TString IterL3MuonObj = IterL3MuonObjs.at(a);
+      for(Int_t i_iterl3=0; i_iterl3<ntuple->GetVar("N_"+IterL3MuonObj,0); i_iterl3++){
+        KPIterL3Muon iterl3mu(ntuple, IterL3MuonObj, i_iterl3);
+        if( Flag_Print )
+        {
+          cout << "\t["<<i_iterl3 << " " << IterL3MuonObj<<"]" << endl;
+          cout << "\t\t(Pt, eta, phi, charge) = (" << iterl3mu.Pt << "," <<  iterl3mu.Eta << "," << iterl3mu.Phi << "," << iterl3mu.Charge << ")" << endl;
+        }
+      }
+
+    }
 
 	}
 
