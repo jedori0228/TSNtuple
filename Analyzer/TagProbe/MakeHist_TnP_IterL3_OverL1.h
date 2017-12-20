@@ -8,7 +8,7 @@ public:
 
 	}
 
-  TString IterL3Obj;
+  vector<TString> IterL3Objs;
 
 	// -- user-defined tag condition -- //
 	Bool_t IsTag( KPMuon tagCand, NtupleHandle *ntuple )
@@ -48,7 +48,7 @@ public:
 	Bool_t IsPassingProbe( KPMuon probe, NtupleHandle *ntuple )
 	{
 		Bool_t flag = kFALSE;
-		if( probe.IsIterL3ObjectMatched( ntuple, IterL3Obj ) )
+		if( probe.IsIterL3ObjectMatched( ntuple, IterL3Objs ) )
 			flag = kTRUE;
 
 		return flag;
@@ -60,7 +60,7 @@ class HistProducer
 public:
 	TString fileName;
 	vector<TString> vec_DataPath;
-  TString iterl3obj;
+  vector<TString> iterl3objs;
 	HistProducer()
 	{
 
@@ -122,13 +122,13 @@ public:
 					KPMuon mu_jth( ntuple, j_mu );
 
 					MyTnPPair *myTnpPair_ij = new MyTnPPair( mu_ith, mu_jth );
-          myTnpPair_ij->IterL3Obj = iterl3obj;
+          myTnpPair_ij->IterL3Objs = iterl3objs;
 					myTnpPair_ij->Validation( ntuple );
 					if( myTnpPair_ij->isValid )
 						vec_myTnpPair.push_back( myTnpPair_ij );
 
 					MyTnPPair *myTnpPair_ji = new MyTnPPair( mu_jth, mu_ith );
-          myTnpPair_ji->IterL3Obj = iterl3obj;
+          myTnpPair_ji->IterL3Objs = iterl3objs;
 					myTnpPair_ji->Validation( ntuple );
 					if( myTnpPair_ji->isValid )
 						vec_myTnpPair.push_back( myTnpPair_ji );

@@ -677,27 +677,33 @@ public:
 		return flag;
 	}
 
-  Bool_t IsIterL3ObjectMatched( NtupleHandle* ntuple, TString IterL3Obj ){
+  Bool_t IsIterL3ObjectMatched( NtupleHandle* ntuple, vector<TString> IterL3Objs ){
     Bool_t flag = kFALSE;
 
     KPEvent event(ntuple);
 
     double ptCut = 10.; //FIXME
 
-    for(Int_t i_iterl3=0; i_iterl3<ntuple->GetVar("N_"+IterL3Obj,0); i_iterl3++){
-      KPIterL3Muon iterl3mu(ntuple, IterL3Obj, i_iterl3);
+    for(unsigned int i_objs=0; i_objs<IterL3Objs.size(); i_objs++){
 
-      // printf("[%d-th L1 muon] (pT, eta, phi) = (%.3lf, %.3lf, %.3lf)\n", i, iterl3mu.Pt, iterl3mu.Eta, iterl3mu.Phi);
+      TString IterL3Obj = IterL3Objs.at(i_objs);
 
-      if( iterl3mu.Pt > ptCut ){
-        Double_t dR = this->LVec_P.DeltaR( iterl3mu.LVec_P ); // -- dR between L1 and offline muon -- //
+			for(Int_t i_iterl3=0; i_iterl3<ntuple->GetVar("N_"+IterL3Obj,0); i_iterl3++){
+				KPIterL3Muon iterl3mu(ntuple, IterL3Obj, i_iterl3);
 
-        if( dR < 0.3 )
-        {
-          flag = kTRUE;
-          break;
-        }
-      }
+				// printf("[%d-th L1 muon] (pT, eta, phi) = (%.3lf, %.3lf, %.3lf)\n", i, iterl3mu.Pt, iterl3mu.Eta, iterl3mu.Phi);
+
+				if( iterl3mu.Pt > ptCut ){
+					Double_t dR = this->LVec_P.DeltaR( iterl3mu.LVec_P ); // -- dR between L1 and offline muon -- //
+
+					if( dR < 0.3 )
+					{
+						flag = kTRUE;
+						break;
+					}
+				}
+			}
+
     }
 
     return flag;
