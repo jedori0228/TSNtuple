@@ -677,12 +677,37 @@ public:
 		return flag;
 	}
 
-  Bool_t IsIterL3ObjectMatched( NtupleHandle* ntuple, vector<TString> IterL3Objs ){
+  Bool_t IsL1MatchedQuality( NtupleHandle* ntuple, Double_t ptCut = 22, int qualityCut=12 )
+  {
     Bool_t flag = kFALSE;
 
     KPEvent event(ntuple);
+    for(Int_t i=0; i<event.nL1Muon; i++)
+    {
+      KPL1Muon l1Mu( ntuple, i );
 
-    double ptCut = 10.; //FIXME
+      // printf("[%d-th L1 muon] (pT, eta, phi) = (%.3lf, %.3lf, %.3lf)\n", i, l1Mu.Pt, l1Mu.Eta, l1Mu.Phi);
+
+      if( l1Mu.Pt > ptCut && l1Mu.Quality >= qualityCut )
+      {
+        Double_t dR = this->LVec_P.DeltaR( l1Mu.LVec_P ); // -- dR between L1 and offline muon -- //
+
+        if( dR < 0.3 )
+        {
+          flag = kTRUE;
+          break;
+        }
+      }
+    }
+
+    return flag;
+  }
+
+
+  Bool_t IsIterL3ObjectMatched( NtupleHandle* ntuple, vector<TString> IterL3Objs, double ptCut = 27.){
+    Bool_t flag = kFALSE;
+
+    KPEvent event(ntuple);
 
     for(unsigned int i_objs=0; i_objs<IterL3Objs.size(); i_objs++){
 
@@ -704,6 +729,58 @@ public:
 				}
 			}
 
+    }
+
+    return flag;
+  }
+
+  Bool_t IsL3Matched( NtupleHandle* ntuple, Double_t ptCut = 22 )
+  {
+    Bool_t flag = kFALSE;
+
+    KPEvent event(ntuple);
+    for(Int_t i=0; i<event.nL3Muon; i++)
+    {
+      KPL3Muon l3Mu( ntuple, i );
+
+      // printf("[%d-th L3 muon] (pT, eta, phi) = (%.3lf, %.3lf, %.3lf)\n", i, l3Mu.Pt, l3Mu.Eta, l3Mu.Phi);
+
+      if( l3Mu.Pt > ptCut  )
+      {
+        Double_t dR = this->LVec_P.DeltaR( l3Mu.LVec_P ); // -- dR between L3 and offline muon -- //
+
+        if( dR < 0.3 )
+        {
+          flag = kTRUE;
+          break;
+        }
+      }
+    }
+
+    return flag;
+  }
+
+  Bool_t IsL2Matched( NtupleHandle* ntuple, Double_t ptCut = 22 )
+  {
+    Bool_t flag = kFALSE;
+
+    KPEvent event(ntuple);
+    for(Int_t i=0; i<event.nL2Muon; i++)
+    {
+      KPL2Muon l2Mu( ntuple, i );
+
+      // printf("[%d-th L2 muon] (pT, eta, phi) = (%.3lf, %.3lf, %.3lf)\n", i, l2Mu.Pt, l2Mu.Eta, l2Mu.Phi);
+
+      if( l2Mu.Pt > ptCut  )
+      {
+        Double_t dR = this->LVec_P.DeltaR( l2Mu.LVec_P ); // -- dR between L2 and offline muon -- //
+
+        if( dR < 0.3 )
+        {
+          flag = kTRUE;
+          break;
+        }
+      }
     }
 
     return flag;

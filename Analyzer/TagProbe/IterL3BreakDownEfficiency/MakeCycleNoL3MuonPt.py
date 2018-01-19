@@ -19,9 +19,9 @@ for obj in IterL3MuonObjs:
 
   objname = IterL3MuonObjsAlias[counter]
   filename = 'MakeHist_TnP_'+objname+'_OverL1'
-  out = open('Cycles/'+filename+'.C','w')
+  out = open('Cycles/NoL3MuonPt/'+filename+'.C','w')
 
-  outputfilepath = '/data8/Users/jskim/CMSSW_9_2_14/src/TSNtuple/Analyzer/TagProbe/IterL3BreakDownEfficiency/Outputs/Output_'+objname+'.root'
+  outputfilepath = '/data8/Users/jskim/CMSSW_9_2_14/src/TSNtuple/Analyzer/TagProbe/IterL3BreakDownEfficiency/Outputs/NoL3MuonPt/Output_'+objname+'.root'
 
   print>>out,'''#include <TagProbe/MakeHist_TnP_IterL3_OverL1.h>
 
@@ -41,7 +41,7 @@ void {0}()
 
   print>>out,'''  producer->L1MuonPtCut = 22.;
   producer->OffLineMuonPtCut = 29.;
-  producer->IterL3MuonPtCut = 27.;
+  producer->IterL3MuonPtCut = 0.;
   producer->SetOutputFileName( "{2}" );
   producer->AddDataPath(dataPath);
   producer->Produce();
