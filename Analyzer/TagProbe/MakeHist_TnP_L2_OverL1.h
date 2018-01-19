@@ -10,13 +10,12 @@ public:
     OffLineMuonPtCut = 29; // Pt cut for probe (OffLine Muon) : use 29 GeV, to compare with IsoMu27 filtered muons
     L1MuonPtCut = 22; // Pt cut for L1Muon, which will be matched to probe
     //==== Pt cuts For Passing Probe
-    IterL3MuonPtCut = 27; // Pt cut for IterL3Muon, which will be matched to passing probe, use 27 GeV, because they will be filtered by IsoMu27
+    L2MuonPtCut = 0; // Pt cut for L2Muon, which will be matched to passing probe, use 27 GeV, because they will be filtered by IsoMu27
 	}
 
-  vector<TString> IterL3Objs;
   double OffLineMuonPtCut;
   double L1MuonPtCut;
-  double IterL3MuonPtCut;
+  double L2MuonPtCut;
 
 
 	// -- user-defined tag condition -- //
@@ -46,7 +45,7 @@ public:
 		Bool_t flag = kFALSE;
 
 		if( probeCand.IsTight && probeCand.RelPFIso_dBeta < 0.15 &&
-        probeCand.IsL1Matched(ntuple, L1MuonPtCut)  ) //FIXME Add TightID
+        probeCand.IsL1MatchedQuality(ntuple, L1MuonPtCut, 8)  )
 			flag = kTRUE;
 
 		// if( flag ) cout << "Probe is found" << endl;
@@ -58,7 +57,7 @@ public:
 	Bool_t IsPassingProbe( KPMuon probe, NtupleHandle *ntuple )
 	{
 		Bool_t flag = kFALSE;
-		if( probe.IsIterL3ObjectMatched( ntuple, IterL3Objs, IterL3MuonPtCut ) ) //Pt cut
+		if( probe.IsL2Matched( ntuple, L2MuonPtCut ) ) //Pt cut
 			flag = kTRUE;
 
 		return flag;
@@ -70,10 +69,9 @@ class HistProducer
 public:
 	TString fileName;
 	vector<TString> vec_DataPath;
-  vector<TString> IterL3Objs;
   double OffLineMuonPtCut;
   double L1MuonPtCut;
-  double IterL3MuonPtCut;
+  double L2MuonPtCut;
 
 
 	HistProducer()
@@ -137,24 +135,20 @@ public:
 					KPMuon mu_jth( ntuple, j_mu );
 
 					MyTnPPair *myTnpPair_ij = new MyTnPPair( mu_ith, mu_jth );
-          //==== matching objects
-          myTnpPair_ij->IterL3Objs = IterL3Objs;
           //==== pt cuts
           myTnpPair_ij->OffLineMuonPtCut = OffLineMuonPtCut;
           myTnpPair_ij->L1MuonPtCut = L1MuonPtCut;
-          myTnpPair_ij->IterL3MuonPtCut = IterL3MuonPtCut;
+          myTnpPair_ij->L2MuonPtCut = L2MuonPtCut;
           //==== validation
 					myTnpPair_ij->Validation( ntuple );
 					if( myTnpPair_ij->isValid )
 						vec_myTnpPair.push_back( myTnpPair_ij );
 
 					MyTnPPair *myTnpPair_ji = new MyTnPPair( mu_jth, mu_ith );
-          //==== matching objects
-          myTnpPair_ji->IterL3Objs = IterL3Objs;
           //==== pt cuts
           myTnpPair_ji->OffLineMuonPtCut = OffLineMuonPtCut;
           myTnpPair_ji->L1MuonPtCut = L1MuonPtCut;
-          myTnpPair_ji->IterL3MuonPtCut = IterL3MuonPtCut;
+          myTnpPair_ji->L2MuonPtCut = L2MuonPtCut;
           //==== validation
 					myTnpPair_ji->Validation( ntuple );
 					if( myTnpPair_ji->isValid )
