@@ -76,7 +76,7 @@ void empty_hist(TH1D *hist_num){
 
 }
 
-void CalcAndDraw_TnP()
+void temp()
 {
 
   gStyle->SetOptStat(0);
@@ -86,8 +86,14 @@ void CalcAndDraw_TnP()
   TString ENV_FILE_PATH = getenv("FILE_PATH");
   TString ENV_PLOT_PATH = getenv("PLOT_PATH");
 
-  TString filepath = ENV_FILE_PATH+"/180129_FromL1ExtendL1Seed/";
-  TString plotpath = ENV_PLOT_PATH+"/Efficiencies/180129_FromL1ExtendL1Seed/";
+/*
+  TString filepath = ENV_FILE_PATH+"/";
+  TString plotpath = ENV_PLOT_PATH+"/Efficiencies/180129_FromL1ExtendL1Seed_COMPARE/";
+*/
+
+  TString filepath = ENV_FILE_PATH+"/CMSSW_9_2_13/";
+  TString plotpath = ENV_PLOT_PATH+"/Efficiencies/";
+  plotpath += "180204_FromL1ExtendL1Seed_PixTrilpetFixL1L2/";
 
   if( !gSystem->mkdir(plotpath, kTRUE) ){
     cout
@@ -111,46 +117,35 @@ void CalcAndDraw_TnP()
 
   //==== Objects
 
-  int index_ratio_den = 3;
+  int index_ratio_den = 0;
   vector<TString> IterL3MuonObjs = {
-    "L2_OverL1",
-    "IterL3OI_TK_OverL1",
-    "IterL3_FromL2_TK_OverL1",
-    "L3_OverL1",
-    "HLTFilterMatched_OverL1__hltL3fL1sMu22Or25L1f0L2f10QL3Filtered27Q",
-    "HLTFilterMatched_OverL1__hltL3crIsoL1sMu22Or25L1f0L2f10QL3f27QL3trkIsoFiltered0p07",
+    "L3_OverL1_BEFORE",
+    "L3_OverL1_AFTER",
   };
   vector<Color_t> colors = {
-    kGreen,
-    kRed,
-    kOrange-1,
     kBlack,
-    kRed+3,
-    kBlue,
+    kBlack,
   };
   vector<TString> IterL3MuonObjs_alias = {
-    "(L2) / L1",
-    "(IterL3 OI) / L1",
-    "(IterL3 FromL2) / L1",
-    "(L3) / L1",
-    "(HLTFilter : Mu27) / L1",
-    "(HLTFilter : IsoMu27) / L1",
+    "(L3) / L1, Before L1 Seed Modification",
+    "(L3) / L1, After L1 Seed Modification",
   };
   TFile *file_KP_2016 = new TFile(filepath+"/ROOTFile_EfficiencyGraphs_Data.root");
   TFile *file_KP_2016_2 = new TFile(filepath+"/ROOTFile_EfficiencyGraphs_Data_WithoutTK.root");
   vector<int> widths = {
-    3,
-    3,
-    3,
+    2,
+    2,
+  };
+  vector<int> styles = {
     1,
-    2,
-    2,
+    3,
   };
 
   TLegend *lg = new TLegend(0.25, 0.05, 0.9, 0.30);
   //lg->SetBorderSize(0);
   //lg->SetFillStyle(0);
 
+/*
   TGraphAsymmErrors *lggr_KP = (TGraphAsymmErrors *)file_KP_2016->Get("Data_IsoMu27_OR_IsoTkMu27_from_L1_IsoMu27_and_Tight2012_and_dBeta_015_pt");
   lggr_KP->SetMarkerSize(0);
   lggr_KP->SetLineColor(kBlue);
@@ -160,14 +155,14 @@ void CalcAndDraw_TnP()
   lggr_KP2->SetMarkerSize(0);
   lggr_KP2->SetLineColor(kMagenta);
   lg->AddEntry(lggr_KP2, "(HLTFilter : IsoMu27) / L1 (2016)", "ple");
+*/
 
   for(unsigned int i=0; i<IterL3MuonObjs.size(); i++){
     int j = IterL3MuonObjs.size()-1-i;
     TH1D *histlg = new TH1D("histlg_"+IterL3MuonObjs.at(j), "", 1, 0., 1.);
     histlg->SetLineColor(colors.at(j));
     histlg->SetLineWidth(widths.at(j));
-    if(IterL3MuonObjs.at(j).Contains("HLTFilterMatched")) histlg->SetLineStyle(3);
-    if(IterL3MuonObjs.at(j).Contains("IsoMu27_OverL1")) histlg->SetLineStyle(3);
+    histlg->SetLineStyle(styles.at(j));
     lg->AddEntry(histlg, IterL3MuonObjs_alias.at(j), "ple");
   }
 
@@ -194,8 +189,12 @@ void CalcAndDraw_TnP()
     for(unsigned int it_obj=0; it_obj<IterL3MuonObjs.size(); it_obj++){
 
       TString obj = IterL3MuonObjs.at(it_obj);
+      TString thisfilepath = ENV_FILE_PATH+"/CMSSW_9_2_13/";
+      if(obj.Contains("AFTER")) thisfilepath = ENV_FILE_PATH+"/180131_PixTrilpetFix/";
 
-      DrawingTool *tool = new DrawingTool(filepath+"Output_"+obj+".root");
+      if(obj.Contains("L3_OverL1")) obj = "L3_OverL1";
+
+      DrawingTool *tool = new DrawingTool(thisfilepath+"Output_"+obj+".root");
       cout << IterL3MuonObjs_alias.at(it_obj) << "\t";
       TH1Ext *histext = tool->GetEfficiencyHistogram(var);
 
@@ -211,18 +210,18 @@ void CalcAndDraw_TnP()
         dummy_top->Draw("hist");
         dummy_top->GetYaxis()->SetTitle("Efficiency");
         if(var=="pt") dummy_top->GetYaxis()->SetRangeUser(0., 1.01);
-        else dummy_top->GetYaxis()->SetRangeUser(0.50, 1.01);
+        else dummy_top->GetYaxis()->SetRangeUser(0.80, 1.01);
       }
 
       TGraphAsymmErrors *gr = hist_to_graph(hist);
       gr->SetLineWidth(widths.at(it_obj));
-      if(obj.Contains("HLTFilterMatched")) gr->SetLineStyle(3);
-      if(obj.Contains("IsoMu27_OverL1")) gr->SetLineStyle(3);
+      gr->SetLineStyle(styles.at(it_obj));
       gr->Draw("psame");
       gr->SetLineColor(colors.at(it_obj));
 
     }
 
+/*
     //==== KP's 2016 HLT/L1 eff : IsoMu27_OR_IsoTkMu27
     TGraphAsymmErrors *gr_KP = (TGraphAsymmErrors *)file_KP_2016->Get("Data_IsoMu27_OR_IsoTkMu27_from_L1_IsoMu27_and_Tight2012_and_dBeta_015_"+varsForKP.at(it_var));
     TH1D *hist_KP = graph_to_hist(gr_KP);
@@ -235,9 +234,7 @@ void CalcAndDraw_TnP()
     gr_KP2->SetMarkerSize(0);
     gr_KP2->SetLineColor(kMagenta);
     gr_KP2->Draw("psame");
-
-
-
+*/
 
 /*
     cout << "####### TEST #########" << endl;
@@ -256,24 +253,30 @@ void CalcAndDraw_TnP()
     dummy_bottom->SetMarkerSize(0);
     dummy_bottom->SetMarkerColor(0);
     dummy_bottom->Draw("hist");
-    dummy_bottom->GetYaxis()->SetRangeUser(0.80, 1.05);
+    dummy_bottom->GetYaxis()->SetRangeUser(0.98, 1.03);
     hist_axis(dummy_top, dummy_bottom);
     dummy_bottom->GetXaxis()->SetTitle(xtitle.at(it_var));
-    dummy_bottom->GetYaxis()->SetTitle("Rel. to (L3)/L1");
+    dummy_bottom->GetYaxis()->SetTitle("Rel. to BEFORE");
 
     TH1D *hist_den = (TH1D *)hists.at(index_ratio_den)->Clone();
-    for(unsigned int it_hist=0; it_hist<hists.size(); it_hist++){
+    for(unsigned int it_hist=1; it_hist<hists.size(); it_hist++){
       TH1D *this_hist = hists.at(it_hist);
       make_ratio(this_hist,hist_den);
 
       TGraphAsymmErrors *gr = hist_to_graph(this_hist);
       gr->SetLineWidth(widths.at(it_hist));
-      if(IterL3MuonObjs.at(it_hist).Contains("HLTFilterMatched")) gr->SetLineStyle(3);
+      gr->SetLineStyle(styles.at(it_hist));
       gr->Draw("psame");
       gr->SetLineColor(colors.at(it_hist));
 
     }
+    double x_1[2], y_1[2];
+    x_1[0] = 5000;  y_1[0] = 1;
+    x_1[1] = -5000;  y_1[1] = 1;
+    TGraph *g1 = new TGraph(2, x_1, y_1);
+    g1->Draw("same");
 
+/*
     //==== KP
     make_ratio(hist_KP,hist_den);
     TGraphAsymmErrors *ratio_gr_hist_KP = hist_to_graph(hist_KP);
@@ -287,6 +290,7 @@ void CalcAndDraw_TnP()
     ratio_gr_hist_KP2->SetLineColor(kMagenta);
     hist_KP2->SetLineColor(kMagenta);
     ratio_gr_hist_KP2->Draw("psame");
+*/
 
     //==== Draw Legend
     c1_up->cd();
