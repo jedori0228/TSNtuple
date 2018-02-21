@@ -1,14 +1,9 @@
 #include <TagProbe/MakeHist_TnP_HLTFilterMatched_OverL1.h>
 
-void MakeHist_TnP_HLTFilterMatched_OverL1()
+void MakeHist_TnP_HLTFilterMatched_OverL1__hltL3fL1sMu22Or25L1f0L2f10QL3Filtered27Q(TString infile, TString outfile)
 {
 
-  TString dataPath = "/data8/Users/jskim/MuonHLTNtuple/171218/merged.root";
-//ntuple_153.root
-//merged.root
-
   vector<TString> filtersToRun = {
-    //"hltL3crIsoL1sMu22Or25L1f0L2f10QL3f27QL3trkIsoFiltered0p07",
     "hltL3fL1sMu22Or25L1f0L2f10QL3Filtered27Q",
   };
 
@@ -24,8 +19,8 @@ void MakeHist_TnP_HLTFilterMatched_OverL1()
     producer->OffLineMuonPtCut = 29.;
     producer->L3MuonPtCut = 0.;
     producer->PassingProbeHLTFilter = this_filter;
-    producer->SetOutputFileName( "/data8/Users/jskim/CMSSW_9_2_14/src/TSNtuple/Analyzer/TagProbe/IterL3BreakDownEfficiency/Outputs/NoL3MuonPt/Output_HLTFilterMatched_OverL1__"+this_filter+".root" );
-    producer->AddDataPath(dataPath);
+    producer->SetOutputFileName(outfile);
+    producer->AddDataPath(infile);
     producer->Produce();
 
   }

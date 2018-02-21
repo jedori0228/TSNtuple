@@ -1,13 +1,13 @@
-#include <TagProbe/MakeHist_TnP_L3_OverL1.h>
+#include <TagProbe/MakeHist_TnP_L2_OverL1.h>
 
-void MakeHist_TnP_L3_OverL1(TString infile, TString outfile)
+void MakeHist_TnP_L2_OverL1(TString infile, TString outfile)
 {
 
   HistProducer* producer = new HistProducer();
 
   producer->L1MuonPtCut = 22.;
   producer->OffLineMuonPtCut = 29.;
-  producer->L3MuonPtCut = 0.;
+  producer->L2MuonPtCut = 0.;
   producer->SetOutputFileName(outfile);
   producer->AddDataPath(infile);
   producer->Produce();
