@@ -41,7 +41,7 @@ public:
 
 void make_ratio(TH1D *hist_num, TH1D *hist_den){
 
-  cout << "[make_ratio] " << hist_num->GetName() << endl;
+  //cout << "[make_ratio] " << hist_num->GetName() << endl;
 
   for(int i=1; i<=hist_num->GetXaxis()->GetNbins(); i++){
 
@@ -58,7 +58,7 @@ void make_ratio(TH1D *hist_num, TH1D *hist_den){
       e_new = e_num/y_den;
     }
 
-    cout << y_num << "/" << y_den << " : " << y_new << endl;
+    //cout << y_num << "/" << y_den << " : " << y_new << endl;
 
     hist_num->SetBinContent(i, y_new);
     hist_num->SetBinError(i, e_new);
@@ -126,13 +126,17 @@ void CompareL3(int i=0)
 
   //==== Objects
 
-  int index_ratio_den = 2;
   vector<TString> IterL3MuonObjs = {
 
-    "180217_IterL3v2018_OIFix_TrilpetLayerlistFix_NtuplerOriginal",
+    "180302_v2018_oi_iofix_loose",
+    "180302_v2018_oi_iofix_tight",
+    "180227_HLT_IsoMu27_MasterTable100X",
+
+    //"180221_IterL3v2018_NoChi2_OIFix_TrilpetLayerlistFix_NtuplerOriginal",
+    //"180217_IterL3v2018_OIFix_TrilpetLayerlistFix_NtuplerOriginal",
 
     //"180214_IterL3_v2018_Ntuple_noID",
-    "180214_IterL3_v2018_Ntuple_withID",
+    //"180214_IterL3_v2018_Ntuple_withID",
 
     //"180216_IterL3_v2017_Ntuple_iterl3froml1_0triplet_2doublet_extendl1",  // == TkMu?
     //"180204_FromL1ExtendL1Seed_PixTrilpetFixL1L2",
@@ -144,12 +148,19 @@ void CompareL3(int i=0)
     //"180204_PixTrilpetFix",
     "CMSSW_9_2_13",
   };
+  int index_ratio_den = IterL3MuonObjs.size()-1;
+
   vector<TString> IterL3MuonObjs_alias = {
 
-    "IterL3 2018, with ID, OI Fixed, trilplet layerlist Fixed",
+    "IterL3 2018, cmssw 10x, Loose WP",
+    "IterL3 2018, cmssw 10x, Tight WP",
+    "IterL3 2018, cmssw 10x, Default",
+
+    //"IterL3 2018, with ID (No Chi2), OI Fixed, trilplet layerlist Fixed",
+    //"IterL3 2018, with ID, OI Fixed, trilplet layerlist Fixed",
 
     //"IterL3 2018, no ID",
-    "IterL3 2018, with ID",
+    //"IterL3 2018, with ID",
 
     //"Use all L1, Fix L1 and L2 trilplet layerlist, Use Doublet",
     //"Use all L1, Fix L1 and L2 trilplet layerlist",
@@ -163,10 +174,15 @@ void CompareL3(int i=0)
   };
   vector<Color_t> colors = {
 
+    kOrange,
+    kRed,
     kBlue,
 
+    //kBlue,
+    //kBlue,
+
     //kViolet,
-    kViolet,
+    //kViolet,
 
     //kBlue,
     //kOrange,
@@ -181,9 +197,14 @@ void CompareL3(int i=0)
   vector<int> widths = {
 
     2,
+    2,
+    2,
 
     //2,
-    2,
+    //2,
+
+    //2,
+    //2,
 
     //2,
     //2,
@@ -198,9 +219,14 @@ void CompareL3(int i=0)
   vector<int> styles = {
 
     1,
+    1,
+    1,
 
     //3,
-    3,
+    //1,
+
+    //3,
+    //3,
 
     //1,
     //1,
