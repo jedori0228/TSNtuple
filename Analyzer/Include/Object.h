@@ -650,6 +650,41 @@ public:
 		return flag;
 	}
 
+  // -- match to the trigger objects produced by rerun HLT -- //
+  Bool_t IsMYHLTFilterMatched_AND(NtupleHandle *ntuple, vector<TString> filterNames)
+  {
+    Bool_t flag = kFALSE;
+    KPEvent event(ntuple);
+
+    for(Int_t i_hlt=0; i_hlt<event.nMyHLTObject; i_hlt++)
+    {
+      KPMYHLTObject MYHLTObj( ntuple, i_hlt );
+
+      bool PassFilters = true;
+      for(unsigned int aaa=0;filterNames.size();aaa++){
+        if( !( MYHLTObj.FilterName.Contains(filterNames.at(aaa)) ) ){
+          PassFilters = false;
+          break;
+        }
+      }
+
+      if( PassFilters )
+      {
+        TLorentzVector vec_TrigObj;
+        vec_TrigObj.SetPtEtaPhiM( MYHLTObj.Pt, MYHLTObj.Eta, MYHLTObj.Phi, M_Mu );
+
+        Double_t dR = this->LVec_P.DeltaR( vec_TrigObj );
+        if( dR < 0.2 )
+        {
+          flag = kTRUE;
+          break;
+        }
+      }
+    }
+
+    return flag;
+  }
+
 	// -- matching with L1 object -- //
 	Bool_t IsL1Matched( NtupleHandle* ntuple, Double_t ptCut = 22 )
 	{
@@ -676,6 +711,34 @@ public:
 
 		return flag;
 	}
+
+  Bool_t IsL1MatchedQ( NtupleHandle* ntuple, Double_t ptCut = 22, Int_t QualCut = 12 )
+  {
+    Bool_t flag = kFALSE;
+
+    if(QualCut==12) return IsL1Matched(ntuple,ptCut);
+
+    KPEvent event(ntuple);
+    for(Int_t i=0; i<event.nL1Muon; i++)
+    {
+      KPL1Muon l1Mu( ntuple, i );
+
+      // printf("[%d-th L1 muon] (pT, eta, phi) = (%.3lf, %.3lf, %.3lf)\n", i, l1Mu.Pt, l1Mu.Eta, l1Mu.Phi);
+
+      if( l1Mu.Pt > ptCut && l1Mu.Quality >= QualCut )
+      {
+        Double_t dR = this->LVec_P.DeltaR( l1Mu.LVec_P ); // -- dR between L1 and offline muon -- //
+
+        if( dR < 0.3 )
+        {
+          flag = kTRUE;
+          break;
+        }
+      }
+    }
+
+    return flag;
+  }
 
   Bool_t IsL1MatchedQuality( NtupleHandle* ntuple, Double_t ptCut = 22, int qualityCut=12 )
   {

@@ -18,7 +18,7 @@ public:
   double L1MuonPtCut;
   double L1MuonQual;
   double L3MuonPtCut;
-  TString PassingProbeHLTFilter;
+  vector<TString> PassingProbeHLTFilter;
 
 
 	// -- user-defined tag condition -- //
@@ -60,7 +60,7 @@ public:
 	Bool_t IsPassingProbe( KPMuon probe, NtupleHandle *ntuple )
 	{
 		Bool_t flag = kFALSE;
-		if( probe.IsMYHLTFilterMatched( ntuple, PassingProbeHLTFilter ) ) // Filter already has L3Muonpt>27
+		if( probe.IsMYHLTFilterMatched_AND( ntuple, PassingProbeHLTFilter ) ) // Filter already has L3Muonpt>27
 			flag = kTRUE;
 
 		return flag;
@@ -76,7 +76,7 @@ public:
   double L1MuonPtCut;
   double L1MuonQual;
   double L3MuonPtCut;
-  TString PassingProbeHLTFilter;
+  vector<TString> PassingProbeHLTFilter;
 
 
 	HistProducer()
