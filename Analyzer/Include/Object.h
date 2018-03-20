@@ -661,18 +661,17 @@ public:
       TString filterName = filterNames.at(aaa);
       bool this_flag = false;
 
-      for(Int_t i_hlt=0; i_hlt<event.nMyHLTObject; i_hlt++)
-      {
+      for(Int_t i_hlt=0; i_hlt<event.nMyHLTObject; i_hlt++){
+
         KPMYHLTObject MYHLTObj( ntuple, i_hlt );
 
-        if( MYHLTObj.FilterName.Contains(filterName) )
-        {
+        if( MYHLTObj.FilterName.Contains(filterName) ){
+
           TLorentzVector vec_TrigObj;
           vec_TrigObj.SetPtEtaPhiM( MYHLTObj.Pt, MYHLTObj.Eta, MYHLTObj.Phi, M_Mu );
 
           Double_t dR = this->LVec_P.DeltaR( vec_TrigObj );
-          if( dR < 0.2 )
-          { 
+          if( dR < 0.2 ){ 
             this_flag = kTRUE;
             break;
           }
@@ -681,7 +680,10 @@ public:
 
       } // END Hlt Object loop
 
-      flag = flag&&this_flag;
+      if( !this_flag ){
+        flag = false;
+        break;
+      }
 
     } // END filter loop
 
