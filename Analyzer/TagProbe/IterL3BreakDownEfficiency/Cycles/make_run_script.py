@@ -26,6 +26,11 @@ infiledirs = [
 '180320_Ntupler__HLTConfig_v01_Default__customizerForMuonReco2018',
 ]
 
+runscript = open('run.py','w')
+runscript.write('import os\n')
+runscript.write('import python.CheckIfFailed\n')
+runscript.write('IsFailed = True\n')
+
 for infiledir in infiledirs:
 
   for line in lines:
@@ -41,14 +46,22 @@ for infiledir in infiledirs:
 
       outfile = "/data7/Users/jskim/CMSSW_9_2_13/src/TSNtuple/Analyzer/TagProbe/IterL3BreakDownEfficiency/Outputs/"
       os.system('mkdir -p '+outfile+infiledir)
-      print 'mkdir -p '+outfile+infiledir
+      #print 'mkdir -p '+outfile+infiledir
       outfile += infiledir+"/Output_"+line+"_"+str(i)+".root"
 
       logfile = "logs/"+infiledir+"/log_MakeHist_TnP_"+line+"_"+str(i)+".log"
       os.system('mkdir -p logs/'+infiledir)
 
       cmd = 'root -l -b -q "'+cyclename+'.C(\\"'+infile+'\\",\\"'+outfile+'\\")"'
-      cmd = cmd+' &> '+logfile
-      print cmd
-      print ""
-      print "########"
+      cmdwithlog = cmd+' &> '+logfile
+      #cmd = cmd+' &> '+logfile
+
+      print >>runscript,'''while IsFailed:
+  os.system('{0}')
+  CheckIfFailed('{1}','{0}')
+
+'''.format(cmdwithlog,logfile)
+
+      #print cmd
+      #print ""
+      #print "########"
