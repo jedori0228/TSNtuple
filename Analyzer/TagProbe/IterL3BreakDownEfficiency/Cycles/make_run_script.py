@@ -22,7 +22,7 @@ infiledirs = [
 #'180304_HLT_IsoMu27__HLT_Mu50_Default_ntupler',
 #'180309_HLTConfig_dimuon_samewith2017_EphemeralHLTPhysics',
 #'180309_HLTConfig_dimuon_sepa_seq2018_v04_EphemeralHLTPhysics',
-'180320_Ntupler__HLTConfig_v01_Default',
+#'180320_Ntupler__HLTConfig_v01_Default',
 '180320_Ntupler__HLTConfig_v01_Default__customizerForMuonReco2018',
 ]
 
@@ -37,9 +37,9 @@ for infiledir in infiledirs:
     cyclename = 'MakeHist_TnP_'+line
 
     for i in range(1,n_file+1):
-      infile = "/data8/Users/jskim/MuonHLTNtuple/"+infiledir+"/merge_"+str(i)+".root"
+      infile = "/data7/Users/jskim/MuonHLTNtuple/"+infiledir+"/merge_"+str(i)+".root"
 
-      outfile = "/data8/Users/jskim/CMSSW_9_2_13/src/TSNtuple/Analyzer/TagProbe/IterL3BreakDownEfficiency/Outputs/"
+      outfile = "/data7/Users/jskim/CMSSW_9_2_13/src/TSNtuple/Analyzer/TagProbe/IterL3BreakDownEfficiency/Outputs/"
       os.system('mkdir -p '+outfile+infiledir)
       print 'mkdir -p '+outfile+infiledir
       outfile += infiledir+"/Output_"+line+"_"+str(i)+".root"
@@ -50,3 +50,5 @@ for infiledir in infiledirs:
       cmd = 'root -l -b -q "'+cyclename+'.C(\\"'+infile+'\\",\\"'+outfile+'\\")"'
       cmd = cmd+' &> '+logfile
       print cmd
+      print ""
+      print "########"
