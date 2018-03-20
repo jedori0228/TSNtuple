@@ -46,9 +46,8 @@ public:
 	Bool_t IsProbe( KPMuon probeCand, NtupleHandle *ntuple )
 	{
 		Bool_t flag = kFALSE;
-		if( probeCand.IsTight && probeCand.RelPFIso_dBeta < 0.15 ) //&&
-        //probeCand.IsL1MatchedQ(ntuple, L1MuonPtCut, L1MuonQual)  )
-        //probeCand.IsL1Matched(ntuple, L1MuonPtCut)  )
+		if( probeCand.IsTight && probeCand.RelPFIso_dBeta < 0.15 &&
+        probeCand.IsL1MatchedQ(ntuple, L1MuonPtCut, L1MuonQual)  )
 			flag = kTRUE;
 
 		// if( flag ) cout << "Probe is found" << endl;
