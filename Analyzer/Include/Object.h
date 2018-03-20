@@ -653,36 +653,40 @@ public:
   // -- match to the trigger objects produced by rerun HLT -- //
   Bool_t IsMYHLTFilterMatched_AND(NtupleHandle *ntuple, vector<TString> filterNames)
   {
-    Bool_t flag = kFALSE;
+    Bool_t flag = true;
     KPEvent event(ntuple);
 
-    for(Int_t i_hlt=0; i_hlt<event.nMyHLTObject; i_hlt++)
-    {
-      KPMYHLTObject MYHLTObj( ntuple, i_hlt );
+    for(unsigned int aaa=0; aaa<filterNames.size(); aaa++){
 
-      bool PassFilters = true;
-      for(unsigned int aaa=0;filterNames.size();aaa++){
-        if( !( MYHLTObj.FilterName.Contains(filterNames.at(aaa)) ) ){
-          PassFilters = false;
-          break;
-        }
-      }
+      TString filterName = filterNames.at(aaa);
+      bool this_flag = false;
 
-      if( PassFilters )
+      for(Int_t i_hlt=0; i_hlt<event.nMyHLTObject; i_hlt++)
       {
-        TLorentzVector vec_TrigObj;
-        vec_TrigObj.SetPtEtaPhiM( MYHLTObj.Pt, MYHLTObj.Eta, MYHLTObj.Phi, M_Mu );
+        KPMYHLTObject MYHLTObj( ntuple, i_hlt );
 
-        Double_t dR = this->LVec_P.DeltaR( vec_TrigObj );
-        if( dR < 0.2 )
+        if( MYHLTObj.FilterName.Contains(filterName) )
         {
-          flag = kTRUE;
-          break;
-        }
-      }
-    }
+          TLorentzVector vec_TrigObj;
+          vec_TrigObj.SetPtEtaPhiM( MYHLTObj.Pt, MYHLTObj.Eta, MYHLTObj.Phi, M_Mu );
+
+          Double_t dR = this->LVec_P.DeltaR( vec_TrigObj );
+          if( dR < 0.2 )
+          { 
+            this_flag = kTRUE;
+            break;
+          }
+
+        } // END IF this filter fired
+
+      } // END Hlt Object loop
+
+      flag = flag&&this_flag;
+
+    } // END filter loop
 
     return flag;
+
   }
 
 	// -- matching with L1 object -- //
