@@ -84,6 +84,7 @@ public:
 	Int_t           Muon_IsTRK[ArrSize];   //[nMuon]
 	Int_t           Muon_IsPF[ArrSize];   //[nMuon]
 	Int_t           Muon_IsTight[ArrSize];   //[nMuon]
+  Int_t           Muon_IsSoft[ArrSize];   //[nMuon]
 	Int_t           Muon_IsMedium[ArrSize];   //[nMuon]
 	Int_t           Muon_IsLoose[ArrSize];   //[nMuon]
   Int_t           Muon_IsHighPt[ArrSize];   //[nMuon]
@@ -463,6 +464,9 @@ public:
 
 		chain->SetBranchStatus("Muon_IsTight", 1);
 		chain->SetBranchAddress("Muon_IsTight", &Muon_IsTight);
+
+    chain->SetBranchStatus("Muon_IsSoft", 1);
+    chain->SetBranchAddress("Muon_IsSoft", &Muon_IsSoft);
 
 		chain->SetBranchStatus("Muon_IsMedium", 1);
 		chain->SetBranchAddress("Muon_IsMedium", &Muon_IsMedium);
