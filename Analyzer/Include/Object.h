@@ -495,6 +495,7 @@ public:
 	Int_t           IsTRK;
 	Int_t           IsPF;
 	Int_t           IsTight;
+  Int_t           IsSoft;
 	Int_t           IsMedium;
 	Int_t           IsLoose;
 	Int_t			IsHighPt;
@@ -556,6 +557,7 @@ public:
 		this->IsTRK = ntuple->Muon_IsTRK[index];
 		this->IsPF = ntuple->Muon_IsPF[index];
 		this->IsTight = ntuple->Muon_IsTight[index];
+    this->IsSoft = ntuple->Muon_IsSoft[index];
 		this->IsMedium = ntuple->Muon_IsMedium[index];
 		this->IsLoose = ntuple->Muon_IsLoose[index];
 
@@ -864,6 +866,7 @@ public:
 		this->IsTRK = 0;
 		this->IsPF = 0;
 		this->IsTight = 0;
+    this->IsSoft = 0;
 		this->IsMedium = 0;
 		this->IsLoose = 0;
 		this->PFIso03_Charged = 0;
