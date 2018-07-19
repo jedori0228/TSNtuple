@@ -42,8 +42,11 @@ public:
 	Bool_t IsProbe( KPMuon probeCand, NtupleHandle *ntuple )
 	{
 		Bool_t flag = kFALSE;
-		if( probeCand.IsMYHLTFilterMatched( ntuple, "hltMu7p5Track2JpsiTrackMassFiltered")
-        && !probeCand.IsMYHLTFilterMatched( ntuple, "hltL3fLMu7p5TrackL3Filtered7p5") && probeCand.IsSoft )
+		//if( probeCand.IsMYHLTFilterMatched( ntuple, "hltMu7p5Track2JpsiTrackMassFiltered")
+    //    && !probeCand.IsMYHLTFilterMatched( ntuple, "hltL3fLMu7p5TrackL3Filtered7p5") && probeCand.IsSoft )
+
+    if( probeCand.IsSoft ) // over Offline, not L1. L1 of this path is complicated..
+
 			flag = kTRUE;
 
 		// if( flag ) cout << "Probe is found" << endl;
@@ -133,15 +136,20 @@ public:
 
 			for(Int_t i_mu=0; i_mu<event.nMuon; i_mu++)
 			{
-//cout << "  i_mu = " << i_mu;
+
+        if(vec_myTnpPair.size()>0) break; //FIXME multiplicity
+
+        //cout << "  i_mu = " << i_mu;
 				KPMuon mu_ith( ntuple, i_mu );
-//cout << ", mu_ith made, i_mu+1 = " << i_mu+1 << ", event.nMuon = " << event.nMuon << ", vec_myTnpPair.size() = " << vec_myTnpPair.size() << endl;
+        //cout << ", mu_ith made, i_mu+1 = " << i_mu+1 << ", event.nMuon = " << event.nMuon << ", vec_myTnpPair.size() = " << vec_myTnpPair.size() << endl;
 				for(Int_t j_mu=i_mu+1; j_mu<event.nMuon; j_mu++) // -- starts from i_mu+1: no duplication -- //
 				{
 
-//cout << "    j_mu = " << j_mu;
+          if(vec_myTnpPair.size()>0) break; //FIXME multiplicity
+
+          //cout << "    j_mu = " << j_mu;
 					KPMuon mu_jth( ntuple, j_mu );
-//cout << ", mu_jth made";
+          //cout << ", mu_jth made";
 					MyTnPPair *myTnpPair_ij = new MyTnPPair( mu_ith, mu_jth );
 
           //==== pt cuts
@@ -168,7 +176,7 @@ public:
 					if( myTnpPair_ji->isValid )
 						vec_myTnpPair.push_back( myTnpPair_ji );
 
-//cout << " --> Validated" << endl;
+          //cout << " --> Validated" << endl;
 				}
 			}
 
